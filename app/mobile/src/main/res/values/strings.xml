@@ -1,0 +1,8 @@
+<resources>
+    <string name="app_name">ProyectoCierzo</string>
+    <string name="login_user">Usuario</string>
+    <string name="login_password">Contraseña</string>
+    <string name="description_logo">Logo de la aplicacion</string>
+    <string name="bt_login">Acceder</string>
+    <string name="login_registro">¿No tienes cuenta? Crea una nueva</string>
+</resources>
