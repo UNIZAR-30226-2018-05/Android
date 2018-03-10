@@ -6,4 +6,5 @@
     <color name="colorLoginGradienteAlto">#01579B</color>
     <color name="colorLoginGradienteMedio">#0277BD</color>
     <color name="colorLoginGradienteBajo">#0288D1</color>
+    <color name="colorPlayerBackground">#263238</color>
 </resources>

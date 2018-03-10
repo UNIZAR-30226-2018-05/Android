@@ -14,7 +14,6 @@
         android:layout_height="80dp"
         android:contentDescription="@string/description_logo"
         app:srcCompat="@drawable/logo"
-
         android:layout_marginTop="40dp"/>
 
     <TextView
@@ -46,6 +45,7 @@
         android:inputType="textPassword"/>
     
     <Button
+        android:id="@+id/bt_access"
         android:layout_width="match_parent"
         android:layout_height="50dp"
         android:text="@string/bt_login"

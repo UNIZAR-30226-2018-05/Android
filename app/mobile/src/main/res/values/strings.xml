@@ -5,4 +5,8 @@
     <string name="description_logo">Logo de la aplicacion</string>
     <string name="bt_login">Acceder</string>
     <string name="login_registro">¿No tienes cuenta? Crea una nueva</string>
+    <string name="player_title">Reproduciendo ahora...</string>
+    <string name="player_artist">Artista</string>
+    <string name="player_song">Nombre de la cancion</string>
+    <string name="player_album_description">Caratula del album</string>
 </resources>
