@@ -9,4 +9,10 @@
     <string name="player_artist">Artista</string>
     <string name="player_song">Nombre de la cancion</string>
     <string name="player_album_description">Caratula del album</string>
+    <string name="title_activity_index">IndexActivity</string>
+
+    <string name="navigation_drawer_open">Open navigation drawer</string>
+    <string name="navigation_drawer_close">Close navigation drawer</string>
+
+    <string name="action_settings">Settings</string>
 </resources>
