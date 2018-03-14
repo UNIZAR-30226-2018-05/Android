@@ -8,4 +8,8 @@
     tools:context="android.prosotec.proyectocierzo.IndexActivity"
     tools:showIn="@layout/app_bar_index">
 
+    <include
+        layout="@layout/activity_list" />
+
+    
 </android.support.constraint.ConstraintLayout>
