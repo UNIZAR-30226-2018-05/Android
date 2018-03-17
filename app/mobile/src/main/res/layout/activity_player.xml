@@ -76,7 +76,7 @@
                 android:layout_marginBottom="10dp"
                 android:layout_weight="1"
                 android:background="@android:color/transparent"
-                app:srcCompat="@android:drawable/ic_media_previous" />
+                app:srcCompat="@id:drawable/ic_skip_previous_white_24dp" />
 
             <ImageButton
                 android:id="@+id/ib_bucle"
