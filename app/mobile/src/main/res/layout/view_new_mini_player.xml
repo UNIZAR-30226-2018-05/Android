@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout
-    android:id="@+id/progress_bar_layout"
+    android:id="@+id/mini_player_layout"
     android:layout_alignParentBottom="true"
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
@@ -8,6 +8,7 @@
     android:background="@color/colorPrimaryDark"
     >
         <ProgressBar
+            android:id="@+id/progress_bar"
             android:layout_alignParentTop="@+id/mini_player"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -16,6 +17,7 @@
             android:paddingBottom="106dp"/>
 
         <TextView
+            android:id="@+id/actual_time"
             android:layout_alignParentLeft="true"
             android:text="00:00"
             android:layout_width="wrap_content"
@@ -24,6 +26,7 @@
             android:paddingLeft="16dp"/>
 
         <TextView
+            android:id="@+id/length"
             android:layout_alignParentRight="true"
             android:text="01:58"
             android:layout_width="wrap_content"
@@ -44,29 +47,33 @@
             >
 
             <ImageView
-                android:id="@+id/player_cover_image"
+                android:id="@+id/cover_image"
                 android:layout_alignParentLeft="true"
-                android:layout_width="wrap_content"
-                android:layout_height="match_parent"
-                android:src="@mipmap/ic_launcher"/>
+                android:layout_width="66dp"
+                android:layout_height="66dp"
+                android:elevation="4dp"
+                android:background="#ffffff"
+                android:src="@mipmap/ic_launcher_round" />
 
             <LinearLayout
-                android:layout_toEndOf="@+id/player_cover_image"
+                android:layout_centerVertical="true"
+                android:layout_toEndOf="@+id/cover_image"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:orientation="vertical">
+                android:orientation="vertical"
+                android:paddingLeft="8dp">
 
                 <TextView
-                    android:id="@+id/player_title"
+                    android:id="@+id/title"
                     android:padding="5dp"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_alignParentTop="true"
                     android:text="Minas Morgul"
-                    android:textStyle="bold" />
+                    android:textStyle="bold"/>
 
                 <TextView
-                    android:id="@+id/player_artist"
+                    android:id="@+id/author"
                     android:padding="5dp"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -79,28 +86,36 @@
                 android:layout_alignParentRight="true"
                 android:layout_centerVertical="true"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_height="match_parent"
                 android:orientation="horizontal">
 
-                <ImageView
+                <ImageButton
+                    android:id="@+id/skip_prev"
                     android:cropToPadding="true"
                     android:padding="8dp"
                     android:layout_width="48dp"
                     android:layout_height="48dp"
+                    android:background="#00000000"
                     android:src="@drawable/ic_skip_previous_white_24dp"/>
 
-                <android.support.design.widget.FloatingActionButton
+                <ImageButton
+                    android:id="@+id/play"
                     android:cropToPadding="true"
                     android:padding="4dp"
                     android:layout_width="48dp"
                     android:layout_height="48dp"
+                    android:background="@drawable/rounded_button_24dp"
+                    android:backgroundTint="@color/colorAccent"
+                    android:elevation="4dp"
                     android:src="@drawable/ic_play_arrow_white_24dp"/>
 
-                <ImageView
+                <ImageButton
+                    android:id="@+id/skip_next"
                     android:cropToPadding="true"
                     android:padding="8dp"
                     android:layout_width="48dp"
                     android:layout_height="48dp"
+                    android:background="#00000000"
                     android:src="@drawable/ic_skip_next_white_24dp"/>
 
             </LinearLayout>
