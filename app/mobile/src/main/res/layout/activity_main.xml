@@ -14,7 +14,6 @@
         android:theme="@style/ThemeOverlay.AppCompat.ActionBar"
         app:navigationIcon="@drawable/ic_menu_white_24dp"
         app:title="Listas de canciones"
-        app:men
         />
 
     <android.prosotec.proyectocierzo.view.MiniPlayerView
