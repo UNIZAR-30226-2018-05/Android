@@ -1,7 +1,9 @@
 package android.prosotec.proyectocierzo
 
 
+import android.media.MediaPlayer
 import android.os.Bundle
+import android.prosotec.proyectocierzo.R.id.drawer_layout
 import android.support.design.widget.NavigationView
 import android.support.v4.view.GravityCompat
 import android.support.v4.widget.DrawerLayout
@@ -10,6 +12,8 @@ import android.support.v7.app.AppCompatActivity
 import android.support.v7.widget.Toolbar
 import android.view.Menu
 import android.view.MenuItem
+import android.widget.Button
+import android.widget.ImageButton
 import kotlinx.android.synthetic.main.activity_main.*
 
 /**
@@ -17,8 +21,8 @@ import kotlinx.android.synthetic.main.activity_main.*
  */
 class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelectedListener {
 
-
     override fun onCreate(savedInstanceState: Bundle?) {
+
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
         setSupportActionBar(my_toolbar)
@@ -27,6 +31,23 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         toggle.syncState()
 
         nav_view.setNavigationItemSelectedListener(this)
+
+        val button1 = findViewById<ImageButton> (R.id.play)
+        val mp = MediaPlayer.create (this, R.raw.song1)
+        var position = 0
+        button1.setOnClickListener {
+            if (position == 0) {
+                mp.start()
+                position = 1
+                button1.setImageResource(R.drawable.ic_pause_white_24dp)
+            } else{
+                mp.pause()
+                position = 0
+                button1.setImageResource(R.drawable.ic_play_arrow_white_24dp)
+            }
+
+        }
+
     }
 
     override fun onBackPressed() {
