@@ -4,6 +4,7 @@ package android.prosotec.proyectocierzo
 import android.media.MediaPlayer
 import android.os.Bundle
 import android.prosotec.proyectocierzo.R.id.drawer_layout
+import android.support.design.widget.FloatingActionButton
 import android.support.design.widget.NavigationView
 import android.support.v4.view.GravityCompat
 import android.support.v4.widget.DrawerLayout
@@ -15,6 +16,7 @@ import android.view.MenuItem
 import android.widget.Button
 import android.widget.ImageButton
 import kotlinx.android.synthetic.main.activity_main.*
+
 
 /**
  * Created by ccucr on 18/03/2018.
@@ -32,7 +34,7 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
 
         nav_view.setNavigationItemSelectedListener(this)
 
-        val button1 = findViewById<ImageButton> (R.id.play)
+        val button1 = findViewById<FloatingActionButton> (R.id.play)
         val mp = MediaPlayer.create (this, R.raw.song1)
         var position = 0
         button1.setOnClickListener {

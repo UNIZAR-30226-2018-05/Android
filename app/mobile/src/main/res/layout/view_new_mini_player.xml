@@ -1,12 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout
-    android:id="@+id/mini_player_layout"
+<RelativeLayout android:id="@+id/mini_player_layout"
     android:layout_alignParentBottom="true"
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="110dp"
     android:background="@color/colorPrimaryDark"
-    >
+    xmlns:app="http://schemas.android.com/apk/res-auto">
         <ProgressBar
             android:id="@+id/progress_bar"
             android:layout_alignParentTop="@+id/mini_player"
@@ -95,19 +94,19 @@
                     android:padding="8dp"
                     android:layout_width="48dp"
                     android:layout_height="48dp"
-                    android:background="#00000000"
+                    android:backgroundTint="#00000000"
                     android:src="@drawable/ic_skip_previous_white_24dp"/>
 
-                <ImageButton
+                <android.support.design.widget.FloatingActionButton
                     android:id="@+id/play"
                     android:cropToPadding="true"
                     android:padding="4dp"
                     android:layout_width="48dp"
                     android:layout_height="48dp"
-                    android:background="@drawable/rounded_button_24dp"
-                    android:backgroundTint="@color/colorAccent"
-                    android:elevation="4dp"
-                    android:src="@drawable/ic_play_arrow_white_24dp"/>
+                    app:elevation="4dp"
+                    android:src="@drawable/ic_play_arrow_white_24dp"
+                    style="@style/Widget.AppCompat.Button.Colored"
+                    />
 
                 <ImageButton
                     android:id="@+id/skip_next"
@@ -115,7 +114,7 @@
                     android:padding="8dp"
                     android:layout_width="48dp"
                     android:layout_height="48dp"
-                    android:background="#00000000"
+                    android:backgroundTint="#00000000"
                     android:src="@drawable/ic_skip_next_white_24dp"/>
 
             </LinearLayout>

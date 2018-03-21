@@ -7,6 +7,7 @@ import android.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import kotlinx.android.synthetic.main.view_new_mini_player.*
 
 
 /**
