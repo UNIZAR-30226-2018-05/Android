@@ -10,7 +10,7 @@
             android:title="Home" />
         <item
             android:id="@+id/nav_biblio"
-            android:icon="@drawable/ic_storage_white_24dp"
+            android:icon="@drawable/ic_library_music_white_24dp"
             android:title="Biblioteca"/>
         <item
             android:id="@+id/nav_slideshow"
