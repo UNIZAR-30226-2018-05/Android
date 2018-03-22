@@ -52,6 +52,14 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
 
         val toggle = ActionBarDrawerToggle(this,drawer_layout,my_toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close)
         toggle.syncState()
+        drawer_layout.setDrawerLockMode(DrawerLayout.LOCK_MODE_LOCKED_CLOSED)
+        my_toolbar.setNavigationOnClickListener(
+                object : View.OnClickListener {
+                    override fun onClick(p0: View?) {
+                        drawer_layout.openDrawer(nav_view)
+                    }
+                }
+        )
 
         drawer_layout.setDrawerLockMode(DrawerLayout.LOCK_MODE_LOCKED_CLOSED)
         nav_view.setNavigationItemSelectedListener(this)
@@ -71,6 +79,7 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         }
 
     }
+
 
     override fun onDestroy() {
         super.onDestroy()
