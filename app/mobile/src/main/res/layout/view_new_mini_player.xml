@@ -120,7 +120,7 @@
     </RelativeLayout>
 
     <SeekBar
-        android:id="@+id/progress_bar"
+        android:id="@+id/seek_bar"
         android:layout_alignParentTop="true"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
