@@ -56,7 +56,7 @@ class MediaPlayerHolder : PlayerAdapter {
         initializeMediaPlayer()
 
         var assetFileDescriptor: AssetFileDescriptor =
-        mContext.resources.openRawResourceFd(R.raw.song1)
+        mContext.resources.openRawResourceFd(resourceID!!)
 
         try {
             mMediaPlayer?.setDataSource(assetFileDescriptor.fileDescriptor, assetFileDescriptor.startOffset, assetFileDescriptor.length)

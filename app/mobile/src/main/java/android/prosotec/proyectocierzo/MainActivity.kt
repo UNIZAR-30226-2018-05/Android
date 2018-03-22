@@ -1,6 +1,7 @@
 package android.prosotec.proyectocierzo
 
 
+import android.app.Activity
 import android.os.Bundle
 import android.support.design.widget.NavigationView
 import android.support.v4.view.GravityCompat
@@ -52,10 +53,22 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         val toggle = ActionBarDrawerToggle(this,drawer_layout,my_toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close)
         toggle.syncState()
 
+        drawer_layout.setDrawerLockMode(DrawerLayout.LOCK_MODE_LOCKED_CLOSED)
         nav_view.setNavigationItemSelectedListener(this)
-        drawer_layout.setDrawerLockMode(DrawerLayout.LOCK_MODE_LOCKED_CLOSED);
+
         initializePlayerView()
         initializePlaybackController()
+
+        bt_song1.setOnClickListener{
+            mPlayerAdapter.release()
+            mPlayerAdapter.loadMedia(R.raw.song1)
+            mPlayerAdapter.play()
+        }
+        bt_song2.setOnClickListener {
+            mPlayerAdapter.release()
+            mPlayerAdapter.loadMedia(R.raw.song2)
+            mPlayerAdapter.play()
+        }
 
     }
 
