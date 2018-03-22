@@ -43,7 +43,7 @@
                 android:paddingTop="8dp"
                 >
 
-                <ImageView
+                <ImageButton
                     android:id="@+id/cover_image"
                     android:layout_alignParentLeft="true"
                     android:layout_width="66dp"

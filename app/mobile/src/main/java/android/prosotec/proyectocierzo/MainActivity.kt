@@ -61,7 +61,7 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         )
 
         nav_view.setNavigationItemSelectedListener(this)
-
+        drawer_layout.setDrawerLockMode(DrawerLayout.LOCK_MODE_LOCKED_CLOSED);
         initializePlayerView()
         initializePlaybackController()
 
