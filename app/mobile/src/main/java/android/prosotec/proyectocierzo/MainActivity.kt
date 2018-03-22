@@ -23,6 +23,25 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
     private var mUserIsSeeking: Boolean = false
     private var songProgress: Int = 0
 
+    /**
+     * Hilo/Tarea que actualiza el campo de texto del tiempo actual del reproductor
+     */
+    private val mUpdateTime = object : Runnable {
+        override fun run() {
+            if (mPlayerAdapter.isPlaying()) {
+                var time: Int = songProgress/1000
+                var timeM: Int = time/60
+                var timeS: Int = time.rem(60)
+                var timeStringM = if (timeM < 10) { "0$timeM" } else { timeM.toString() }
+                var timeStringS = if (timeS < 10) { "0$timeS" } else { timeS.toString() }
+                actual_time.text = "$timeStringM:$timeStringS"
+                actual_time.postDelayed(this, 1000)
+            } else {
+                actual_time.removeCallbacks(this)
+            }
+        }
+    }
+
     override fun onCreate(savedInstanceState: Bundle?) {
 
         super.onCreate(savedInstanceState)
@@ -35,26 +54,7 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         nav_view.setNavigationItemSelectedListener(this)
 
         initializePlayerView()
-        initializeSeekbar()
         initializePlaybackController()
-
-
-
-        /*val button1 = findViewById<FloatingActionButton> (R.id.play)
-        val mp = MediaPlayer.create (this, R.raw.song1)
-        var position = 0
-        button1.setOnClickListener {
-            if (position == 0) {
-                mp.start()
-                position = 1
-                button1.setImageResource(R.drawable.ic_pause_white_24dp)
-            } else{
-                mp.pause()
-                position = 0
-                button1.setImageResource(R.drawable.ic_play_arrow_white_24dp)
-            }
-
-        }*/
 
     }
 
@@ -75,14 +75,6 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         {
             mPlayerAdapter.release()
         }
-    }
-
-
-
-    private fun initializePlaybackController() {
-        var mMediaPlayerHolder = MediaPlayerHolder(this)
-        mMediaPlayerHolder.setPlaybackInfoListener(PlaybackListener())
-        mPlayerAdapter = mMediaPlayerHolder
     }
 
     override fun onBackPressed() {
@@ -126,6 +118,18 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         return true
     }
 
+    /**
+     * Se inicializa el controlador del reproductor
+     */
+    private fun initializePlaybackController() {
+        var mMediaPlayerHolder = MediaPlayerHolder(this)
+        mMediaPlayerHolder.setPlaybackInfoListener(PlaybackListener())
+        mPlayerAdapter = mMediaPlayerHolder
+    }
+
+    /**
+     * Inicializa la vista del reproductor
+     */
     private fun initializePlayerView() {
         play.setOnClickListener(
                 object : View.OnClickListener {
@@ -151,8 +155,13 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
                     }
                 }
         )
+
+        initializeSeekbar()
     }
 
+    /**
+     * Inicializa la barra de progreso del reproductor
+     */
     private fun initializeSeekbar() {
         seek_bar.setOnSeekBarChangeListener(
                 object : SeekBar.OnSeekBarChangeListener {
@@ -176,22 +185,9 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         )
     }
 
-    private val mUpdateTime = object : Runnable {
-        override fun run() {
-            if (mPlayerAdapter.isPlaying()) {
-                var time: Int = songProgress/1000
-                var timeM: Int = time/60
-                var timeS: Int = time.rem(60)
-                var timeStringM = if (timeM < 10) { "0$timeM" } else { timeM.toString() }
-                var timeStringS = if (timeS < 10) { "0$timeS" } else { timeS.toString() }
-                actual_time.text = "$timeStringM:$timeStringS"
-                actual_time.postDelayed(this, 1000)
-            } else {
-                actual_time.removeCallbacks(this)
-            }
-        }
-    }
-
+    /**
+     * Listener del reproductor
+     */
     inner class PlaybackListener : PlaybackInfoListener() {
 
         override fun onDurationChanged(duration: Int) {

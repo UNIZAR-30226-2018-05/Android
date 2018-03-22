@@ -4,11 +4,7 @@ import android.content.Context
 import android.prosotec.proyectocierzo.R
 import android.util.AttributeSet
 import android.view.LayoutInflater
-import android.widget.ImageButton
-import android.widget.ImageView
 import android.widget.RelativeLayout
-import android.widget.TextView
-import kotlinx.android.synthetic.main.view_new_mini_player.view.*
 
 /**
  * Created by ccucr on 18/03/2018.

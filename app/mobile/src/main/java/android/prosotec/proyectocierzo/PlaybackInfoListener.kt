@@ -1,7 +1,7 @@
 package android.prosotec.proyectocierzo
 
 /**
- * Created by ccucr on 21/03/2018.
+ * Clase que puede recibir las actualizaciones de tiempo y estado del reproductor
  */
 abstract class PlaybackInfoListener {
 

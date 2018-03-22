@@ -1,7 +1,7 @@
 package android.prosotec.proyectocierzo
 
 /**
- * Created by ccucr on 21/03/2018.
+ * Adaptador para las clases que implementen el reproductor (Media Player)
  */
 interface PlayerAdapter {
 

@@ -4,19 +4,18 @@ import android.content.Context
 import android.content.res.AssetFileDescriptor
 import android.media.MediaPlayer
 import android.util.Log
-import java.io.FileDescriptor
 import java.util.concurrent.Executors
 import java.util.concurrent.ScheduledExecutorService
 import java.util.concurrent.TimeUnit
 
 /**
- * Created by ccucr on 21/03/2018.
+ * Clase que implementa el reproductor (Media Player)
  */
 class MediaPlayerHolder : PlayerAdapter {
 
     private val PLAYBACK_POSITION_REFRESH_INTERVAL_MS = 1000
 
-    private lateinit var mContext: Context
+    private var mContext: Context
     private var mMediaPlayer: MediaPlayer? = null
     private var mPlaybackInfoListener: PlaybackInfoListener? = null
     // Executor es un objeto que permite ejecutar tareas en paralelo
@@ -147,6 +146,7 @@ class MediaPlayerHolder : PlayerAdapter {
             mExecutor = Executors.newSingleThreadScheduledExecutor()
         }
         if (mSeekbarPositionUpdateTask == null) {
+            // Crea un hilo/tarea donde ejecuta la actualización
             mSeekbarPositionUpdateTask = Runnable { updateProgressCallbackTask() }
         }
         mExecutor?.scheduleAtFixedRate(
