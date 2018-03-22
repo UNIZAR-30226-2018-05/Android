@@ -1,20 +1,14 @@
 package android.prosotec.proyectocierzo
 
 
-import android.media.MediaPlayer
 import android.os.Bundle
 import android.support.design.widget.NavigationView
 import android.support.v4.view.GravityCompat
-import android.support.v4.widget.DrawerLayout
 import android.support.v7.app.ActionBarDrawerToggle
 import android.support.v7.app.AppCompatActivity
-import android.support.v7.widget.Toolbar
 import android.view.Menu
 import android.view.MenuItem
-import android.view.MotionEvent
 import android.view.View
-import android.widget.Button
-import android.widget.ImageButton
 import android.widget.SeekBar
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.view_new_mini_player.*
@@ -27,6 +21,7 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
 
     private lateinit var mPlayerAdapter: PlayerAdapter
     private var mUserIsSeeking: Boolean = false
+    private var songProgress: Int = 0
 
     override fun onCreate(savedInstanceState: Bundle?) {
 
@@ -136,9 +131,13 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
                 object : View.OnClickListener {
                     override fun onClick(p0: View?) {
                         if (mPlayerAdapter.isPlaying()) {
+                            play.setImageResource(R.drawable.ic_play_arrow_white_24dp)
                             mPlayerAdapter.pause()
+
                         } else {
                             mPlayerAdapter.play()
+                            play.setImageResource(R.drawable.ic_pause_white_24dp)
+                            actual_time.post(mUpdateTime)
                         }
                     }
                 }
@@ -148,6 +147,7 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
                 object : View.OnClickListener {
                     override fun onClick(p0: View?) {
                         mPlayerAdapter.reset()
+                        mPlayerAdapter.play()
                     }
                 }
         )
@@ -176,15 +176,39 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         )
     }
 
+    private val mUpdateTime = object : Runnable {
+        override fun run() {
+            if (mPlayerAdapter.isPlaying()) {
+                var time: Int = songProgress/1000
+                var timeM: Int = time/60
+                var timeS: Int = time.rem(60)
+                var timeStringM = if (timeM < 10) { "0$timeM" } else { timeM.toString() }
+                var timeStringS = if (timeS < 10) { "0$timeS" } else { timeS.toString() }
+                actual_time.text = "$timeStringM:$timeStringS"
+                actual_time.postDelayed(this, 1000)
+            } else {
+                actual_time.removeCallbacks(this)
+            }
+        }
+    }
+
     inner class PlaybackListener : PlaybackInfoListener() {
 
         override fun onDurationChanged(duration: Int) {
             seek_bar.max = duration
+
+            var time: Int = duration/1000
+            var timeM: Int = time/60
+            var timeS: Int = time.rem(60)
+            var timeStringM = if (timeM < 10) { "0$timeM" } else { timeM.toString() }
+            var timeStringS = if (timeS < 10) { "0$timeS" } else { timeS.toString() }
+            length.text = "$timeStringM:$timeStringS"
         }
 
         override fun onPositionChanged(position: Int) {
             if (!mUserIsSeeking) {
                 seek_bar.progress = position
+                songProgress = position
             }
         }
 
