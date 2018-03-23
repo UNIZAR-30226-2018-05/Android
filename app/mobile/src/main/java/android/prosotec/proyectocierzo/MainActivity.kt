@@ -3,6 +3,7 @@ package android.prosotec.proyectocierzo
 
 import android.app.Activity
 import android.os.Bundle
+import android.prosotec.proyectocierzo.fragment.PlayerFragment
 import android.support.design.widget.NavigationView
 import android.support.v4.view.GravityCompat
 import android.support.v4.widget.DrawerLayout
@@ -14,7 +15,6 @@ import android.view.View
 import android.widget.SeekBar
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.view_new_mini_player.*
-
 
 /**
  * Created by ccucr on 18/03/2018.
@@ -31,13 +31,13 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
     private val mUpdateTime = object : Runnable {
         override fun run() {
             if (mPlayerAdapter.isPlaying()) {
-                var time: Int = songProgress/1000
+                var time: Int = seek_bar.progress/1000
                 var timeM: Int = time/60
                 var timeS: Int = time.rem(60)
                 var timeStringM = if (timeM < 10) { "0$timeM" } else { timeM.toString() }
                 var timeStringS = if (timeS < 10) { "0$timeS" } else { timeS.toString() }
                 actual_time.text = "$timeStringM:$timeStringS"
-                actual_time.postDelayed(this, 1000)
+                actual_time.postDelayed(this, 500)
             } else {
                 actual_time.removeCallbacks(this)
             }
@@ -70,14 +70,17 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         bt_song1.setOnClickListener{
             mPlayerAdapter.release()
             mPlayerAdapter.loadMedia(R.raw.song1)
+            play.setImageResource(R.drawable.ic_pause_white_24dp)
             mPlayerAdapter.play()
         }
         bt_song2.setOnClickListener {
             mPlayerAdapter.release()
             mPlayerAdapter.loadMedia(R.raw.song2)
+            play.setImageResource(R.drawable.ic_pause_white_24dp)
             mPlayerAdapter.play()
         }
 
+        var pa: PlayerFragment
     }
 
 
@@ -164,7 +167,7 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
                         } else {
                             mPlayerAdapter.play()
                             play.setImageResource(R.drawable.ic_pause_white_24dp)
-                            actual_time.post(mUpdateTime)
+
                         }
                     }
                 }
@@ -227,12 +230,13 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         override fun onPositionChanged(position: Int) {
             if (!mUserIsSeeking) {
                 seek_bar.progress = position
-                songProgress = position
             }
         }
 
         override fun onStateChanged(state: PlaybackInfoListener.State) {
-
+            when (state) {
+                State.PLAYING -> actual_time.post(mUpdateTime)
+            }
         }
 
         override fun onPlaybackCompleted() {

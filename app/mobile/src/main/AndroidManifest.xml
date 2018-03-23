@@ -10,7 +10,6 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
         <activity android:name=".LoginActivity" />
-        <activity android:name=".PlayerActivity"></activity>
         <activity
             android:name=".IndexActivity"
             android:label="@string/title_activity_index"
@@ -27,7 +26,7 @@
         </activity>
 
         <activity android:name=".MainActivity"
-            android:label="MainActivity"
+            android:label="Cierzo"
             android:theme="@style/AppTheme">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
