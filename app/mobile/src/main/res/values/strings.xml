@@ -11,10 +11,21 @@
     <string name="player_album_description">Caratula del album</string>
     <string name="title_activity_index">IndexActivity</string>
 
+    <!-- Strings para los tabs -->
+    <string name="tab_playlist">PLAYLIST</string>
+    <string name="tab_song">CANCIONES</string>
+    <string name="tab_album">ALBUMS</string>
+    <string name="tab_artists">ARTISTAS</string>
+
+    <!-- Strings para menu -->
+    <string name="menu_profile">Perfil</string>
+    <string name="menu_settings">Ajustes</string>
+    <string name="menu_signOut">Cerrar Sesión</string>
+    
     <string name="navigation_drawer_open">Open navigation drawer</string>
     <string name="navigation_drawer_close">Close navigation drawer</string>
 
-    <string name="action_settings">Settings</string>
+
 
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
@@ -108,4 +119,6 @@
         "For example, position the FAB to one side of stream of a cards so the FAB won’t interfere "
         "when a user tries to pick up one of cards.\n\n"
     </string>
+    <string name="title_activity_main2">Main2Activity</string>
+    <string name="section_format">Hello World from section: %1$d</string>
 </resources>

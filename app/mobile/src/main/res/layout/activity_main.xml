@@ -54,15 +54,10 @@
                 android:layout_toEndOf="@id/bt_song1"
                 android:layout_below="@id/my_toolbar" />
 
-            <include
-                android:id="@+id/mini_player"
-                layout="@layout/view_new_mini_player"/>
+        <include
+            android:id="@+id/mini_player"
+            layout="@layout/view_new_mini_player"/>
 
     </RelativeLayout>
-
-    <fragment
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:visibility="gone"/>
 
 </android.support.v4.widget.DrawerLayout>
