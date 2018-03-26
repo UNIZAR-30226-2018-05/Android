@@ -12,6 +12,11 @@ import android.view.*
 
 import kotlinx.android.synthetic.main.activity_main2.*
 import kotlinx.android.synthetic.main.fragment_main2.view.*
+import android.view.Gravity
+import android.support.v4.view.MenuItemCompat.getActionView
+import android.support.v7.app.ActionBar
+import android.widget.SearchView
+
 
 class Main2Activity : AppCompatActivity() {
 
@@ -89,7 +94,6 @@ class Main2Activity : AppCompatActivity() {
         override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
                                   savedInstanceState: Bundle?): View? {
             val rootView = inflater.inflate(R.layout.fragment_main2, container, false)
-            rootView.section_label.text = getString(R.string.section_format, arguments.getInt(ARG_SECTION_NUMBER))
             return rootView
         }
 

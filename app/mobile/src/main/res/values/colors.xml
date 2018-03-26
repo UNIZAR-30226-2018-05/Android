@@ -10,4 +10,6 @@
     <color name="colorLoginGradienteMedio">#0277BD</color>
     <color name="colorLoginGradienteBajo">#0288D1</color>
     <color name="colorPlayerBackground">#263238</color>
+
+    <color name="colorBackgroundFragment">#ECEFF1</color>
 </resources>
