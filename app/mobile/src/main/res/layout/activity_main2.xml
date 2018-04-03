@@ -20,7 +20,7 @@
             android:layout_width="match_parent"
             android:layout_height="?attr/actionBarSize"
             android:layout_weight="1"
-            android:background="?attr/colorPrimary"
+            android:background="@color/colorPrimary"
             app:popupTheme="@style/AppTheme.PopupOverlay">
 
             <ImageView
@@ -34,19 +34,23 @@
                 android:layout_gravity="end"/>
 
         </android.support.v7.widget.Toolbar>
-
+        
         <android.support.design.widget.TabLayout
             android:id="@+id/tabs"
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
 
             <android.support.design.widget.TabItem
+                android:id="@+id/playlist_tab"
                 android:text="@string/tab_playlist"/>
             <android.support.design.widget.TabItem
+                android:id="@+id/song_tab"
                 android:text="@string/tab_song"/>
             <android.support.design.widget.TabItem
+                android:id="@+id/album_tab"
                 android:text="@string/tab_album"/>
             <android.support.design.widget.TabItem
+                android:id="@+id/artist_tab"
                 android:text="@string/tab_artists"/>
 
         </android.support.design.widget.TabLayout>

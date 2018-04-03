@@ -8,6 +8,11 @@ import android.support.v4.app.FragmentManager
 import android.support.v4.app.FragmentPagerAdapter
 import android.support.v4.view.ViewPager
 import android.os.Bundle
+import android.prosotec.proyectocierzo.R.id.mini
+import android.prosotec.proyectocierzo.fragment.*
+import android.support.design.widget.CoordinatorLayout.Behavior.getTag
+import android.support.design.widget.TabItem
+import android.support.design.widget.TabLayout
 import android.view.*
 
 import kotlinx.android.synthetic.main.activity_main2.*
@@ -15,6 +20,8 @@ import kotlinx.android.synthetic.main.fragment_main2.view.*
 import android.view.Gravity
 import android.support.v4.view.MenuItemCompat.getActionView
 import android.support.v7.app.ActionBar
+import android.support.v7.widget.RecyclerView
+import android.widget.Adapter
 import android.widget.SearchView
 
 
@@ -45,8 +52,22 @@ class Main2Activity : AppCompatActivity() {
         container.adapter = mSectionsPagerAdapter
 
 
-    }
+        // Set up the ViewPager with the sections adapter.
+        val mViewPager = findViewById(R.id.container) as ViewPager
+        mViewPager.setAdapter(mSectionsPagerAdapter)
 
+        val tabLayout = findViewById(R.id.tabs) as TabLayout
+
+        mViewPager.addOnPageChangeListener(TabLayout.TabLayoutOnPageChangeListener(tabLayout))
+        tabLayout.addOnTabSelectedListener(TabLayout.ViewPagerOnTabSelectedListener(mViewPager))
+
+        //TODO: Hay que cambiar el include del XML por un Layout, el que se quiera.
+        val mf = MiniPlayerFragment()
+        val manager = supportFragmentManager
+        manager.beginTransaction().replace(R.id.mini_player, mf, mf.getTag()).commit()
+
+
+    }
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
         // Inflate the menu; this adds items to the action bar if it is present.
@@ -60,41 +81,28 @@ class Main2Activity : AppCompatActivity() {
         // as you specify a parent activity in AndroidManifest.xml.
         val id = item.itemId
 
-        if (id == R.id.action_settings) {
-            return true
-        }
 
-        return super.onOptionsItemSelected(item)
+        return if (id == R.id.action_settings) {
+            true
+        } else super.onOptionsItemSelected(item)
+
     }
 
-
-    /**
-     * A [FragmentPagerAdapter] that returns a fragment corresponding to
-     * one of the sections/tabs/pages.
-     */
-    inner class SectionsPagerAdapter(fm: FragmentManager) : FragmentPagerAdapter(fm) {
-
-        override fun getItem(position: Int): Fragment {
-            // getItem is called to instantiate the fragment for the given page.
-            // Return a PlaceholderFragment (defined as a static inner class below).
-            return PlaceholderFragment.newInstance(position + 1)
-        }
-
-        override fun getCount(): Int {
-            // Show 3 total pages.
-            return 3
-        }
-    }
 
     /**
      * A placeholder fragment containing a simple view.
      */
     class PlaceholderFragment : Fragment() {
 
-        override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
+        override fun onCreateView(inflater: LayoutInflater?, container: ViewGroup?,
                                   savedInstanceState: Bundle?): View? {
-            val rootView = inflater.inflate(R.layout.fragment_main2, container, false)
-            return rootView
+            when (arguments.getInt(ARG_SECTION_NUMBER)) {
+                1 -> return inflater!!.inflate(R.layout.fragment_prueba, container, false)
+                2 -> return inflater!!.inflate(R.layout.fragment_prueba2, container, false)
+                3 -> return inflater!!.inflate(R.layout.fragment_prueba3, container, false)
+                else -> return inflater!!.inflate(R.layout.fragment_player, container, false)
+            }
+
         }
 
         companion object {
@@ -115,6 +123,24 @@ class Main2Activity : AppCompatActivity() {
                 fragment.arguments = args
                 return fragment
             }
+        }
+    }
+
+    /**
+     * A [FragmentPagerAdapter] that returns a fragment corresponding to
+     * one of the sections/tabs/pages.
+     */
+    inner class SectionsPagerAdapter(fm: FragmentManager) : FragmentPagerAdapter(fm) {
+
+        override fun getItem(position: Int): Fragment {
+            // getItem is called to instantiate the fragment for the given page.
+            // Return a PlaceholderFragment (defined as a static inner class below).
+            return PlaceholderFragment.newInstance(position + 1)
+        }
+
+        override fun getCount(): Int {
+            // Show 4 total pages.
+            return 4
         }
     }
 }
