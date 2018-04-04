@@ -3,6 +3,7 @@ package android.prosotec.proyectocierzo
 
 import android.app.Activity
 import android.os.Bundle
+import android.prosotec.proyectocierzo.fragment.MiniPlayerFragment
 import android.prosotec.proyectocierzo.fragment.PlayerFragment
 import android.support.design.widget.NavigationView
 import android.support.v4.view.GravityCompat
@@ -12,6 +13,7 @@ import android.support.v7.app.AppCompatActivity
 import android.view.Menu
 import android.view.MenuItem
 import android.view.View
+import android.widget.ArrayAdapter
 import android.widget.SeekBar
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.view_new_mini_player.*
@@ -67,20 +69,94 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         initializePlayerView()
         initializePlaybackController()
 
+        //Botones auxiliares y temporales
         bt_song1.setOnClickListener{
             mPlayerAdapter.release()
             mPlayerAdapter.loadMedia(R.raw.song1)
             play.setImageResource(R.drawable.ic_pause_white_24dp)
             mPlayerAdapter.play()
+            songProgress = 1
         }
         bt_song2.setOnClickListener {
             mPlayerAdapter.release()
             mPlayerAdapter.loadMedia(R.raw.song2)
             play.setImageResource(R.drawable.ic_pause_white_24dp)
             mPlayerAdapter.play()
+            songProgress = 2
         }
 
-        var pa: PlayerFragment
+        // Cambiar por posición del ArrayList recibido de la API
+        skip_prev.setOnClickListener {
+            mPlayerAdapter.release()
+            when(songProgress){
+                1 -> {mPlayerAdapter.loadMedia(R.raw.song5)
+                     play.setImageResource(R.drawable.ic_pause_white_24dp)
+                    autor.text = "Avenged Sevenfold"
+                    titulo.text = "Hail to the king"
+                     mPlayerAdapter.play()
+                     songProgress = 5}
+                2 -> {mPlayerAdapter.loadMedia(R.raw.song1)
+                    play.setImageResource(R.drawable.ic_pause_white_24dp)
+                    autor.text="Linkin park"
+                    titulo.text="Numb"
+                    mPlayerAdapter.play()
+                    songProgress = 1}
+                3 -> {mPlayerAdapter.loadMedia(R.raw.song2)
+                    play.setImageResource(R.drawable.ic_pause_white_24dp)
+                    autor.text = "Breaking Benjamin"
+                    titulo.text = "Diary of Jane"
+                    mPlayerAdapter.play()
+                    songProgress = 2}
+                4 -> {mPlayerAdapter.loadMedia(R.raw.song3)
+                    play.setImageResource(R.drawable.ic_pause_white_24dp)
+                    autor.text = "Green Day"
+                    titulo.text = "Basket Case"
+                    mPlayerAdapter.play()
+                    songProgress = 3}
+                else ->{mPlayerAdapter.loadMedia(R.raw.song4)
+                    play.setImageResource(R.drawable.ic_pause_white_24dp)
+                    autor.text = "The Offspring"
+                    titulo.text = "Pretty Fly"
+                    mPlayerAdapter.play()
+                    songProgress = 4}
+            }
+        }
+        skip_next.setOnClickListener {
+            mPlayerAdapter.release()
+            when(songProgress){
+                1 -> {mPlayerAdapter.loadMedia(R.raw.song2)
+                    play.setImageResource(R.drawable.ic_pause_white_24dp)
+                    autor.text = "Breaking Benjamin"
+                    titulo.text = "Diary of Jane"
+                    mPlayerAdapter.play()
+                    songProgress = 2}
+                2 -> {mPlayerAdapter.loadMedia(R.raw.song3)
+                    play.setImageResource(R.drawable.ic_pause_white_24dp)
+                    autor.text = "Green Day"
+                    titulo.text = "Basket Case"
+                    mPlayerAdapter.play()
+                    songProgress = 3}
+                3 -> {mPlayerAdapter.loadMedia(R.raw.song4)
+                    play.setImageResource(R.drawable.ic_pause_white_24dp)
+                    autor.text = "The Offspring"
+                    titulo.text = "Pretty Fly"
+                    mPlayerAdapter.play()
+                    songProgress = 4}
+                4 -> {mPlayerAdapter.loadMedia(R.raw.song5)
+                    play.setImageResource(R.drawable.ic_pause_white_24dp)
+                    autor.text = "Avenged Sevenfold"
+                    titulo.text = "Hail to the king"
+                    mPlayerAdapter.play()
+                    songProgress = 5}
+                else ->{mPlayerAdapter.loadMedia(R.raw.song1)
+                    play.setImageResource(R.drawable.ic_pause_white_24dp)
+                    autor.text="Linkin park"
+                    titulo.text="Numb"
+                    mPlayerAdapter.play()
+                    songProgress = 1}
+            }
+        }
+
     }
 
 
