@@ -36,6 +36,8 @@ class Main2Activity : AppCompatActivity() {
      * [android.support.v4.app.FragmentStatePagerAdapter].
      */
     private var mSectionsPagerAdapter: SectionsPagerAdapter? = null
+    private var mMiniPlayerFragment: MiniPlayerFragment = MiniPlayerFragment()
+    private val mFragmentManager = supportFragmentManager
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -61,12 +63,17 @@ class Main2Activity : AppCompatActivity() {
         mViewPager.addOnPageChangeListener(TabLayout.TabLayoutOnPageChangeListener(tabLayout))
         tabLayout.addOnTabSelectedListener(TabLayout.ViewPagerOnTabSelectedListener(mViewPager))
 
-        //TODO: Hay que cambiar el include del XML por un Layout, el que se quiera.
-        val mf = MiniPlayerFragment()
-        val manager = supportFragmentManager
-        manager.beginTransaction().replace(R.id.mini_player, mf, mf.getTag()).commit()
+        mFragmentManager.beginTransaction().replace(R.id.mini_player, mMiniPlayerFragment,
+                mMiniPlayerFragment.getTag()).commit()
 
 
+
+
+    }
+
+    override fun onStart() {
+        super.onStart()
+        mMiniPlayerFragment.initialize(this)
     }
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
