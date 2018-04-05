@@ -41,15 +41,23 @@
             android:layout_height="wrap_content">
 
             <android.support.design.widget.TabItem
+                android:layout_height="wrap_content"
+                android:layout_width="wrap_content"
                 android:id="@+id/playlist_tab"
                 android:text="@string/tab_playlist"/>
             <android.support.design.widget.TabItem
+                android:layout_height="wrap_content"
+                android:layout_width="wrap_content"
                 android:id="@+id/song_tab"
                 android:text="@string/tab_song"/>
             <android.support.design.widget.TabItem
+                android:layout_height="wrap_content"
+                android:layout_width="wrap_content"
                 android:id="@+id/album_tab"
                 android:text="@string/tab_album"/>
             <android.support.design.widget.TabItem
+                android:layout_height="wrap_content"
+                android:layout_width="wrap_content"
                 android:id="@+id/artist_tab"
                 android:text="@string/tab_artists"/>
 
@@ -62,13 +70,12 @@
         android:layout_height="wrap_content"
         android:layout_below="@id/appbar"
         android:layout_above="@id/mini_player"
-        android:layout_marginBottom="-10dp"
         app:layout_behavior="@string/appbar_scrolling_view_behavior" />
 
-    <include
-        android:id="@+id/mini_player"
-        layout="@layout/view_new_mini_player"/>
-
-
+    <RelativeLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:id="@+id/mini_player"/>
 
 </RelativeLayout>
