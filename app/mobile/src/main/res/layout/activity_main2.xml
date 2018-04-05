@@ -70,6 +70,7 @@
         android:layout_height="wrap_content"
         android:layout_below="@id/appbar"
         android:layout_above="@id/mini_player"
+        android:layout_marginBottom="-10dp"
         app:layout_behavior="@string/appbar_scrolling_view_behavior" />
 
     <RelativeLayout
