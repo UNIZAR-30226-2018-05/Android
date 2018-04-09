@@ -88,6 +88,8 @@ class MiniPlayerFragment : Fragment() {
                         titulo.text = song.name
                         mPlayerAdapter.loadMedia(song.fileURL)
                         Picasso.get().load(song.imageURL).into(cover_image)
+                        mPlayerAdapter.play()
+                        songProgress = 4
                     }
                 }
                 else ->{mPlayerAdapter.loadMedia(R.raw.song4)
@@ -95,7 +97,7 @@ class MiniPlayerFragment : Fragment() {
                     autor.text = "The Offspring"
                     titulo.text = "Pretty Fly"
                     mPlayerAdapter.play()
-                    songProgress = 4}
+                    songProgress = 5}
             }
         }
         skip_next.setOnClickListener {
@@ -132,6 +134,8 @@ class MiniPlayerFragment : Fragment() {
                         titulo.text = song.name
                         mPlayerAdapter.loadMedia(song.fileURL)
                         Picasso.get().load(song.imageURL).into(cover_image)
+                        mPlayerAdapter.play()
+                        songProgress = 1
                     }
                 }
                 else ->{mPlayerAdapter.loadMedia(R.raw.song1)
