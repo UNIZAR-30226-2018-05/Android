@@ -74,6 +74,7 @@ class Main2Activity : AppCompatActivity() {
     override fun onStart() {
         super.onStart()
         mMiniPlayerFragment.initialize(this)
+
     }
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {

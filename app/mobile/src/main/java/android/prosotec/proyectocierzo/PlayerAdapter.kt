@@ -7,6 +7,8 @@ interface PlayerAdapter {
 
     fun loadMedia(resourceID: Int?)
 
+    fun loadMedia(URL: String)
+
     fun release()
 
     fun isPlaying() : Boolean

@@ -73,6 +73,25 @@ class MediaPlayerHolder : PlayerAdapter {
         initializeProgressCallback()
     }
 
+    override fun loadMedia(URL: String) {
+
+        initializeMediaPlayer()
+
+        try {
+            mMediaPlayer?.setDataSource(URL)
+        } catch (e: Exception) {
+            Log.e("MPH_setDataSource", e.toString())
+        }
+
+        try {
+            mMediaPlayer?.prepare()
+        } catch (e: Exception) {
+            Log.e("MPH_preprare", e.toString())
+        }
+
+        initializeProgressCallback()
+    }
+
     /**
      * Libera el MediaPlayer
      */

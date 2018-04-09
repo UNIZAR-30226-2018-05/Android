@@ -1,6 +1,7 @@
 package android.prosotec.proyectocierzo.fragment
 
 import android.content.Context
+import android.graphics.Bitmap
 import android.os.Bundle
 import android.prosotec.proyectocierzo.*
 import android.support.v4.app.Fragment
@@ -8,8 +9,13 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.SeekBar
+import cierzo.model.*
+import cierzo.model.objects.Song
+import com.squareup.picasso.Picasso
+import io.swagger.client.models.SongItem
 import kotlinx.android.synthetic.main.activity_main2.*
 import kotlinx.android.synthetic.main.fragment_mini_player.*
+
 
 /**
  * A simple [Fragment] subclass.
@@ -75,6 +81,15 @@ class MiniPlayerFragment : Fragment() {
                     titulo.text = "Basket Case"
                     mPlayerAdapter.play()
                     songProgress = 3}
+                5 -> {
+                    var song: Song? = getSong("123456789")
+                    if (song != null) {
+                        autor.text = song.authorName
+                        titulo.text = song.name
+                        mPlayerAdapter.loadMedia(song.fileURL)
+                        Picasso.get().load(song.imageURL).into(cover_image)
+                    }
+                }
                 else ->{mPlayerAdapter.loadMedia(R.raw.song4)
                     play.setImageResource(R.drawable.ic_pause_white_24dp)
                     autor.text = "The Offspring"
@@ -110,6 +125,15 @@ class MiniPlayerFragment : Fragment() {
                     titulo.text = "Hail to the king"
                     mPlayerAdapter.play()
                     songProgress = 5}
+                5 -> {
+                    var song: Song? = getSong("123456789")
+                    if (song != null) {
+                        autor.text = song.authorName
+                        titulo.text = song.name
+                        mPlayerAdapter.loadMedia(song.fileURL)
+                        Picasso.get().load(song.imageURL).into(cover_image)
+                    }
+                }
                 else ->{mPlayerAdapter.loadMedia(R.raw.song1)
                     play.setImageResource(R.drawable.ic_pause_white_24dp)
                     autor.text="Linkin park"

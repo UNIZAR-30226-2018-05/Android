@@ -23,7 +23,6 @@ android {
 }
 
 dependencies {
-    implementation fileTree(dir: 'libs', include: ['*.jar'])
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jre7:$kotlin_version"
     implementation 'com.android.support:appcompat-v7:26.1.0'
     implementation 'com.android.support.constraint:constraint-layout:1.0.2'
@@ -33,5 +32,10 @@ dependencies {
     androidTestImplementation 'com.android.support.test:runner:1.0.1'
     androidTestImplementation 'com.android.support.test.espresso:espresso-core:3.0.1'
     wearApp project(':wear')
+    implementation 'com.squareup.picasso:picasso:2.71828'
     implementation 'com.google.android.gms:play-services-wearable:+'
+    implementation "com.squareup.moshi:moshi-kotlin:1.5.0"
+    implementation "com.squareup.moshi:moshi-adapters:1.5.0"
+    implementation "com.squareup.okhttp3:okhttp:3.10.0"
+    implementation files('libs/modelo-jvm.jar')
 }
