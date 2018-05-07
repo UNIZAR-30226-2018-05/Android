@@ -23,6 +23,8 @@ import android.support.v7.app.ActionBar
 import android.support.v7.widget.RecyclerView
 import android.widget.Adapter
 import android.widget.SearchView
+import cierzo.model.APIConnector
+import cierzo.model.objects.SongQueue
 
 
 class Main2Activity : AppCompatActivity() {
@@ -73,7 +75,9 @@ class Main2Activity : AppCompatActivity() {
 
     override fun onStart() {
         super.onStart()
+        SongQueue.loadPlaylist(APIConnector.getPlaylist(1)!!)
         mMiniPlayerFragment.initialize(this)
+
 
     }
 
