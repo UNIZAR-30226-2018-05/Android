@@ -1,5 +1,6 @@
 package android.prosotec.proyectocierzo
 
+import android.os.AsyncTask
 import android.support.design.widget.Snackbar
 import android.support.v7.app.AppCompatActivity
 
@@ -21,10 +22,14 @@ import android.view.Gravity
 import android.support.v4.view.MenuItemCompat.getActionView
 import android.support.v7.app.ActionBar
 import android.support.v7.widget.RecyclerView
+import android.util.Log
 import android.widget.Adapter
 import android.widget.SearchView
 import cierzo.model.APIConnector
 import cierzo.model.objects.SongQueue
+import java.util.concurrent.Executors
+import java.util.concurrent.ScheduledExecutorService
+import java.util.concurrent.TimeUnit
 
 
 class Main2Activity : AppCompatActivity() {
@@ -40,6 +45,7 @@ class Main2Activity : AppCompatActivity() {
     private var mSectionsPagerAdapter: SectionsPagerAdapter? = null
     private var mMiniPlayerFragment: MiniPlayerFragment = MiniPlayerFragment()
     private val mFragmentManager = supportFragmentManager
+    private var mExecutor: ScheduledExecutorService? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -67,6 +73,7 @@ class Main2Activity : AppCompatActivity() {
 
         mFragmentManager.beginTransaction().replace(R.id.mini_player, mMiniPlayerFragment,
                 mMiniPlayerFragment.getTag()).commit()
+        mMiniPlayerFragment.view?.visibility = View.GONE
 
 
 
@@ -75,11 +82,15 @@ class Main2Activity : AppCompatActivity() {
 
     override fun onStart() {
         super.onStart()
-        SongQueue.loadPlaylist(APIConnector.getPlaylist(1)!!)
+        Log.e("DEBUG: ","start")
+        AsyncLoadPlaylist().execute()
+        Log.e("DEBUG: ",SongQueue.playingSongs.size.toString())
         mMiniPlayerFragment.initialize(this)
 
 
     }
+
+
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
         // Inflate the menu; this adds items to the action bar if it is present.
@@ -153,6 +164,22 @@ class Main2Activity : AppCompatActivity() {
         override fun getCount(): Int {
             // Show 4 total pages.
             return 4
+        }
+    }
+
+    inner class AsyncLoadPlaylist: AsyncTask<Void, Void, Boolean>() {
+        override fun doInBackground(vararg params: Void?): Boolean {
+            mMiniPlayerFragment.view?.visibility = View.GONE
+            SongQueue.loadPlaylist(APIConnector.getPlaylist(1)!!)
+            Log.e("debugL", SongQueue.playingSongs[0].name)
+            Log.e("debugL", SongQueue.playingSongs[1].name)
+            Log.e("debugL", SongQueue.playingSongs[2].name)
+            return true
+        }
+
+        override fun onPostExecute(result: Boolean?) {
+            super.onPostExecute(result)
+            mMiniPlayerFragment.view?.visibility = View.VISIBLE
         }
     }
 }

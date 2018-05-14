@@ -5,6 +5,7 @@ import android.graphics.Bitmap
 import android.os.Bundle
 import android.prosotec.proyectocierzo.*
 import android.support.v4.app.Fragment
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -56,12 +57,14 @@ class MiniPlayerFragment : Fragment() {
 
         // Cambiar por posición del ArrayList recibido de la API
         skip_prev.setOnClickListener {
-            val nextSong = SongQueue.getNextSong()
-            mPlayerAdapter.loadMedia(R.raw.song1)
+            Log.e("DEBUG:", "antes de getPrevSong " + SongQueue.actualSongIndex)
+            val prevSong = SongQueue.getPreviousSong()
+            Log.e("DEBUG:", "despues de getPrevSong " + SongQueue.actualSongIndex)
+            //mPlayerAdapter.loadMedia(R.raw.song1)
             play.setImageResource(R.drawable.ic_pause_white_24dp)
-            autor.text = nextSong?.authorName ?: "Author not set"
-            titulo.text = nextSong?.name ?: "Title not set"
-            mPlayerAdapter.play()
+            autor.text = prevSong?.authorName ?: "Author not set"
+            titulo.text = prevSong?.name ?: "Title not set"
+            //mPlayerAdapter.play()
             /*mPlayerAdapter.release()
             when(songProgress){
                 1 -> {mPlayerAdapter.loadMedia(R.raw.song5)
@@ -108,12 +111,14 @@ class MiniPlayerFragment : Fragment() {
             }*/
         }
         skip_next.setOnClickListener {
-            val nextSong = SongQueue.getPreviousSong()
-            mPlayerAdapter.loadMedia(R.raw.song1)
+            Log.e("DEBUG:", "antes de getNextSong " + SongQueue.actualSongIndex)
+            val nextSong = SongQueue.getNextSong()
+            Log.e("DEBUG:", "despues de getNextSong " + SongQueue.actualSongIndex)
+            //mPlayerAdapter.loadMedia(R.raw.song1)
             play.setImageResource(R.drawable.ic_pause_white_24dp)
-            autor.text = nextSong.authorName
-            titulo.text = nextSong.name
-            mPlayerAdapter.play()
+            autor.text = nextSong?.authorName ?: "Author not set"
+            titulo.text = nextSong?.name ?: "Title not set"
+            //mPlayerAdapter.play()
             /*mPlayerAdapter.release()
             when(songProgress){
                 1 -> {mPlayerAdapter.loadMedia(R.raw.song2)
