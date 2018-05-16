@@ -43,6 +43,13 @@ class Main2Activity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main2)
 
+        /*if (savedInstanceState == null) {
+            val transaction = supportFragmentManager.beginTransaction()
+            val fragment = RecyclerViewFragment()
+            transaction.replace(R.id.sample_content_fragment, fragment)
+            transaction.commit()
+        }*/
+
         setSupportActionBar(toolbar)
         getSupportActionBar()!!.setDisplayShowTitleEnabled(false)  /* Quitamos el título de la barra*/
 
@@ -65,6 +72,8 @@ class Main2Activity : AppCompatActivity() {
 
         mFragmentManager.beginTransaction().replace(R.id.mini_player, mMiniPlayerFragment,
                 mMiniPlayerFragment.getTag()).commit()
+
+
 
 
 
@@ -111,6 +120,8 @@ class Main2Activity : AppCompatActivity() {
                 else -> return inflater!!.inflate(R.layout.fragment_player, container, false)
             }
 
+
+
         }
 
         companion object {
@@ -143,7 +154,11 @@ class Main2Activity : AppCompatActivity() {
         override fun getItem(position: Int): Fragment {
             // getItem is called to instantiate the fragment for the given page.
             // Return a PlaceholderFragment (defined as a static inner class below).
-            return PlaceholderFragment.newInstance(position + 1)
+            return if (position == 0) {
+                RecyclerViewFragment()
+            } else {
+                PlaceholderFragment.newInstance(position + 1)
+            }
         }
 
         override fun getCount(): Int {

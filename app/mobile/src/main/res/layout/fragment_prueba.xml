@@ -5,11 +5,10 @@
     android:layout_height="match_parent"
     tools:context=".fragment.PruebaFragment">
 
-    <!-- TODO: Update blank fragment layout -->
-    <TextView
+    <FrameLayout
+        android:id="@+id/sample_content_fragment"
+        android:layout_weight="2"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:text="FRAGMENTO 1"
-        android:gravity="center"/>
+        android:layout_height="0px" />
 
 </FrameLayout>
