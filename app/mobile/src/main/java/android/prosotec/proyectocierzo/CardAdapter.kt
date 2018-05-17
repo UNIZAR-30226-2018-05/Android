@@ -10,7 +10,7 @@ import android.widget.TextView
 /**
  * Provide views to RecyclerView with data from mDataSet.
  */
-class CustomAdapter
+class CardAdapter
 // END_INCLUDE(recyclerViewSampleViewHolder)
 
 /**
@@ -18,7 +18,7 @@ class CustomAdapter
  *
  * @param dataSet String[] containing the data to populate views to be used by RecyclerView.
  */
-(private val mDataSet: Array<String>) : RecyclerView.Adapter<CustomAdapter.ViewHolder>() {
+(private val mDataSet: Array<String>) : RecyclerView.Adapter<CardAdapter.ViewHolder>() {
 
     // BEGIN_INCLUDE(recyclerViewSampleViewHolder)
     /**
@@ -62,6 +62,6 @@ class CustomAdapter
     }
 
     companion object {
-        private val TAG = "CustomAdapter"
+        private val TAG = "CardAdapter"
     }
 }

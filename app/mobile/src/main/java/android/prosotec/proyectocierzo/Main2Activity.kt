@@ -23,6 +23,10 @@ import android.support.v7.app.ActionBar
 import android.support.v7.widget.RecyclerView
 import android.widget.Adapter
 import android.widget.SearchView
+import android.prosotec.proyectocierzo.R.id.recyclerView
+import android.support.v7.widget.helper.ItemTouchHelper
+
+
 
 
 class Main2Activity : AppCompatActivity() {
@@ -155,7 +159,9 @@ class Main2Activity : AppCompatActivity() {
             // getItem is called to instantiate the fragment for the given page.
             // Return a PlaceholderFragment (defined as a static inner class below).
             return if (position == 0) {
-                RecyclerViewFragment()
+                CardsRecyclerViewFragment()
+            } else if (position == 1) {
+                TextRowRecyclerViewFragment()
             } else {
                 PlaceholderFragment.newInstance(position + 1)
             }
