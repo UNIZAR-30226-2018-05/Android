@@ -1,10 +1,8 @@
-package android.prosotec.proyectocierzo.fragment
+package android.prosotec.proyectocierzo.fragment.recyclerview
 
-import android.content.res.Configuration
 import android.os.Bundle
-import android.prosotec.proyectocierzo.CardAdapter
+import android.prosotec.proyectocierzo.PersonRowAdapter
 import android.prosotec.proyectocierzo.R
-import android.prosotec.proyectocierzo.RowAdapter
 import android.prosotec.proyectocierzo.SimpleItemTouchHelperCallback
 import android.support.v4.app.Fragment
 import android.support.v7.widget.GridLayoutManager
@@ -19,12 +17,12 @@ import android.view.ViewGroup
  * Demonstrates the use of [RecyclerView] with a [LinearLayoutManager] and a
  * [GridLayoutManager].
  */
-class TextRowRecyclerViewFragment : Fragment()  {
+class PersonRowRecyclerViewFragment : Fragment()  {
 
     protected lateinit var mRecyclerView: RecyclerView
-    protected lateinit var mAdapter: RowAdapter
-    protected var mDataset: MutableList<String> = mutableListOf("Canción 1", "Canción 2", "Canción 3", "Canción 4",
-            "Canción 5", "Canción 6", "Canción 7", "Canción 8", "Canción 9", "Canción 10")
+    protected lateinit var mAdapter: PersonRowAdapter
+    protected var mDataset: MutableList<String> = mutableListOf("Persona 1", "Persona 2", "Persona 3", "Persona 4",
+            "Persona 5", "Persona 6", "Persona 7", "Persona 8", "Persona 9", "Persona 10")
 
     enum class LayoutManagerType {
         GRID_LAYOUT_MANAGER,
@@ -48,12 +46,12 @@ class TextRowRecyclerViewFragment : Fragment()  {
 
         mRecyclerView.setLayoutManager(LinearLayoutManager(activity))
 
-        mAdapter = RowAdapter(mDataset, true)
+        mAdapter = PersonRowAdapter(mDataset)
         // Set CardAdapter as the adapter for RecyclerView.
         mRecyclerView.adapter = mAdapter
         // END_INCLUDE(initializeRecyclerView)
 
-        val callback = SimpleItemTouchHelperCallback(mAdapter, true, false)
+        val callback = SimpleItemTouchHelperCallback(mAdapter, false, false)
         val touchHelper = ItemTouchHelper(callback)
         touchHelper.attachToRecyclerView(mRecyclerView)
 
@@ -65,8 +63,8 @@ class TextRowRecyclerViewFragment : Fragment()  {
      * from a local content provider or remote server.
      */
     private fun initDataset() {
-        mDataset = mutableListOf("Canción 1", "Canción 2", "Canción 3", "Canción 4",
-        "Canción 5", "Canción 6", "Canción 7", "Canción 8", "Canción 9", "Canción 10")    }
+        mDataset = mutableListOf("Persona 1", "Persona 2", "Persona 3", "Persona 4",
+                "Persona 5", "Persona 6", "Persona 7", "Persona 8", "Persona 9", "Persona 10")    }
 
     companion object {
         private val TAG = "CardsRecyclerViewFragment"

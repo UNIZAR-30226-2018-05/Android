@@ -1,13 +1,14 @@
-package android.prosotec.proyectocierzo.fragment
+package android.prosotec.proyectocierzo.fragment.recyclerview
 
-import android.content.res.Configuration
 import android.os.Bundle
-import android.prosotec.proyectocierzo.CardAdapter
 import android.prosotec.proyectocierzo.R
+import android.prosotec.proyectocierzo.SongRowAdapter
+import android.prosotec.proyectocierzo.SimpleItemTouchHelperCallback
 import android.support.v4.app.Fragment
 import android.support.v7.widget.GridLayoutManager
 import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.RecyclerView
+import android.support.v7.widget.helper.ItemTouchHelper
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -16,12 +17,12 @@ import android.view.ViewGroup
  * Demonstrates the use of [RecyclerView] with a [LinearLayoutManager] and a
  * [GridLayoutManager].
  */
-class CardsRecyclerViewFragment : Fragment() {
+class SongRowRecyclerViewFragment : Fragment()  {
 
     protected lateinit var mRecyclerView: RecyclerView
-    protected lateinit var mAdapter: CardAdapter
-    protected var mDataset: Array<String> = arrayOf("Lista 1", "Lista 2", "Lista 3", "Lista 4",
-            "Lista 5", "Lista 6", "Lista 7", "Lista 8", "Lista 9", "Lista 10")
+    protected lateinit var mAdapter: SongRowAdapter
+    protected var mDataset: MutableList<String> = mutableListOf("Canción 1", "Canción 2", "Canción 3", "Canción 4",
+            "Canción 5", "Canción 6", "Canción 7", "Canción 8", "Canción 9", "Canción 10")
 
     enum class LayoutManagerType {
         GRID_LAYOUT_MANAGER,
@@ -43,16 +44,16 @@ class CardsRecyclerViewFragment : Fragment() {
         // BEGIN_INCLUDE(initializeRecyclerView)
         mRecyclerView = rootView.findViewById(R.id.recyclerView)
 
-        if (activity.resources.configuration.orientation == Configuration.ORIENTATION_PORTRAIT) {
-            mRecyclerView.setLayoutManager(GridLayoutManager(activity, 2))
-        } else {
-            mRecyclerView.setLayoutManager(GridLayoutManager(activity, 4))
-        }
+        mRecyclerView.setLayoutManager(LinearLayoutManager(activity))
 
-        mAdapter = CardAdapter(mDataset)
+        mAdapter = SongRowAdapter(mDataset)
         // Set CardAdapter as the adapter for RecyclerView.
         mRecyclerView.adapter = mAdapter
         // END_INCLUDE(initializeRecyclerView)
+
+        val callback = SimpleItemTouchHelperCallback(mAdapter, true, false)
+        val touchHelper = ItemTouchHelper(callback)
+        touchHelper.attachToRecyclerView(mRecyclerView)
 
         return rootView
     }
@@ -62,8 +63,8 @@ class CardsRecyclerViewFragment : Fragment() {
      * from a local content provider or remote server.
      */
     private fun initDataset() {
-        mDataset = arrayOf("Lista 1", "Lista 2", "Lista 3", "Lista 4", "Lista 5", "Lista 6", "Lista 7", "Lista 8", "Lista 9", "Lista 10")
-    }
+        mDataset = mutableListOf("Canción 1", "Canción 2", "Canción 3", "Canción 4",
+        "Canción 5", "Canción 6", "Canción 7", "Canción 8", "Canción 9", "Canción 10")    }
 
     companion object {
         private val TAG = "CardsRecyclerViewFragment"
