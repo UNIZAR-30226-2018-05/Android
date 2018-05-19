@@ -9,10 +9,10 @@ import android.support.v4.app.FragmentManager
 import android.support.v4.app.FragmentPagerAdapter
 import android.support.v4.view.ViewPager
 import android.os.Bundle
-import android.prosotec.proyectocierzo.R.id.mini
 import android.prosotec.proyectocierzo.fragment.*
-import android.support.design.widget.CoordinatorLayout.Behavior.getTag
-import android.support.design.widget.TabItem
+import android.prosotec.proyectocierzo.fragment.recyclerview.CardsRecyclerViewFragment
+import android.prosotec.proyectocierzo.fragment.recyclerview.PersonRowRecyclerViewFragment
+import android.prosotec.proyectocierzo.fragment.recyclerview.SongRowRecyclerViewFragment
 import android.support.design.widget.TabLayout
 import android.view.*
 
@@ -51,6 +51,13 @@ class Main2Activity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main2)
 
+        /*if (savedInstanceState == null) {
+            val transaction = supportFragmentManager.beginTransaction()
+            val fragment = RecyclerViewFragment()
+            transaction.replace(R.id.sample_content_fragment, fragment)
+            transaction.commit()
+        }*/
+
         setSupportActionBar(toolbar)
         getSupportActionBar()!!.setDisplayShowTitleEnabled(false)  /* Quitamos el título de la barra*/
 
@@ -74,6 +81,8 @@ class Main2Activity : AppCompatActivity() {
         mFragmentManager.beginTransaction().replace(R.id.mini_player, mMiniPlayerFragment,
                 mMiniPlayerFragment.getTag()).commit()
         mMiniPlayerFragment.view?.visibility = View.GONE
+
+
 
 
 
@@ -126,6 +135,8 @@ class Main2Activity : AppCompatActivity() {
                 else -> return inflater!!.inflate(R.layout.fragment_player, container, false)
             }
 
+
+
         }
 
         companion object {
@@ -158,7 +169,15 @@ class Main2Activity : AppCompatActivity() {
         override fun getItem(position: Int): Fragment {
             // getItem is called to instantiate the fragment for the given page.
             // Return a PlaceholderFragment (defined as a static inner class below).
-            return PlaceholderFragment.newInstance(position + 1)
+            return if (position == 0) {
+                CardsRecyclerViewFragment()
+            } else if (position == 1) {
+                SongRowRecyclerViewFragment()
+            } else if (position == 3) {
+                PersonRowRecyclerViewFragment()
+            } else {
+                PlaceholderFragment.newInstance(position + 1)
+            }
         }
 
         override fun getCount(): Int {
