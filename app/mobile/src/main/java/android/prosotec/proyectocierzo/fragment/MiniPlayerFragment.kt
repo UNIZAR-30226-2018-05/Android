@@ -5,14 +5,16 @@ import android.graphics.Bitmap
 import android.os.Bundle
 import android.prosotec.proyectocierzo.*
 import android.support.v4.app.Fragment
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.SeekBar
 import cierzo.model.*
 import cierzo.model.objects.Song
+import cierzo.model.objects.SongQueue
 import com.squareup.picasso.Picasso
-import io.swagger.client.models.SongItem
+import io.swagger.client.model.SongItem
 import kotlinx.android.synthetic.main.activity_main2.*
 import kotlinx.android.synthetic.main.fragment_mini_player.*
 
@@ -55,7 +57,15 @@ class MiniPlayerFragment : Fragment() {
 
         // Cambiar por posición del ArrayList recibido de la API
         skip_prev.setOnClickListener {
-            mPlayerAdapter.release()
+            Log.e("DEBUG:", "antes de getPrevSong " + SongQueue.actualSongIndex)
+            val prevSong = SongQueue.getPreviousSong()
+            Log.e("DEBUG:", "despues de getPrevSong " + SongQueue.actualSongIndex)
+            //mPlayerAdapter.loadMedia(R.raw.song1)
+            play.setImageResource(R.drawable.ic_pause_white_24dp)
+            autor.text = prevSong?.authorName ?: "Author not set"
+            titulo.text = prevSong?.name ?: "Title not set"
+            //mPlayerAdapter.play()
+            /*mPlayerAdapter.release()
             when(songProgress){
                 1 -> {mPlayerAdapter.loadMedia(R.raw.song5)
                     play.setImageResource(R.drawable.ic_pause_white_24dp)
@@ -98,10 +108,18 @@ class MiniPlayerFragment : Fragment() {
                     titulo.text = "Pretty Fly"
                     mPlayerAdapter.play()
                     songProgress = 5}
-            }
+            }*/
         }
         skip_next.setOnClickListener {
-            mPlayerAdapter.release()
+            Log.e("DEBUG:", "antes de getNextSong " + SongQueue.actualSongIndex)
+            val nextSong = SongQueue.getNextSong()
+            Log.e("DEBUG:", "despues de getNextSong " + SongQueue.actualSongIndex)
+            //mPlayerAdapter.loadMedia(R.raw.song1)
+            play.setImageResource(R.drawable.ic_pause_white_24dp)
+            autor.text = nextSong?.authorName ?: "Author not set"
+            titulo.text = nextSong?.name ?: "Title not set"
+            //mPlayerAdapter.play()
+            /*mPlayerAdapter.release()
             when(songProgress){
                 1 -> {mPlayerAdapter.loadMedia(R.raw.song2)
                     play.setImageResource(R.drawable.ic_pause_white_24dp)
@@ -144,7 +162,7 @@ class MiniPlayerFragment : Fragment() {
                     titulo.text="Numb"
                     mPlayerAdapter.play()
                     songProgress = 1}
-            }
+            }*/
         }
 
     }
