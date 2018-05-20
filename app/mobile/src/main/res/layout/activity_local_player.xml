@@ -7,9 +7,6 @@
     android:background="#0099cc"
     tools:context=".LocalPlayerActivity">
 
-    <!-- The primary full-screen view. This can be replaced with whatever view
-         is needed to present your content, e.g. VideoView, SurfaceView,
-         TextureView, etc. -->
     <LinearLayout
         android:id="@+id/fullscreen_content"
         android:layout_width="match_parent"
@@ -29,6 +26,14 @@
                 android:gravity="center"
                 android:text="@string/player_local"
                 android:textSize="18sp" />
+
+            <ImageButton
+                android:id="@+id/equalizer"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginRight="15dp"
+                android:background="@android:color/transparent"
+                android:src="@drawable/ic_equalizer_white_24dp"/>
 
         </LinearLayout>
 

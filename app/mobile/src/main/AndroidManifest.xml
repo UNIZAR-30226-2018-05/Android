@@ -24,7 +24,7 @@
         <activity
             android:name=".MainActivity"
             android:label="Cierzo"
-            android:theme="@style/AppTheme"></activity>
+            android:theme="@style/AppTheme" />
         <activity
             android:name=".Main2Activity"
             android:label="@string/title_activity_main2"
@@ -42,10 +42,12 @@
             android:theme="@style/FullscreenTheme">
             <intent-filter>
                 <action android:name="android.intent.action.VIEW" />
+
                 <category android:name="android.intent.category.DEFAULT" />
+
                 <data android:scheme="content" />
                 <data android:scheme="file" />
-                <data android:mimeType="audio/*"/>
+                <data android:mimeType="audio/*" />
             </intent-filter>
         </activity>
     </application>
