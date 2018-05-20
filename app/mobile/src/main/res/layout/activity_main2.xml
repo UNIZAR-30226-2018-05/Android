@@ -74,10 +74,10 @@
         android:layout_marginBottom="-10dp"
         app:layout_behavior="@string/appbar_scrolling_view_behavior" />
 
-    <RelativeLayout
+    <android.prosotec.proyectocierzo.view.MiniPlayerView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
-        android:id="@+id/mini_player"/>
+        android:id="@+id/mini_player_view"/>
 
 </RelativeLayout>

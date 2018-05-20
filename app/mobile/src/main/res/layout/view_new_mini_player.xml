@@ -1,17 +1,23 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout
-    android:layout_alignParentBottom="true"
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="120dp"
-    xmlns:app="http://schemas.android.com/apk/res-auto">
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    tools:context="android.prosotec.proyectocierzo.mini_player">
 
-    <RelativeLayout android:id="@+id/mini_player_layout"
+    <RelativeLayout
         android:layout_alignParentBottom="true"
-        xmlns:android="http://schemas.android.com/apk/res/android"
         android:layout_width="match_parent"
-        android:layout_height="110dp"
-        android:background="@color/colorPrimaryDark">
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        android:layout_height="120dp">
+
+        <RelativeLayout android:id="@+id/mini_player_layout"
+            android:layout_alignParentBottom="true"
+            xmlns:android="http://schemas.android.com/apk/res/android"
+            android:layout_width="match_parent"
+            android:layout_height="110dp"
+            android:background="@color/colorPrimaryDark">
 
             <TextView
                 android:id="@+id/actual_time"
@@ -114,16 +120,18 @@
 
                 </LinearLayout>
             </RelativeLayout>
+        </RelativeLayout>
+
+        <android.prosotec.proyectocierzo.mediasession.ui.MediaSeekBar
+            android:id="@+id/seek_bar"
+            android:layout_alignParentTop="true"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            style="@style/Base.Widget.AppCompat.ProgressBar.Horizontal"
+            android:progress="90"
+            android:paddingTop="3dp"
+            android:paddingStart="0dp"
+            android:paddingEnd="0dp"/>
     </RelativeLayout>
 
-    <SeekBar
-        android:id="@+id/seek_bar"
-        android:layout_alignParentTop="true"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        style="@style/Base.Widget.AppCompat.ProgressBar.Horizontal"
-        android:progress="90"
-        android:paddingTop="3dp"
-        android:paddingStart="0dp"
-        android:paddingEnd="0dp"/>
-</RelativeLayout>
+</FrameLayout>

@@ -36,7 +36,7 @@ class PersonRowRecyclerViewFragment : Fragment()  {
         initDataset()
     }
 
-    override fun onCreateView(inflater: LayoutInflater?, container: ViewGroup?,
+    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
                               savedInstanceState: Bundle?): View? {
         val rootView = inflater!!.inflate(R.layout.recycler_view_frag, container, false)
         rootView.setTag(TAG)

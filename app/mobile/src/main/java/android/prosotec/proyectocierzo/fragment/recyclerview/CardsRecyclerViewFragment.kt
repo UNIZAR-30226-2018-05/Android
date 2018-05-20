@@ -35,7 +35,7 @@ class CardsRecyclerViewFragment : Fragment() {
         initDataset()
     }
 
-    override fun onCreateView(inflater: LayoutInflater?, container: ViewGroup?,
+    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
                               savedInstanceState: Bundle?): View? {
         val rootView = inflater!!.inflate(R.layout.recycler_view_frag, container, false)
         rootView.setTag(TAG)
@@ -43,7 +43,7 @@ class CardsRecyclerViewFragment : Fragment() {
         // BEGIN_INCLUDE(initializeRecyclerView)
         mRecyclerView = rootView.findViewById(R.id.recyclerView)
 
-        if (activity.resources.configuration.orientation == Configuration.ORIENTATION_PORTRAIT) {
+        if (activity?.resources?.configuration?.orientation == Configuration.ORIENTATION_PORTRAIT) {
             mRecyclerView.setLayoutManager(GridLayoutManager(activity, 3))
         } else {
             mRecyclerView.setLayoutManager(GridLayoutManager(activity, 6))
