@@ -32,6 +32,8 @@
                     android:id="@+id/portada_normal"
                     android:layout_width="150dp"
                     android:layout_height="150dp"
+                    android:layout_marginLeft="20dp"
+                    android:layout_gravity="center"
                     android:src="@mipmap/ic_launcher" />
 
 
