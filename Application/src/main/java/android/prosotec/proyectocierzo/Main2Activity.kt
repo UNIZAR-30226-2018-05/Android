@@ -87,6 +87,7 @@ class Main2Activity : AppCompatActivity() {
         mArtistTextView = mMiniPlayer.findViewById(R.id.autor)
         mAlbumArt = mMiniPlayer.findViewById(R.id.cover_image)
         mSeekBarAudio = mMiniPlayer.findViewById(R.id.seek_bar)
+        mPlayButton = mMiniPlayer.findViewById(R.id.play)
 
         val clickListener = ClickListener()
         mMiniPlayer.findViewById<View>(R.id.skip_prev).setOnClickListener(clickListener)
@@ -168,6 +169,7 @@ class Main2Activity : AppCompatActivity() {
                 R.id.skip_prev -> mMediaBrowserHelper.getTransportControls().skipToPrevious()
                 R.id.play -> if (mIsPlaying) {
                     mMediaBrowserHelper.getTransportControls().pause()
+
                 } else {
                     mMediaBrowserHelper.getTransportControls().play()
                 }
