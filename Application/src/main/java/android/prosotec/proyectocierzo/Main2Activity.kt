@@ -186,6 +186,7 @@ class Main2Activity : AppCompatActivity() {
 
         override fun onConnected(mediaController: MediaControllerCompat) {
             mSeekBarAudio?.setMediaController(mediaController)
+
         }
 
         override fun onChildrenLoaded(parentId: String,
@@ -201,6 +202,15 @@ class Main2Activity : AppCompatActivity() {
 
             // Call prepare now so pressing play just works.
             mediaController.transportControls.prepare()
+
+            // Se provoca un PlaybackStateChanged para que se recargue la seekbar
+            if (!mIsPlaying) {
+                mMediaBrowserHelper.getTransportControls().play()
+                mMediaBrowserHelper.getTransportControls().pause()
+            } else {
+                mMediaBrowserHelper.getTransportControls().pause()
+                mMediaBrowserHelper.getTransportControls().play()
+            }
         }
     }
 
