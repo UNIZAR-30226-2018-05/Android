@@ -71,7 +71,12 @@
                         android:layout_height="wrap_content"
                         android:layout_alignParentTop="true"
                         android:text="Numb"
-                        android:textStyle="bold"/>
+                        android:textStyle="bold"
+                        android:singleLine="true"
+                        android:scrollHorizontally="true"
+                        android:ellipsize="marquee"
+                        android:marqueeRepeatLimit ="marquee_forever"
+                        android:maxLength="18"/>
 
                     <TextView
                         android:id="@+id/autor"
@@ -79,8 +84,12 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_alignParentTop="true"
-                        android:text="Linkin Park"/>
-
+                        android:text="Linkin park"
+                        android:singleLine="true"
+                        android:scrollHorizontally="true"
+                        android:ellipsize="marquee"
+                        android:marqueeRepeatLimit ="marquee_forever"
+                        android:maxLength="20"/>
                 </LinearLayout>
 
                 <LinearLayout
