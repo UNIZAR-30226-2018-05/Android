@@ -142,6 +142,7 @@ public class MediaSeekBar extends AppCompatSeekBar {
                     : 0;
             setProgress(0);
             setMax(max);
+
         }
 
         @Override

@@ -18,16 +18,16 @@
             android:layout_height="110dp"
             android:background="@color/colorPrimaryDark">
 
-            <TextView
+            <com.example.android.mediasession.ui.MediaCurrentTime
                 android:id="@+id/actual_time"
                 android:layout_alignParentLeft="true"
-                android:text="00:00"
+                android:text="20:00"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:paddingTop="10dp"
                 android:paddingLeft="16dp"/>
 
-            <TextView
+            <com.example.android.mediasession.ui.MediaFinalTime
                 android:id="@+id/length"
                 android:layout_alignParentRight="true"
                 android:text="01:58"

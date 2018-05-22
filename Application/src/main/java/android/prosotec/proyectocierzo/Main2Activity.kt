@@ -1,6 +1,7 @@
 package android.prosotec.proyectocierzo
 
 import android.content.Context
+import android.os.AsyncTask
 import android.support.v7.app.AppCompatActivity
 
 import android.support.v4.app.Fragment
@@ -27,9 +28,12 @@ import com.example.android.mediasession.R
 import com.example.android.mediasession.client.MediaBrowserHelper
 import com.example.android.mediasession.service.MusicService
 import com.example.android.mediasession.service.contentcatalogs.MusicLibrary
+import com.example.android.mediasession.ui.MediaCurrentTime
+import com.example.android.mediasession.ui.MediaFinalTime
 import com.example.android.mediasession.ui.MediaSeekBar
 
 import kotlinx.android.synthetic.main.activity_main2.*
+import java.util.concurrent.Executor
 
 
 class Main2Activity : AppCompatActivity() {
@@ -49,11 +53,30 @@ class Main2Activity : AppCompatActivity() {
     private var mArtistTextView: TextView? = null
     private var mSeekBarAudio: MediaSeekBar? = null
     private var mPlayButton: ImageButton? = null
+    private var mCurrentTime: MediaCurrentTime? = null
+    private var mFinalTime: MediaFinalTime? = null
+
     private lateinit var mMiniPlayer: MiniPlayerView
 
     private lateinit var mMediaBrowserHelper: MediaBrowserHelper
 
     private var mIsPlaying: Boolean = false
+
+    private var mUpdateTime: Runnable = object : Runnable {
+        override fun run() {
+            if (mIsPlaying) {
+                mCurrentTime?.setCurrentTime(mTime)
+                mTime += 250
+                mCurrentTime?.postDelayed(this, 250)
+            } else if (!mIsPlaying) {
+                mCurrentTime?.removeCallbacks(this)
+                mUpdaterRunning = false
+            }
+        }
+    }
+
+    private var mUpdaterRunning: Boolean = false
+    private var mTime: Int = 0
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -88,6 +111,9 @@ class Main2Activity : AppCompatActivity() {
         mAlbumArt = mMiniPlayer.findViewById(R.id.cover_image)
         mSeekBarAudio = mMiniPlayer.findViewById(R.id.seek_bar)
         mPlayButton = mMiniPlayer.findViewById(R.id.play)
+        mCurrentTime = mMiniPlayer.findViewById(R.id.actual_time)
+        mFinalTime = mMiniPlayer.findViewById(R.id.length)
+
 
         val clickListener = ClickListener()
         mMiniPlayer.findViewById<View>(R.id.skip_prev).setOnClickListener(clickListener)
@@ -227,6 +253,13 @@ class Main2Activity : AppCompatActivity() {
         override fun onPlaybackStateChanged(playbackState: PlaybackStateCompat?) {
             mIsPlaying = playbackState != null && playbackState.state == PlaybackStateCompat.STATE_PLAYING
             mPlayButton?.setPressed(mIsPlaying)
+
+            mTime = playbackState?.position?.toInt() ?: 0
+
+            if (!mUpdaterRunning) {
+                mUpdaterRunning = true
+                mCurrentTime?.post(mUpdateTime)
+            }
         }
 
         override fun onMetadataChanged(mediaMetadata: MediaMetadataCompat?) {
@@ -240,6 +273,8 @@ class Main2Activity : AppCompatActivity() {
             mAlbumArt?.setImageBitmap(MusicLibrary.getAlbumBitmap(
                     this@Main2Activity,
                     mediaMetadata.getString(MediaMetadataCompat.METADATA_KEY_MEDIA_ID)))
+            mFinalTime?.setDuration(mediaMetadata.getLong(MediaMetadataCompat.METADATA_KEY_DURATION).toInt())
+            mCurrentTime?.setCurrentTime(0)
         }
 
         override fun onSessionDestroyed() {
@@ -250,5 +285,4 @@ class Main2Activity : AppCompatActivity() {
             super.onQueueChanged(queue)
         }
     }
-
 }
