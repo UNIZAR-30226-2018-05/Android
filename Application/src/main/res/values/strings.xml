@@ -130,4 +130,8 @@
 
     <string name="title_activity_local_player">Cierzo</string>
     <string name="player_local">Reproduciendo desde el dispositivo...</string>
+
+    <string name="title_activity_profile">ProfileActivity</string>
+
+    <string name="title_activity_social">SocialActivity</string>
 </resources>
