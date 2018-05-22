@@ -1,7 +1,6 @@
 package android.prosotec.proyectocierzo
 
 import android.content.Context
-import android.os.AsyncTask
 import android.support.v7.app.AppCompatActivity
 
 import android.support.v4.app.Fragment
@@ -33,7 +32,6 @@ import com.example.android.mediasession.ui.MediaFinalTime
 import com.example.android.mediasession.ui.MediaSeekBar
 
 import kotlinx.android.synthetic.main.activity_main2.*
-import java.util.concurrent.Executor
 
 
 class Main2Activity : AppCompatActivity() {
@@ -285,4 +283,5 @@ class Main2Activity : AppCompatActivity() {
             super.onQueueChanged(queue)
         }
     }
+
 }

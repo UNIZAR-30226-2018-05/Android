@@ -4,15 +4,15 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:background="#0099cc"
-    tools:context=".LocalPlayerActivity">
+    android:background="@color/colorPrimaryDark"
+    tools:context="android.prosotec.proyectocierzo.LocalPlayerActivity">
 
     <LinearLayout
         android:id="@+id/fullscreen_content"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="vertical"
-        android:paddingTop="10dp">
+        android:paddingTop="8dp">
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -39,11 +39,12 @@
 
 
         <ImageView
+            android:id="@+id/cover_image"
             android:layout_width="200dp"
             android:layout_height="200dp"
             android:layout_gravity="center"
-            android:layout_marginBottom="20dp"
-            android:layout_marginTop="20dp"
+            android:layout_marginBottom="8dp"
+            android:layout_marginTop="8dp"
             android:contentDescription="@string/player_album_description"
             app:srcCompat="@drawable/ic_icono" />
 
@@ -60,11 +61,25 @@
             android:marqueeRepeatLimit ="marquee_forever"
             android:text="@string/player_song"
             android:textSize="30sp" />
+        <TextView
+            android:id="@+id/artist_name"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:paddingLeft="30dp"
+            android:paddingRight="30dp"
+            android:singleLine="true"
+            android:scrollHorizontally="true"
+            android:ellipsize="marquee"
+            android:marqueeRepeatLimit ="marquee_forever"
+            android:text="@string/player_song"
+            android:textSize="15sp" />
+
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="80dp"
-            android:layout_marginTop="50dp"
+            android:layout_marginTop="16dp"
             android:gravity="center"
             android:orientation="horizontal">
 
@@ -121,7 +136,7 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="40dp"
+            android:layout_marginTop="16dp"
             android:orientation="horizontal">
 
             <TextView
@@ -142,22 +157,20 @@
 
         </LinearLayout>
 
-        <SeekBar
+        <com.example.android.mediasession.ui.MediaSeekBar
+            android:id="@+id/seek_bar"
             style="@style/Base.Widget.AppCompat.ProgressBar.Horizontal"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginLeft="20dp"
             android:layout_marginRight="20dp"
-            android:layout_marginTop="20dp"
+            android:layout_marginTop="16dp"
             android:progress="90" />
 
-        <TextView
+        <com.chibde.visualizer.LineVisualizer
+            android:id="@+id/visualizer"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="40dp"
-            android:gravity="center"
-            android:text="VISUALIZADOR"
-            android:textSize="40dp" />
+            android:layout_height="250dp"/>
 
 
     </LinearLayout>

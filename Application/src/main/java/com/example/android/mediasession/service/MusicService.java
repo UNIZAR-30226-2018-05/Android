@@ -80,6 +80,10 @@ public class MusicService extends MediaBrowserServiceCompat {
         Log.d(TAG, "onDestroy: MediaPlayerAdapter stopped, and MediaSession released");
     }
 
+    public int getAudioSessionId() {
+        return mPlayback.getAudioSessionId();
+    }
+
     @Override
     public BrowserRoot onGetRoot(@NonNull String clientPackageName,
                                  int clientUid,

@@ -19,6 +19,7 @@ package com.example.android.mediasession.service.players;
 import android.content.Context;
 import android.content.res.AssetFileDescriptor;
 import android.media.MediaPlayer;
+import android.net.Uri;
 import android.os.SystemClock;
 import android.support.v4.media.MediaMetadataCompat;
 import android.support.v4.media.session.PlaybackStateCompat;
@@ -34,6 +35,7 @@ import com.example.android.mediasession.ui.MainActivity;
  * so that {@link MainActivity} can control music playback.
  */
 public final class MediaPlayerAdapter extends PlayerAdapter {
+    public static int MEDIA_PLAYER_ID = -1;
 
     private final Context mContext;
     private MediaPlayer mMediaPlayer;
@@ -63,6 +65,7 @@ public final class MediaPlayerAdapter extends PlayerAdapter {
     private void initializeMediaPlayer() {
         if (mMediaPlayer == null) {
             mMediaPlayer = new MediaPlayer();
+            MEDIA_PLAYER_ID = mMediaPlayer.getAudioSessionId();
             mMediaPlayer.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
                 @Override
                 public void onCompletion(MediaPlayer mediaPlayer) {
@@ -79,17 +82,62 @@ public final class MediaPlayerAdapter extends PlayerAdapter {
         }
     }
 
+    @Override
+    public int getAudioSessionId() {
+        return mMediaPlayer.getAudioSessionId();
+    }
+
     // Implements PlaybackControl.
     @Override
     public void playFromMedia(MediaMetadataCompat metadata) {
         mCurrentMedia = metadata;
         final String mediaId = metadata.getDescription().getMediaId();
-        playFile(MusicLibrary.getMusicFilename(mediaId));
+        if (MusicLibrary.getMusicUri(mediaId) != null) {
+            playUri(MusicLibrary.getMusicUri(mediaId),MusicLibrary.getMusicFilename(mediaId));
+        } else {
+            playFile(MusicLibrary.getMusicFilename(mediaId));
+        }
     }
 
     @Override
     public MediaMetadataCompat getCurrentMedia() {
         return mCurrentMedia;
+    }
+
+    private void playUri(Uri uri, String filename) {
+        boolean mediaChanged = (mFilename == null || !filename.equals(mFilename));
+        if (mCurrentMediaPlayedToCompletion) {
+            // Last audio file was played to completion, the resourceId hasn't changed, but the
+            // player was released, so force a reload of the media file for playback.
+            mediaChanged = true;
+            mCurrentMediaPlayedToCompletion = false;
+        }
+        if (!mediaChanged) {
+            if (!isPlaying()) {
+                play();
+            }
+            return;
+        } else {
+            release();
+        }
+
+        mFilename = filename;
+
+        initializeMediaPlayer();
+
+        try {
+            mMediaPlayer.setDataSource(mContext, uri);
+        } catch (Exception e) {
+            throw new RuntimeException("Failed to open file: " + mFilename, e);
+        }
+
+        try {
+            mMediaPlayer.prepare();
+        } catch (Exception e) {
+            throw new RuntimeException("Failed to open file: " + mFilename, e);
+        }
+
+        play();
     }
 
     private void playFile(String filename) {

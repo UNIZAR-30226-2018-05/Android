@@ -18,14 +18,19 @@ package com.example.android.mediasession.service.contentcatalogs;
 
 import android.content.ContentResolver;
 import android.content.Context;
+import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.media.MediaMetadataRetriever;
+import android.net.Uri;
+import android.provider.MediaStore;
 import android.support.v4.media.MediaBrowserCompat;
 import android.support.v4.media.MediaMetadataCompat;
 
 import com.example.android.mediasession.BuildConfig;
 import com.example.android.mediasession.R;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -38,6 +43,7 @@ public class MusicLibrary {
     private static final TreeMap<String, MediaMetadataCompat> music = new TreeMap<>();
     private static final HashMap<String, Integer> albumRes = new HashMap<>();
     private static final HashMap<String, String> musicFileName = new HashMap<>();
+    private static final HashMap<String, Uri> musicFileUri = new HashMap<>();
 
     static {
         createMediaMetadataCompat(
@@ -50,7 +56,8 @@ public class MusicLibrary {
                 TimeUnit.SECONDS,
                 "jazz_in_paris.mp3",
                 R.drawable.album_jazz_blues,
-                "album_jazz_blues");
+                "album_jazz_blues",
+                null);
         createMediaMetadataCompat(
                 "The_Coldest_Shoulder",
                 "The Coldest Shoulder",
@@ -61,7 +68,8 @@ public class MusicLibrary {
                 TimeUnit.SECONDS,
                 "the_coldest_shoulder.mp3",
                 R.drawable.album_youtube_audio_library_rock_2,
-                "album_youtube_audio_library_rock_2");
+                "album_youtube_audio_library_rock_2",
+                null);
     }
 
     public static String getRoot() {
@@ -97,6 +105,7 @@ public class MusicLibrary {
     }
 
     public static MediaMetadataCompat getMetadata(Context context, String mediaId) {
+        if (music.get(mediaId) == null) mediaId = "0";
         MediaMetadataCompat metadataWithoutBitmap = music.get(mediaId);
         Bitmap albumArt = getAlbumBitmap(context, mediaId);
 
@@ -120,6 +129,41 @@ public class MusicLibrary {
         return builder.build();
     }
 
+    public static Uri getMusicUri(String mediaId) {
+        return musicFileUri.get(mediaId);
+    }
+
+    public static void removeAllMusic() {
+        music.clear();
+        albumRes.clear();
+        musicFileName.clear();
+        musicFileUri.clear();
+    }
+
+    public static void replaceWithSong(Uri uri, Context context) {
+        removeAllMusic();
+
+        MediaMetadataRetriever metaRetriver;
+        metaRetriver = new MediaMetadataRetriever();
+        metaRetriver.setDataSource(context, uri);
+
+        //byte[] cover = metaRetriver.getEmbeddedPicture();
+        //Bitmap cover_image = BitmapFactory.decodeByteArray(cover, 0, cover.length);
+
+        createMediaMetadataCompat(
+                "0",
+                metaRetriver.extractMetadata(MediaMetadataRetriever.METADATA_KEY_TITLE),
+                metaRetriver.extractMetadata(MediaMetadataRetriever.METADATA_KEY_ARTIST),
+                metaRetriver.extractMetadata(MediaMetadataRetriever.METADATA_KEY_ALBUM),
+                metaRetriver.extractMetadata(MediaMetadataRetriever.METADATA_KEY_GENRE),
+                Integer.parseInt(metaRetriver.extractMetadata(MediaMetadataRetriever.METADATA_KEY_DURATION)),
+                TimeUnit.MILLISECONDS,
+                "",
+                R.drawable.caratula_acdc,
+                "",
+                uri);
+    }
+
     private static void createMediaMetadataCompat(
             String mediaId,
             String title,
@@ -130,7 +174,8 @@ public class MusicLibrary {
             TimeUnit durationUnit,
             String musicFilename,
             int albumArtResId,
-            String albumArtResName) {
+            String albumArtResName,
+            Uri uri) {
         music.put(
                 mediaId,
                 new MediaMetadataCompat.Builder()
@@ -150,5 +195,7 @@ public class MusicLibrary {
                         .build());
         albumRes.put(mediaId, albumArtResId);
         musicFileName.put(mediaId, musicFilename);
+        musicFileUri.put(mediaId, uri);
     }
+
 }
