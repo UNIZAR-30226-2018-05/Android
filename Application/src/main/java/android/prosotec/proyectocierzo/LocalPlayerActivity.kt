@@ -4,6 +4,7 @@ import android.content.Context
 import android.content.Intent
 import android.database.Cursor
 import android.net.Uri
+import android.os.AsyncTask
 import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
 import android.os.Handler
@@ -18,8 +19,10 @@ import android.view.View
 import kotlinx.android.synthetic.main.activity_local_player.*
 import java.io.File
 import android.text.method.ScrollingMovementMethod
+import android.util.Log
 import android.widget.ImageButton
 import android.widget.ImageView
+import android.widget.LinearLayout
 import android.widget.TextView
 
 import com.example.android.mediasession.R
@@ -100,9 +103,15 @@ class LocalPlayerActivity : AppCompatActivity() {
         mMediaBrowserHelper = MediaBrowserConnection(this)
         mMediaBrowserHelper.registerCallback(MediaBrowserListener())
 
-        mlineVisualizer = findViewById(R.id.visualizer)
+
+        mlineVisualizer = LineVisualizer(this)
+        var mainLayout: LinearLayout = findViewById(R.id.fullscreen_content)
+        mainLayout.addView(mlineVisualizer)
         mlineVisualizer?.setColor(ContextCompat.getColor(this, R.color.colorAccent))
         mlineVisualizer?.setStrokeWidth(5)
+
+        var vCreatorTask: VisualizerCreatorTask = VisualizerCreatorTask()
+        vCreatorTask.execute(this)
     }
 
     override fun onStart() {
@@ -114,6 +123,7 @@ class LocalPlayerActivity : AppCompatActivity() {
         super.onStop()
         mSeekBarAudio?.disconnectController()
         mMediaBrowserHelper.onStop()
+        mlineVisualizer?.release()
     }
 
     private fun prepareSong(){
@@ -150,9 +160,6 @@ class LocalPlayerActivity : AppCompatActivity() {
 
         override fun onConnected(mediaController: MediaControllerCompat) {
             mSeekBarAudio?.setMediaController(mediaController)
-            if (MEDIA_PLAYER_ID != -1) {
-                mlineVisualizer?.setPlayer(MEDIA_PLAYER_ID)
-            }
         }
 
         override fun onChildrenLoaded(parentId: String,
@@ -206,6 +213,18 @@ class LocalPlayerActivity : AppCompatActivity() {
 
         override fun onQueueChanged(queue: List<MediaSessionCompat.QueueItem>?) {
             super.onQueueChanged(queue)
+        }
+    }
+
+    inner class VisualizerCreatorTask: AsyncTask<Context,Void,Boolean>() {
+        override fun doInBackground(vararg params: Context?): Boolean {
+            while (MEDIA_PLAYER_ID == -1) {
+                Log.d("VisualizerCreatorTask", "Waiting for Media Player to initialize.")
+                Thread.sleep(250)
+            }
+            Log.d("VisualizerCreatorTask", "Media Player initialized. ID: $MEDIA_PLAYER_ID")
+            mlineVisualizer?.setPlayer(MEDIA_PLAYER_ID)
+            return true
         }
     }
 }

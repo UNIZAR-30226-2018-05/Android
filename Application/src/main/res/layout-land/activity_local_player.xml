@@ -180,11 +180,6 @@
 
         </LinearLayout>
 
-        <com.chibde.visualizer.LineVisualizer
-            android:id="@+id/visualizer"
-            android:layout_width="match_parent"
-            android:layout_height="250dp"/>
-
     </LinearLayout>
 
 </FrameLayout>
