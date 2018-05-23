@@ -1,6 +1,9 @@
 package android.prosotec.proyectocierzo
 
+import android.Manifest
+import android.app.Activity
 import android.content.Context
+import android.content.pm.PackageManager
 import android.support.v7.app.AppCompatActivity
 
 import android.support.v4.app.Fragment
@@ -14,6 +17,8 @@ import android.prosotec.proyectocierzo.fragment.recyclerview.PersonRowRecyclerVi
 import android.prosotec.proyectocierzo.fragment.recyclerview.SongRowRecyclerViewFragment
 import android.prosotec.proyectocierzo.view.MiniPlayerView
 import android.support.design.widget.TabLayout
+import android.support.v4.app.ActivityCompat
+import android.support.v4.content.ContextCompat
 import android.support.v4.media.MediaBrowserCompat
 import android.support.v4.media.MediaMetadataCompat
 import android.support.v4.media.session.MediaControllerCompat
@@ -53,6 +58,12 @@ class Main2Activity : AppCompatActivity() {
     private var mPlayButton: ImageButton? = null
     private var mCurrentTime: MediaCurrentTime? = null
     private var mFinalTime: MediaFinalTime? = null
+
+    // Valores estáticos para codificar las peticiones de permisos
+    private val MY_PERMISSIONS_REQUEST_READ_EXTERNAL_STORAGE = 1
+    private val MY_PERMISSIONS_REQUEST_RECORD_AUDIO = 2
+    private val MY_PERMISSIONS_REQUEST_WAKE_LOCK = 3
+    private val MY_PERMISSIONS_REQUEST_INTERNET = 4
 
     private lateinit var mMiniPlayer: MiniPlayerView
 
@@ -121,7 +132,126 @@ class Main2Activity : AppCompatActivity() {
         mMediaBrowserHelper = MediaBrowserConnection(this)
         mMediaBrowserHelper.registerCallback(MediaBrowserListener())
 
+        // Código para los permisos
+        //checkPermissions(this@Main2Activity)
     }
+
+    /*
+    // Función para comprobar si se tienen los permisos necesarios
+    fun checkPermissions(actividad: Activity) {
+        // Here, thisActivity is the current activity
+        if (ContextCompat.checkSelfPermission(actividad,            // Permiso para acceder al almacenamiento
+                        Manifest.permission.READ_EXTERNAL_STORAGE)
+                != PackageManager.PERMISSION_GRANTED) {
+
+            if (ActivityCompat.shouldShowRequestPermissionRationale(actividad,
+                            Manifest.permission.READ_EXTERNAL_STORAGE)) {
+
+            } else {
+
+                ActivityCompat.requestPermissions(actividad,
+                        arrayOf(Manifest.permission.READ_CONTACTS),
+                        MY_PERMISSIONS_REQUEST_READ_EXTERNAL_STORAGE);
+
+            }
+        } else if (ContextCompat.checkSelfPermission(actividad,     // Permiso de grabar audio
+                        Manifest.permission.RECORD_AUDIO)
+                != PackageManager.PERMISSION_GRANTED) {
+
+            if (ActivityCompat.shouldShowRequestPermissionRationale(actividad,
+                            Manifest.permission.RECORD_AUDIO)) {
+
+                // Show an expanation to the user *asynchronously* -- don't block
+                // this thread waiting for the user's response! After the user
+                // sees the explanation, try again to request the permission.
+
+            } else {
+
+                ActivityCompat.requestPermissions(actividad,
+                        arrayOf(Manifest.permission.READ_CONTACTS),
+                        MY_PERMISSIONS_REQUEST_RECORD_AUDIO);
+
+            }
+        } else if (ContextCompat.checkSelfPermission(actividad,     // Permiso de internet
+                         Manifest.permission.INTERNET)
+                != PackageManager.PERMISSION_GRANTED) {
+
+            if (ActivityCompat.shouldShowRequestPermissionRationale(actividad,
+                         Manifest.permission.INTERNET)) {
+
+            } else {
+
+                ActivityCompat.requestPermissions(actividad,
+                        arrayOf(Manifest.permission.READ_CONTACTS),
+                        MY_PERMISSIONS_REQUEST_INTERNET);
+            }
+        }else if (ContextCompat.checkSelfPermission(actividad,     // Permiso de bloqueo
+                        Manifest.permission.WAKE_LOCK)
+                != PackageManager.PERMISSION_GRANTED) {
+
+            if (ActivityCompat.shouldShowRequestPermissionRationale(actividad,
+                            Manifest.permission.WAKE_LOCK)) {
+
+            } else {
+
+                ActivityCompat.requestPermissions(actividad,
+                        arrayOf(Manifest.permission.READ_CONTACTS),
+                        MY_PERMISSIONS_REQUEST_WAKE_LOCK)
+            }
+        }
+    }
+
+    // Funcion para captar cambios en los permisos por parte del usuario
+    override fun onRequestPermissionsResult(requestCode: Int,
+                                            permissions: Array<String>, grantResults: IntArray) {
+        when (requestCode) {
+            MY_PERMISSIONS_REQUEST_READ_EXTERNAL_STORAGE -> {
+                // If request is cancelled, the result arrays are empty.
+                if (grantResults.size > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+
+                    // permission was granted, yay! Do the
+                    // contacts-related task you need to do.
+
+                } else {
+
+                }
+                return
+            }MY_PERMISSIONS_REQUEST_RECORD_AUDIO -> {
+                if (grantResults.size > 0 && grantResults[1] == PackageManager.PERMISSION_GRANTED) {
+
+                    // permission was granted, yay! Do the
+                    // contacts-related task you need to do.
+
+                } else {
+
+                }
+                return
+
+            }MY_PERMISSIONS_REQUEST_INTERNET ->{
+                if (grantResults.size > 0 && grantResults[2] == PackageManager.PERMISSION_GRANTED) {
+
+                    // permission was granted, yay! Do the
+                    // contacts-related task you need to do.
+
+                } else {
+
+                }
+                return
+
+            }MY_PERMISSIONS_REQUEST_WAKE_LOCK ->{
+                if (grantResults.size > 0 && grantResults[3] == PackageManager.PERMISSION_GRANTED) {
+
+                    // permission was granted, yay! Do the
+                    // contacts-related task you need to do.
+
+                } else {
+
+                }
+                return
+
+            }
+        }
+    }*/
 
     override fun onStart() {
         super.onStart()
