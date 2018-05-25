@@ -21,9 +21,10 @@ import android.widget.*
 import com.chibde.visualizer.LineVisualizer
 import com.example.android.mediasession.R
 import android.media.MediaMetadataRetriever
-
-
-
+import android.graphics.BitmapFactory
+import android.graphics.Bitmap
+import android.util.Log
+import java.io.File
 
 
 /**
@@ -34,8 +35,6 @@ class LocalPlayerActivity : AppCompatActivity() {
 
     private var mlineVisualizer: LineVisualizer? = null
     private var mMediaPlayer = MediaPlayer()
-
-    private var uri: Uri? = null
 
     private val mSeekbarUpdateHandler = Handler()
     private val mUpdateSeekbar = object : Runnable {
@@ -77,12 +76,26 @@ class LocalPlayerActivity : AppCompatActivity() {
      private fun prepareSong(){
         // Código para capturar el intent de mp3 en local.
         if (Intent.ACTION_VIEW == intent.action) {
-            uri = intent.data
+            val uri = intent.data
+            val fileName = File(uri.path).name
             val metaRetriver: MediaMetadataRetriever
             metaRetriver = MediaMetadataRetriever()
             metaRetriver.setDataSource(this, uri)
-            song_name.text = metaRetriver.extractMetadata(MediaMetadataRetriever.METADATA_KEY_TITLE)
+            val titulo = metaRetriver.extractMetadata(MediaMetadataRetriever.METADATA_KEY_TITLE)
+            if(titulo != null){
+                song_name.text = titulo
+            }else{
+                song_name.text = fileName
+            }
             artist_name.text = metaRetriver.extractMetadata(MediaMetadataRetriever.METADATA_KEY_ARTIST)
+
+            val cover = metaRetriver.embeddedPicture
+            if(cover != null){
+                val image = BitmapFactory.decodeByteArray(cover, 0, cover.size)
+                cover_image.setImageBitmap(image)
+            }
+
+
             mMediaPlayer.setAudioStreamType(AudioManager.STREAM_MUSIC)
             mMediaPlayer.setDataSource(getApplicationContext(), uri)
             mMediaPlayer.prepare()
@@ -96,9 +109,13 @@ class LocalPlayerActivity : AppCompatActivity() {
                 R.id.ib_prev -> mMediaPlayer.seekTo(mMediaPlayer.currentPosition - 10000)
                 R.id.play -> if (mMediaPlayer.isPlaying) {
                     mMediaPlayer.pause()
+                    play.isPressed  = true
+                    play.setImageResource(R.drawable.ic_play_arrow_white_24dp)
 
                 } else {
                     mMediaPlayer.start()
+                    play.isPressed = false
+                    play.setImageResource(R.drawable.ic_pause_white_24dp)
                 }
                 R.id.ib_next -> mMediaPlayer.seekTo(mMediaPlayer.currentPosition + 30000)
             }
