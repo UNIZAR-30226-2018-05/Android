@@ -1,78 +1,50 @@
 package android.prosotec.proyectocierzo
 
+///////////////////////////////////
 import android.content.Context
-import android.content.Intent
-import android.database.Cursor
-import android.net.Uri
-import android.os.AsyncTask
-import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
-import android.os.Handler
-import android.provider.MediaStore
-import android.support.v4.content.ContextCompat
-import android.support.v4.media.MediaBrowserCompat
-import android.support.v4.media.MediaMetadataCompat
-import android.support.v4.media.session.MediaControllerCompat
-import android.support.v4.media.session.MediaSessionCompat
-import android.support.v4.media.session.PlaybackStateCompat
 import android.view.View
+import android.widget.SeekBar
 import kotlinx.android.synthetic.main.activity_local_player.*
-import java.io.File
-import android.text.method.ScrollingMovementMethod
-import android.util.Log
-import android.widget.ImageButton
-import android.widget.ImageView
-import android.widget.LinearLayout
-import android.widget.TextView
+///////////////////////////
 
-import com.example.android.mediasession.R
-import com.example.android.mediasession.client.MediaBrowserHelper
-import com.example.android.mediasession.service.MusicService
-import com.example.android.mediasession.service.contentcatalogs.MusicLibrary
-import com.example.android.mediasession.ui.MediaSeekBar
+
+import android.content.Intent
+import android.media.AudioManager
+import android.media.MediaPlayer
+import android.net.Uri
+import android.os.Handler
+import android.support.v7.app.AppCompatActivity
+import android.support.v4.content.ContextCompat
+import android.widget.*
 
 import com.chibde.visualizer.LineVisualizer
-import com.example.android.mediasession.service.players.MediaPlayerAdapter.MEDIA_PLAYER_ID
+import com.example.android.mediasession.R
+import android.media.MediaMetadataRetriever
+
+
+
+
 
 /**
  * An example full-screen activity that shows and hides the system UI (i.e.
  * status bar and navigation/system bar) with user interaction.
  */
 class LocalPlayerActivity : AppCompatActivity() {
-    private val mHideHandler = Handler()
-    private val mHidePart2Runnable = Runnable {
-        // Delayed removal of status and navigation bar
 
-        // Note that some of these constants are new as of API 16 (Jelly Bean)
-        // and API 19 (KitKat). It is safe to use them, as they are inlined
-        // at compile-time and do nothing on earlier devices.
-        fullscreen_content.systemUiVisibility =
-                View.SYSTEM_UI_FLAG_LOW_PROFILE or
-                View.SYSTEM_UI_FLAG_FULLSCREEN or
-                View.SYSTEM_UI_FLAG_LAYOUT_STABLE or
-                View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY or
-                View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION or
-                View.SYSTEM_UI_FLAG_HIDE_NAVIGATION
-    }
-    private val mShowPart2Runnable = Runnable {
-        // Delayed display of UI elements
-        supportActionBar?.show()
-    }
-    private var mVisible: Boolean = false
-
-
-    private lateinit var mMediaBrowserHelper: MediaBrowserConnection
-    private var mSeekBarAudio: MediaSeekBar? = null
-
-    private var mTitleTextView: TextView? = null
-    private var mArtistTextView: TextView? = null
-    private var mAlbumArt: ImageView? = null
-    private var mPlayButton: ImageButton? = null
     private var mlineVisualizer: LineVisualizer? = null
-
-    private var mIsPlaying: Boolean = false
+    private var mMediaPlayer = MediaPlayer()
 
     private var uri: Uri? = null
+
+    private val mSeekbarUpdateHandler = Handler()
+    private val mUpdateSeekbar = object : Runnable {
+        override fun run() {
+            seek_bar_local.setProgress(mMediaPlayer.currentPosition)
+            current_time.text = setTextTime(mMediaPlayer.currentPosition)
+            mSeekbarUpdateHandler.postDelayed(this, 50)
+        }
+    }
 
     /**
      * Touch listener to use for in-layout UI controls to delay hiding the
@@ -86,145 +58,103 @@ class LocalPlayerActivity : AppCompatActivity() {
         setContentView(R.layout.activity_local_player)
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
 
-        mSeekBarAudio = findViewById(R.id.seek_bar)
-        mTitleTextView = findViewById(R.id.song_name)
-        mArtistTextView = findViewById(R.id.artist_name)
-        mAlbumArt = findViewById(R.id.cover_image)
-        mPlayButton = findViewById(R.id.play)
-
         val clickListener = ClickListener()
         findViewById<View>(R.id.ib_prev).setOnClickListener(clickListener)
         findViewById<View>(R.id.play).setOnClickListener(clickListener)
         findViewById<View>(R.id.ib_next).setOnClickListener(clickListener)
 
-        mVisible = true
-
         prepareSong()
-        mMediaBrowserHelper = MediaBrowserConnection(this)
-        mMediaBrowserHelper.registerCallback(MediaBrowserListener())
-
-
-        mlineVisualizer = LineVisualizer(this)
-        var mainLayout: LinearLayout = findViewById(R.id.fullscreen_content)
-        mainLayout.addView(mlineVisualizer)
-        mlineVisualizer?.setColor(ContextCompat.getColor(this, R.color.colorAccent))
-        mlineVisualizer?.setStrokeWidth(5)
-
-        var vCreatorTask: VisualizerCreatorTask = VisualizerCreatorTask()
-        vCreatorTask.execute(this)
+        prepareUI()
+        prepareVisualizer()
     }
 
-    override fun onStart() {
-        super.onStart()
-        mMediaBrowserHelper.onStart()
+    override fun onDestroy() {
+        super.onDestroy()
+        mMediaPlayer.release()
+        mSeekbarUpdateHandler.removeCallbacks(mUpdateSeekbar)
     }
 
-    override fun onStop() {
-        super.onStop()
-        mSeekBarAudio?.disconnectController()
-        mMediaBrowserHelper.onStop()
-        mlineVisualizer?.release()
-    }
-
-    private fun prepareSong(){
+     private fun prepareSong(){
         // Código para capturar el intent de mp3 en local.
         if (Intent.ACTION_VIEW == intent.action) {
-            var uriS = intent.dataString
             uri = intent.data
-            //val Fpath = Commons.getPath(uri, this)
-            //val file = File(Fpath)
-            //val filename = file.getName()
-           // song_name.setText(filename)
-            //song_name.setSelected(true)
-
-            MusicLibrary.replaceWithSong(uri, this)
+            val metaRetriver: MediaMetadataRetriever
+            metaRetriver = MediaMetadataRetriever()
+            metaRetriver.setDataSource(this, uri)
+            song_name.text = metaRetriver.extractMetadata(MediaMetadataRetriever.METADATA_KEY_TITLE)
+            artist_name.text = metaRetriver.extractMetadata(MediaMetadataRetriever.METADATA_KEY_ARTIST)
+            mMediaPlayer.setAudioStreamType(AudioManager.STREAM_MUSIC)
+            mMediaPlayer.setDataSource(getApplicationContext(), uri)
+            mMediaPlayer.prepare()
+            mMediaPlayer.start()
         }
     }
 
     private inner class ClickListener : View.OnClickListener {
         override fun onClick(v: View) {
             when (v.id) {
-                R.id.skip_prev -> mMediaBrowserHelper.getTransportControls().skipToPrevious()
-                R.id.play -> if (mIsPlaying) {
-                    mMediaBrowserHelper.getTransportControls().pause()
+                R.id.ib_prev -> mMediaPlayer.seekTo(mMediaPlayer.currentPosition - 10000)
+                R.id.play -> if (mMediaPlayer.isPlaying) {
+                    mMediaPlayer.pause()
 
                 } else {
-                    mMediaBrowserHelper.getTransportControls().play()
+                    mMediaPlayer.start()
                 }
-                R.id.skip_next -> mMediaBrowserHelper.getTransportControls().skipToNext()
+                R.id.ib_next -> mMediaPlayer.seekTo(mMediaPlayer.currentPosition + 30000)
             }
         }
     }
 
-    private inner class MediaBrowserConnection constructor(context: Context) : MediaBrowserHelper(context, MusicService::class.java) {
-
-        override fun onConnected(mediaController: MediaControllerCompat) {
-            mSeekBarAudio?.setMediaController(mediaController)
-        }
-
-        override fun onChildrenLoaded(parentId: String,
-                                      children: List<MediaBrowserCompat.MediaItem>) {
-            super.onChildrenLoaded(parentId, children)
-
-            val mediaController = mediaController
-
-            // Queue up all media items for this simple sample.
-            for (mediaItem in children) {
-                mediaController.addQueueItem(mediaItem.description)
-            }
-
-            // Call prepare now so pressing play just works.
-            if (uri != null)
-            mediaController.transportControls.prepare()
-
-            // Se provoca un PlaybackStateChanged para que se recargue la seekbar
-            if (!mIsPlaying) {
-                mMediaBrowserHelper.getTransportControls().play()
-                mMediaBrowserHelper.getTransportControls().pause()
-            } else {
-                mMediaBrowserHelper.getTransportControls().pause()
-                mMediaBrowserHelper.getTransportControls().play()
-            }
-        }
+    private fun prepareVisualizer(){
+        mlineVisualizer = LineVisualizer(this)
+        var mainLayout: LinearLayout = findViewById(R.id.fullscreen_content)
+        mainLayout.addView(mlineVisualizer)
+        mlineVisualizer?.setColor(ContextCompat.getColor(this, R.color.colorAccent))
+        mlineVisualizer?.setStrokeWidth(5)
+        mlineVisualizer?.setPlayer(mMediaPlayer)
     }
 
-    private inner class MediaBrowserListener : MediaControllerCompat.Callback() {
-        override fun onPlaybackStateChanged(playbackState: PlaybackStateCompat?) {
-            mIsPlaying = playbackState != null && playbackState.state == PlaybackStateCompat.STATE_PLAYING
-            mPlayButton?.setPressed(mIsPlaying)
-        }
+    private fun prepareUI(){
+        seek_bar_local.max = mMediaPlayer.duration
+        final_time.text = setTextTime(mMediaPlayer.duration)
+        current_time.text = setTextTime(0)
+        mSeekbarUpdateHandler.postDelayed(mUpdateSeekbar, 0);
 
-        override fun onMetadataChanged(mediaMetadata: MediaMetadataCompat?) {
-            if (mediaMetadata == null) {
-                return
+        seek_bar_local.setOnSeekBarChangeListener(object : SeekBar.OnSeekBarChangeListener {
+            override fun onProgressChanged(seekBar: SeekBar, progress: Int, fromUser: Boolean) {
+                // Write code to perform some action when progress is changed.
+                if(fromUser){
+                    mMediaPlayer.seekTo(progress)
+                    current_time.text = setTextTime(progress)
+                }
             }
-            mTitleTextView?.setText(
-                    mediaMetadata.getString(MediaMetadataCompat.METADATA_KEY_TITLE))
-            mArtistTextView?.setText(
-                    mediaMetadata.getString(MediaMetadataCompat.METADATA_KEY_ARTIST))
-            mAlbumArt?.setImageBitmap(MusicLibrary.getAlbumBitmap(
-                    this@LocalPlayerActivity,
-                    mediaMetadata.getString(MediaMetadataCompat.METADATA_KEY_MEDIA_ID)))
-        }
 
-        override fun onSessionDestroyed() {
-            super.onSessionDestroyed()
-        }
+            override fun onStartTrackingTouch(seekBar: SeekBar) {
+                // Write code to perform some action when touch is started.
+            }
 
-        override fun onQueueChanged(queue: List<MediaSessionCompat.QueueItem>?) {
-            super.onQueueChanged(queue)
-        }
+            override fun onStopTrackingTouch(seekBar: SeekBar) {
+                // Write code to perform some action when touch is stopped.
+                current_time.text = setTextTime(mMediaPlayer.currentPosition)
+            }
+        })
     }
 
-    inner class VisualizerCreatorTask: AsyncTask<Context,Void,Boolean>() {
-        override fun doInBackground(vararg params: Context?): Boolean {
-            while (MEDIA_PLAYER_ID == -1) {
-                Log.d("VisualizerCreatorTask", "Waiting for Media Player to initialize.")
-                Thread.sleep(250)
-            }
-            Log.d("VisualizerCreatorTask", "Media Player initialized. ID: $MEDIA_PLAYER_ID")
-            mlineVisualizer?.setPlayer(MEDIA_PLAYER_ID)
-            return true
+    private fun setTextTime(duration: Int): String{
+        var finalTimerString: String
+        var secondsString: String
+
+        val minutes  = (duration % (1000*60*60) / (1000*60))
+        val seconds =  (duration % (1000*60*60) % (1000*60) / 1000)
+
+        if(seconds < 10){
+            secondsString = "0" + seconds
+        }else{
+            secondsString = "" + seconds
         }
+
+        finalTimerString = "" + minutes + ":" + secondsString
+        return finalTimerString
     }
+
 }

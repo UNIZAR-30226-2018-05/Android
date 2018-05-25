@@ -30,17 +30,17 @@
             android:supportsRtl="true"
             android:theme="@style/AppTheme">
         <activity
-                android:name="android.prosotec.proyectocierzo.Main2Activity"
-                android:launchMode="singleTop">
+            android:name="android.prosotec.proyectocierzo.Main2Activity"
+            android:launchMode="singleTop">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN"/>
-
                 <category android:name="android.intent.category.LAUNCHER"/>
             </intent-filter>
         </activity>
         <activity
             android:name="android.prosotec.proyectocierzo.LocalPlayerActivity"
-            android:configChanges="keyboardHidden|screenSize"
+            android:screenOrientation="portrait"
+            android:configChanges="orientation|screenSize"
             android:label="@string/title_activity_local_player"
             android:theme="@style/FullscreenTheme">
             <intent-filter>
