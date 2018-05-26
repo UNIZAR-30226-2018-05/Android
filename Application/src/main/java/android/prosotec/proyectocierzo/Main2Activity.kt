@@ -48,6 +48,7 @@ import android.Manifest.permission.RECORD_AUDIO
 import android.content.Intent
 import android.os.AsyncTask
 import android.util.Log
+import android.prosotec.proyectocierzo.view.PlayerView
 import android.widget.Toolbar
 import io.swagger.client.ApiException
 import kotlinx.android.synthetic.main.activity_local_player.*
@@ -55,6 +56,7 @@ import kotlinx.android.synthetic.main.activity_local_player.*
 
 import kotlinx.android.synthetic.main.activity_main2.*
 import kotlinx.android.synthetic.main.view_new_mini_player.*
+import kotlinx.android.synthetic.main.view_player.*
 
 
 class Main2Activity : AppCompatActivity() {
@@ -77,9 +79,22 @@ class Main2Activity : AppCompatActivity() {
     private var mCurrentTime: MediaCurrentTime? = null
     private var mFinalTime: MediaFinalTime? = null
 
-   // private lateinit var mMiniPlayer: MiniPlayerView
+    private var mAlbumArt2: ImageView? = null
+    private var mTitleTextView2: TextView? = null
+    private var mArtistTextView2: TextView? = null
+    private var mSeekBarAudio2: MediaSeekBar? = null
+    private var mPlayButton2: ImageButton? = null
+    private var mCurrentTime2: MediaCurrentTime? = null
+    private var mFinalTime2: MediaFinalTime? = null
 
-  //  private lateinit var mMediaBrowserHelper: MediaBrowserHelper
+    private var mPlayerFragment: Fragment? = PlayerFragment()
+
+    private val mFragmentManager = supportFragmentManager
+
+    private lateinit var mMiniPlayer: MiniPlayerView
+    private lateinit var mPlayerBig: PlayerView
+
+    private lateinit var mMediaBrowserHelper: MediaBrowserHelper
 
     private var mIsPlaying: Boolean = false
 
@@ -87,6 +102,7 @@ class Main2Activity : AppCompatActivity() {
         override fun run() {
             if (mIsPlaying) {
                 mCurrentTime?.setCurrentTime(mTime)
+                mCurrentTime2?.setCurrentTime(mTime)
                 mTime += 250
                 mCurrentTime?.postDelayed(this, 250)
             } else if (!mIsPlaying) {
@@ -106,6 +122,9 @@ class Main2Activity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main2)
 
+        mMiniPlayer = mini_player_view
+        mPlayerBig = player_view
+
         setSupportActionBar(toolbar)
         getSupportActionBar()!!.setDisplayShowTitleEnabled(false)  /* Quitamos el título de la barra*/
 
@@ -114,7 +133,7 @@ class Main2Activity : AppCompatActivity() {
         mSectionsPagerAdapter = SectionsPagerAdapter(supportFragmentManager)
 
         // Set up the ViewPager with the sections adapter.
-       // container.adapter = mSectionsPagerAdapter
+       container.adapter = mSectionsPagerAdapter
 
 
         // Set up the ViewPager with the sections adapter.
@@ -129,8 +148,8 @@ class Main2Activity : AppCompatActivity() {
         checkPermission()
         requestPermission()
 
-        // Código para el reproductor
-/*
+        // Código para el reproductor mini
+
         mTitleTextView = mMiniPlayer.findViewById(R.id.titulo)
         mArtistTextView = mMiniPlayer.findViewById(R.id.autor)
         mAlbumArt = mMiniPlayer.findViewById(R.id.cover_image)
@@ -139,17 +158,38 @@ class Main2Activity : AppCompatActivity() {
         mCurrentTime = mMiniPlayer.findViewById(R.id.actual_time)
         mFinalTime = mMiniPlayer.findViewById(R.id.length)
 
+        // Código para el reproductor "grande"
+        mTitleTextView2 = mPlayerBig.findViewById(R.id.song_name)
+        mArtistTextView2 = mPlayerBig.findViewById(R.id.artist_name)
+        mAlbumArt2 = mPlayerBig.findViewById(R.id.cover_image)
+        mSeekBarAudio2 = mPlayerBig.findViewById(R.id.seek_bar)
+        mPlayButton2 = mPlayerBig.findViewById(R.id.play)
+        mCurrentTime2 = mPlayerBig.findViewById(R.id.current_time)
+        mFinalTime2 = mPlayerBig.findViewById(R.id.final_time)
+
 
         val clickListener = ClickListener()
         mMiniPlayer.findViewById<View>(R.id.skip_prev).setOnClickListener(clickListener)
         mMiniPlayer.findViewById<View>(R.id.play).setOnClickListener(clickListener)
         mMiniPlayer.findViewById<View>(R.id.skip_next).setOnClickListener(clickListener)
+        mPlayerBig.findViewById<View>(R.id.skip_prev).setOnClickListener(clickListener)
+        mPlayerBig.findViewById<View>(R.id.play).setOnClickListener(clickListener)
+        mPlayerBig.findViewById<View>(R.id.skip_next).setOnClickListener(clickListener)
+
 
         mMediaBrowserHelper = MediaBrowserConnection(this)
         mMediaBrowserHelper.registerCallback(MediaBrowserListener())
-*/
-        // Código para los permisos
-        //checkPermissions(this@Main2Activity)
+
+        player_back.setOnClickListener {
+            player_view.visibility = View.GONE
+            main_layout.visibility = View.VISIBLE
+        }
+        player_view.visibility = View.GONE
+        mAlbumArt!!.setOnClickListener {
+            player_view.visibility = View.VISIBLE
+            main_layout.visibility = View.GONE
+        }
+
     }
 
     override fun onKeyDown(keyCode: Int, event: KeyEvent?): Boolean {
@@ -170,13 +210,14 @@ class Main2Activity : AppCompatActivity() {
 
     override fun onStart() {
         super.onStart()
-        //mMediaBrowserHelper.onStart()
+        mMediaBrowserHelper.onStart()
     }
 
      override fun onStop() {
         super.onStop()
-      //  mSeekBarAudio?.disconnectController()
-       // mMediaBrowserHelper.onStop()
+        mSeekBarAudio?.disconnectController()
+         mSeekBarAudio2?.disconnectController()
+        mMediaBrowserHelper.onStop()
     }
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
@@ -243,7 +284,7 @@ class Main2Activity : AppCompatActivity() {
     }
 
     // Para reproductor
-/*
+
     /**
      * Convenience class to collect the click listeners together.
      *
@@ -257,9 +298,13 @@ class Main2Activity : AppCompatActivity() {
                 R.id.skip_prev -> mMediaBrowserHelper.getTransportControls().skipToPrevious()
                 R.id.play -> if (mIsPlaying) {
                     mMediaBrowserHelper.getTransportControls().pause()
+                    mPlayButton?.setImageResource(R.drawable.ic_play_arrow_white_24dp)
+                    mPlayButton2?.setImageResource(R.drawable.ic_play_arrow_white_24dp)
 
                 } else {
                     mMediaBrowserHelper.getTransportControls().play()
+                    mPlayButton?.setImageResource(R.drawable.ic_pause_white_24dp)
+                    mPlayButton2?.setImageResource(R.drawable.ic_pause_white_24dp)
                 }
                 R.id.skip_next -> mMediaBrowserHelper.getTransportControls().skipToNext()
             }
@@ -274,6 +319,7 @@ class Main2Activity : AppCompatActivity() {
 
         override fun onConnected(mediaController: MediaControllerCompat) {
             mSeekBarAudio?.setMediaController(mediaController)
+            mSeekBarAudio2?.setMediaController(mediaController)
 
         }
 
@@ -291,17 +337,17 @@ class Main2Activity : AppCompatActivity() {
             // Call prepare now so pressing play just works.
             mediaController.transportControls.prepare()
 
-            // Se provoca un PlaybackStateChanged para que se recargue la seekbar
+        /*    // Se provoca un PlaybackStateChanged para que se recargue la seekbar
             if (!mIsPlaying) {
                 mMediaBrowserHelper.getTransportControls().play()
                 mMediaBrowserHelper.getTransportControls().pause()
             } else {
                 mMediaBrowserHelper.getTransportControls().pause()
                 mMediaBrowserHelper.getTransportControls().play()
-            }
+            }*/
         }
     }
-*/
+
     /**
      * Implementation of the [MediaControllerCompat.Callback] methods we're interested in.
      *
@@ -330,13 +376,22 @@ class Main2Activity : AppCompatActivity() {
             }
             mTitleTextView?.setText(
                     mediaMetadata.getString(MediaMetadataCompat.METADATA_KEY_TITLE))
+            mTitleTextView2?.setText(
+                    mediaMetadata.getString(MediaMetadataCompat.METADATA_KEY_TITLE))
             mArtistTextView?.setText(
+                    mediaMetadata.getString(MediaMetadataCompat.METADATA_KEY_ARTIST))
+            mArtistTextView2?.setText(
                     mediaMetadata.getString(MediaMetadataCompat.METADATA_KEY_ARTIST))
             mAlbumArt?.setImageBitmap(MusicLibrary.getAlbumBitmap(
                     this@Main2Activity,
                     mediaMetadata.getString(MediaMetadataCompat.METADATA_KEY_MEDIA_ID)))
+            mAlbumArt2?.setImageBitmap(MusicLibrary.getAlbumBitmap(
+                    this@Main2Activity,
+                    mediaMetadata.getString(MediaMetadataCompat.METADATA_KEY_MEDIA_ID)))
             mFinalTime?.setDuration(mediaMetadata.getLong(MediaMetadataCompat.METADATA_KEY_DURATION).toInt())
+            mFinalTime2?.setDuration(mediaMetadata.getLong(MediaMetadataCompat.METADATA_KEY_DURATION).toInt())
             mCurrentTime?.setCurrentTime(0)
+            mCurrentTime2?.setCurrentTime(0)
         }
 
         override fun onSessionDestroyed() {

@@ -77,7 +77,9 @@
                         android:scrollHorizontally="true"
                         android:ellipsize="marquee"
                         android:marqueeRepeatLimit ="marquee_forever"
-                        android:maxLength="18"/>
+                        android:maxLength="18"
+                        android:focusable="true"
+                        android:focusableInTouchMode="true"/>
 
                     <TextView
                         android:id="@+id/autor"
@@ -90,7 +92,9 @@
                         android:scrollHorizontally="true"
                         android:ellipsize="marquee"
                         android:marqueeRepeatLimit ="marquee_forever"
-                        android:maxLength="20"/>
+                        android:maxLength="20"
+                        android:focusable="true"
+                        android:focusableInTouchMode="true"/>
                 </LinearLayout>
 
                 <LinearLayout
@@ -114,7 +118,7 @@
                         android:layout_width="48dp"
                         android:layout_height="48dp"
                         app:elevation="4dp"
-                        android:src="@drawable/play_button"
+                        android:src="@drawable/ic_play_arrow_white_24dp"
                         app:fabSize="mini"/>
 
                     <ImageButton
