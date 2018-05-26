@@ -45,9 +45,13 @@ import android.Manifest.permission.INTERNET
 import android.Manifest.permission.WAKE_LOCK
 import android.Manifest.permission.READ_EXTERNAL_STORAGE
 import android.Manifest.permission.RECORD_AUDIO
+import android.content.Intent
+import android.widget.Toolbar
+import kotlinx.android.synthetic.main.activity_local_player.*
 
 
 import kotlinx.android.synthetic.main.activity_main2.*
+import kotlinx.android.synthetic.main.view_new_mini_player.*
 
 
 class Main2Activity : AppCompatActivity() {
@@ -99,8 +103,8 @@ class Main2Activity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main2)
 
-       // setSupportActionBar(toolbar)
-       // getSupportActionBar()!!.setDisplayShowTitleEnabled(false)  /* Quitamos el título de la barra*/
+        setSupportActionBar(toolbar)
+        getSupportActionBar()!!.setDisplayShowTitleEnabled(false)  /* Quitamos el título de la barra*/
 
         // Create the adapter that will return a fragment for each of the three
         // primary sections of the activity.
@@ -167,6 +171,17 @@ class Main2Activity : AppCompatActivity() {
         // automatically handle clicks on the Home/Up button, so long
         // as you specify a parent activity in AndroidManifest.xml.
         val id = item.itemId
+        val intent: Intent
+        when(id){
+            R.id.menu_profile -> {
+                intent = Intent(applicationContext,ListActivity::class.java)
+                startActivity(intent)
+            }
+            R.id.menu_signOut ->{
+                intent = Intent(applicationContext,LoginActivity::class.java)
+                startActivity(intent)
+            }
+        }
 
         return if (id == R.id.action_settings) {
             true
