@@ -10,14 +10,15 @@
     android:background="#FFFFFF">
 
     <LinearLayout
+        android:id="@+id/main_layout"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="vertical">
 
         <android.support.design.widget.CoordinatorLayout
+            android:id="@+id/appbar_layout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:id="@+id/appbar_layout"
             android:layout_weight="2">
 
             <android.support.design.widget.AppBarLayout
@@ -33,18 +34,19 @@
                     android:layout_height="?attr/actionBarSize"
                     android:layout_weight="1"
                     android:background="@color/colorPrimary"
-                    app:popupTheme="@style/AppTheme.PopupOverlay"
-                    app:layout_scrollFlags="enterAlways|scroll|snap">
+                    app:layout_scrollFlags="enterAlways|scroll|snap"
+                    app:popupTheme="@style/AppTheme.PopupOverlay">
 
                     <ImageView
                         android:id="@+id/logo"
                         android:layout_width="150dp"
                         android:layout_height="match_parent"
-                        android:src="@drawable/logo"/>
+                        android:src="@drawable/logo" />
+
                     <SearchView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_gravity="end"/>
+                        android:layout_gravity="end" />
 
                 </android.support.v7.widget.Toolbar>
 
@@ -54,25 +56,28 @@
                     android:layout_height="wrap_content">
 
                     <android.support.design.widget.TabItem
-                        android:layout_height="wrap_content"
-                        android:layout_width="wrap_content"
                         android:id="@+id/playlist_tab"
-                        android:text="@string/tab_playlist"/>
-                    <android.support.design.widget.TabItem
-                        android:layout_height="wrap_content"
                         android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/tab_playlist" />
+
+                    <android.support.design.widget.TabItem
                         android:id="@+id/song_tab"
-                        android:text="@string/tab_song"/>
-                    <android.support.design.widget.TabItem
-                        android:layout_height="wrap_content"
                         android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/tab_song" />
+
+                    <android.support.design.widget.TabItem
                         android:id="@+id/album_tab"
-                        android:text="@string/tab_album"/>
-                    <android.support.design.widget.TabItem
-                        android:layout_height="wrap_content"
                         android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/tab_album" />
+
+                    <android.support.design.widget.TabItem
                         android:id="@+id/artist_tab"
-                        android:text="@string/tab_artists"/>
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/tab_artists" />
 
                 </android.support.design.widget.TabLayout>
             </android.support.design.widget.AppBarLayout>
@@ -86,9 +91,15 @@
         </android.support.design.widget.CoordinatorLayout>
 
         <android.prosotec.proyectocierzo.view.MiniPlayerView
+            android:id="@+id/mini_player_view"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:id="@+id/mini_player_view" />
+            android:layout_height="wrap_content" />
+
     </LinearLayout>
+
+    <android.prosotec.proyectocierzo.view.PlayerView
+        android:id="@+id/player_view"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" />
 
 </RelativeLayout>

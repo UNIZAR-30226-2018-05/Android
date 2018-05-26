@@ -5,7 +5,8 @@
     android:layout_height="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:background="@color/colorPrimaryDark"
-    tools:context="android.prosotec.proyectocierzo.LocalPlayerActivity">
+    tools:context="android.prosotec.proyectocierzo.LocalPlayerActivity"
+    android:id="@+id/frameLayout">
 
     <LinearLayout
         android:id="@+id/fullscreen_content"
@@ -112,7 +113,7 @@
                 android:layout_width="60dp"
                 android:layout_height="60dp"
                 android:layout_weight="1"
-                android:src="@drawable/ic_play_arrow_white_24dp"
+                android:src="@drawable/ic_pause_white_24dp"
                 app:fabSize="mini" />
 
 

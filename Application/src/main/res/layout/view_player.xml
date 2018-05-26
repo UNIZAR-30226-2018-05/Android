@@ -20,6 +20,7 @@
             android:orientation="horizontal">
 
             <ImageButton
+                android:id="@+id/player_back"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:background="@android:color/transparent"
@@ -54,6 +55,7 @@
             android:layout_marginBottom="8dp"
             android:layout_marginTop="8dp"
             android:contentDescription="@string/player_album_description"
+            android:scaleType="fitXY"
             app:srcCompat="@drawable/ic_icono" />
 
         <TextView
@@ -103,7 +105,7 @@
                 android:orientation="vertical">
 
                 <ImageButton
-                    android:id="@+id/ib_prev"
+                    android:id="@+id/skip_prev"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
@@ -143,7 +145,7 @@
                 android:orientation="vertical">
 
                 <ImageButton
-                    android:id="@+id/ib_next"
+                    android:id="@+id/skip_next"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
@@ -172,7 +174,7 @@
             android:layout_marginTop="16dp"
             android:orientation="horizontal">
 
-            <TextView
+            <com.example.android.mediasession.ui.MediaCurrentTime
                 android:id="@+id/current_time"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -181,7 +183,7 @@
                 android:paddingLeft="50dp"
                 android:text="2:00" />
 
-            <TextView
+            <com.example.android.mediasession.ui.MediaFinalTime
                 android:id="@+id/final_time"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -192,8 +194,8 @@
 
         </LinearLayout>
 
-        <SeekBar
-            android:id="@+id/seek_bar_local"
+        <com.example.android.mediasession.ui.MediaSeekBar
+            android:id="@+id/seek_bar"
             style="@style/Base.Widget.AppCompat.ProgressBar.Horizontal"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
