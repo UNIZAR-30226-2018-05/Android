@@ -3,7 +3,9 @@ package android.prosotec.proyectocierzo
 import android.Manifest
 import android.app.Activity
 import android.content.Context
+import android.content.DialogInterface
 import android.content.pm.PackageManager
+import android.os.Build
 import android.support.v7.app.AppCompatActivity
 
 import android.support.v4.app.Fragment
@@ -16,6 +18,7 @@ import android.prosotec.proyectocierzo.fragment.recyclerview.CardsRecyclerViewFr
 import android.prosotec.proyectocierzo.fragment.recyclerview.PersonRowRecyclerViewFragment
 import android.prosotec.proyectocierzo.fragment.recyclerview.SongRowRecyclerViewFragment
 import android.prosotec.proyectocierzo.view.MiniPlayerView
+import android.support.design.widget.Snackbar
 import android.support.design.widget.TabLayout
 import android.support.v4.app.ActivityCompat
 import android.support.v4.content.ContextCompat
@@ -24,6 +27,7 @@ import android.support.v4.media.MediaMetadataCompat
 import android.support.v4.media.session.MediaControllerCompat
 import android.support.v4.media.session.MediaSessionCompat
 import android.support.v4.media.session.PlaybackStateCompat
+import android.support.v7.app.AlertDialog
 import android.view.*
 import android.widget.ImageButton
 import android.widget.ImageView
@@ -35,6 +39,13 @@ import com.example.android.mediasession.service.contentcatalogs.MusicLibrary
 import com.example.android.mediasession.ui.MediaCurrentTime
 import com.example.android.mediasession.ui.MediaFinalTime
 import com.example.android.mediasession.ui.MediaSeekBar
+
+
+import android.Manifest.permission.INTERNET
+import android.Manifest.permission.WAKE_LOCK
+import android.Manifest.permission.READ_EXTERNAL_STORAGE
+import android.Manifest.permission.RECORD_AUDIO
+
 
 import kotlinx.android.synthetic.main.activity_main2.*
 
@@ -59,15 +70,9 @@ class Main2Activity : AppCompatActivity() {
     private var mCurrentTime: MediaCurrentTime? = null
     private var mFinalTime: MediaFinalTime? = null
 
-    // Valores estáticos para codificar las peticiones de permisos
-    private val MY_PERMISSIONS_REQUEST_READ_EXTERNAL_STORAGE = 1
-    private val MY_PERMISSIONS_REQUEST_RECORD_AUDIO = 2
-    private val MY_PERMISSIONS_REQUEST_WAKE_LOCK = 3
-    private val MY_PERMISSIONS_REQUEST_INTERNET = 4
+   // private lateinit var mMiniPlayer: MiniPlayerView
 
-    private lateinit var mMiniPlayer: MiniPlayerView
-
-    private lateinit var mMediaBrowserHelper: MediaBrowserHelper
+  //  private lateinit var mMediaBrowserHelper: MediaBrowserHelper
 
     private var mIsPlaying: Boolean = false
 
@@ -87,21 +92,22 @@ class Main2Activity : AppCompatActivity() {
     private var mUpdaterRunning: Boolean = false
     private var mTime: Int = 0
 
+
+    private val PERMISSION_REQUEST_CODE = 200
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main2)
-        // Para reproductor
-        mMiniPlayer = mini_player_view
 
-        setSupportActionBar(toolbar)
-        getSupportActionBar()!!.setDisplayShowTitleEnabled(false)  /* Quitamos el título de la barra*/
+       // setSupportActionBar(toolbar)
+       // getSupportActionBar()!!.setDisplayShowTitleEnabled(false)  /* Quitamos el título de la barra*/
 
         // Create the adapter that will return a fragment for each of the three
         // primary sections of the activity.
         mSectionsPagerAdapter = SectionsPagerAdapter(supportFragmentManager)
 
         // Set up the ViewPager with the sections adapter.
-        container.adapter = mSectionsPagerAdapter
+       // container.adapter = mSectionsPagerAdapter
 
 
         // Set up the ViewPager with the sections adapter.
@@ -113,8 +119,11 @@ class Main2Activity : AppCompatActivity() {
         mViewPager.addOnPageChangeListener(TabLayout.TabLayoutOnPageChangeListener(tabLayout))
         tabLayout.addOnTabSelectedListener(TabLayout.ViewPagerOnTabSelectedListener(mViewPager))
 
-        // Código para el reproductor
+        checkPermission()
+        requestPermission()
 
+        // Código para el reproductor
+/*
         mTitleTextView = mMiniPlayer.findViewById(R.id.titulo)
         mArtistTextView = mMiniPlayer.findViewById(R.id.autor)
         mAlbumArt = mMiniPlayer.findViewById(R.id.cover_image)
@@ -131,137 +140,20 @@ class Main2Activity : AppCompatActivity() {
 
         mMediaBrowserHelper = MediaBrowserConnection(this)
         mMediaBrowserHelper.registerCallback(MediaBrowserListener())
-
+*/
         // Código para los permisos
         //checkPermissions(this@Main2Activity)
     }
 
-    /*
-    // Función para comprobar si se tienen los permisos necesarios
-    fun checkPermissions(actividad: Activity) {
-        // Here, thisActivity is the current activity
-        if (ContextCompat.checkSelfPermission(actividad,            // Permiso para acceder al almacenamiento
-                        Manifest.permission.READ_EXTERNAL_STORAGE)
-                != PackageManager.PERMISSION_GRANTED) {
-
-            if (ActivityCompat.shouldShowRequestPermissionRationale(actividad,
-                            Manifest.permission.READ_EXTERNAL_STORAGE)) {
-
-            } else {
-
-                ActivityCompat.requestPermissions(actividad,
-                        arrayOf(Manifest.permission.READ_CONTACTS),
-                        MY_PERMISSIONS_REQUEST_READ_EXTERNAL_STORAGE);
-
-            }
-        } else if (ContextCompat.checkSelfPermission(actividad,     // Permiso de grabar audio
-                        Manifest.permission.RECORD_AUDIO)
-                != PackageManager.PERMISSION_GRANTED) {
-
-            if (ActivityCompat.shouldShowRequestPermissionRationale(actividad,
-                            Manifest.permission.RECORD_AUDIO)) {
-
-                // Show an expanation to the user *asynchronously* -- don't block
-                // this thread waiting for the user's response! After the user
-                // sees the explanation, try again to request the permission.
-
-            } else {
-
-                ActivityCompat.requestPermissions(actividad,
-                        arrayOf(Manifest.permission.READ_CONTACTS),
-                        MY_PERMISSIONS_REQUEST_RECORD_AUDIO);
-
-            }
-        } else if (ContextCompat.checkSelfPermission(actividad,     // Permiso de internet
-                         Manifest.permission.INTERNET)
-                != PackageManager.PERMISSION_GRANTED) {
-
-            if (ActivityCompat.shouldShowRequestPermissionRationale(actividad,
-                         Manifest.permission.INTERNET)) {
-
-            } else {
-
-                ActivityCompat.requestPermissions(actividad,
-                        arrayOf(Manifest.permission.READ_CONTACTS),
-                        MY_PERMISSIONS_REQUEST_INTERNET);
-            }
-        }else if (ContextCompat.checkSelfPermission(actividad,     // Permiso de bloqueo
-                        Manifest.permission.WAKE_LOCK)
-                != PackageManager.PERMISSION_GRANTED) {
-
-            if (ActivityCompat.shouldShowRequestPermissionRationale(actividad,
-                            Manifest.permission.WAKE_LOCK)) {
-
-            } else {
-
-                ActivityCompat.requestPermissions(actividad,
-                        arrayOf(Manifest.permission.READ_CONTACTS),
-                        MY_PERMISSIONS_REQUEST_WAKE_LOCK)
-            }
-        }
-    }
-
-    // Funcion para captar cambios en los permisos por parte del usuario
-    override fun onRequestPermissionsResult(requestCode: Int,
-                                            permissions: Array<String>, grantResults: IntArray) {
-        when (requestCode) {
-            MY_PERMISSIONS_REQUEST_READ_EXTERNAL_STORAGE -> {
-                // If request is cancelled, the result arrays are empty.
-                if (grantResults.size > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-
-                    // permission was granted, yay! Do the
-                    // contacts-related task you need to do.
-
-                } else {
-
-                }
-                return
-            }MY_PERMISSIONS_REQUEST_RECORD_AUDIO -> {
-                if (grantResults.size > 0 && grantResults[1] == PackageManager.PERMISSION_GRANTED) {
-
-                    // permission was granted, yay! Do the
-                    // contacts-related task you need to do.
-
-                } else {
-
-                }
-                return
-
-            }MY_PERMISSIONS_REQUEST_INTERNET ->{
-                if (grantResults.size > 0 && grantResults[2] == PackageManager.PERMISSION_GRANTED) {
-
-                    // permission was granted, yay! Do the
-                    // contacts-related task you need to do.
-
-                } else {
-
-                }
-                return
-
-            }MY_PERMISSIONS_REQUEST_WAKE_LOCK ->{
-                if (grantResults.size > 0 && grantResults[3] == PackageManager.PERMISSION_GRANTED) {
-
-                    // permission was granted, yay! Do the
-                    // contacts-related task you need to do.
-
-                } else {
-
-                }
-                return
-
-            }
-        }
-    }*/
-
     override fun onStart() {
         super.onStart()
-        mMediaBrowserHelper.onStart()
+        //mMediaBrowserHelper.onStart()
     }
 
      override fun onStop() {
         super.onStop()
-        mSeekBarAudio?.disconnectController()
-        mMediaBrowserHelper.onStop()
+      //  mSeekBarAudio?.disconnectController()
+       // mMediaBrowserHelper.onStop()
     }
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
@@ -309,7 +201,7 @@ class Main2Activity : AppCompatActivity() {
     }
 
     // Para reproductor
-
+/*
     /**
      * Convenience class to collect the click listeners together.
      *
@@ -367,7 +259,7 @@ class Main2Activity : AppCompatActivity() {
             }
         }
     }
-
+*/
     /**
      * Implementation of the [MediaControllerCompat.Callback] methods we're interested in.
      *
@@ -413,5 +305,67 @@ class Main2Activity : AppCompatActivity() {
             super.onQueueChanged(queue)
         }
     }
+
+    // Funciones para los permisos
+
+    private fun checkPermission(): Boolean {
+        val result = ContextCompat.checkSelfPermission(applicationContext, INTERNET)
+        val result1 = ContextCompat.checkSelfPermission(applicationContext, WAKE_LOCK)
+        val result2 = ContextCompat.checkSelfPermission(applicationContext, READ_EXTERNAL_STORAGE)
+        val result3 = ContextCompat.checkSelfPermission(applicationContext, RECORD_AUDIO)
+
+        return result == PackageManager.PERMISSION_GRANTED && result1 == PackageManager.PERMISSION_GRANTED
+                && result2 == PackageManager.PERMISSION_GRANTED && result3 == PackageManager.PERMISSION_GRANTED
+    }
+
+    private fun requestPermission() {
+
+        ActivityCompat.requestPermissions(this, arrayOf(INTERNET, WAKE_LOCK, READ_EXTERNAL_STORAGE, RECORD_AUDIO), PERMISSION_REQUEST_CODE)
+
+    }
+
+    override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<String>, grantResults: IntArray) {
+        when (requestCode) {
+            PERMISSION_REQUEST_CODE -> if (grantResults.size > 0) {
+
+                val InternetAccepted = grantResults[0] == PackageManager.PERMISSION_GRANTED
+                val WakeLockAccepted = grantResults[1] == PackageManager.PERMISSION_GRANTED
+                val StorageAccepted = grantResults[2] == PackageManager.PERMISSION_GRANTED
+                val RecordAudioAccepted = grantResults[3] == PackageManager.PERMISSION_GRANTED
+
+
+                if (InternetAccepted && WakeLockAccepted && StorageAccepted && RecordAudioAccepted )
+                    Snackbar.make(window.decorView, "Permisos para la aplicación garantizados.", Snackbar.LENGTH_LONG).show()
+                else {
+
+                    Snackbar.make(window.decorView, "Permisos para la aplicación denegados, puede causar que la aplicación no funcione.", Snackbar.LENGTH_LONG).show()
+
+                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                        if (shouldShowRequestPermissionRationale(INTERNET)) {
+                            showMessageOKCancel("La aplicación necesita de todos los permisos para funcionar correctamente",
+                                    DialogInterface.OnClickListener { dialog, which ->
+                                        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                                            requestPermissions(arrayOf(INTERNET, WAKE_LOCK, READ_EXTERNAL_STORAGE, RECORD_AUDIO), PERMISSION_REQUEST_CODE)
+                                        }
+                                    })
+                            return
+                        }
+                    }
+
+                }
+            }
+        }
+    }
+
+
+    private fun showMessageOKCancel(message: String, okListener: DialogInterface.OnClickListener) {
+        AlertDialog.Builder(this@Main2Activity)
+                .setMessage(message)
+                .setPositiveButton("OK", okListener)
+                .setNegativeButton("Cancel", null)
+                .create()
+                .show()
+    }
+
 
 }
