@@ -31,7 +31,7 @@
             android:theme="@style/AppTheme"
             android:name=".CierzoApp">
         <activity
-            android:name="android.prosotec.proyectocierzo.Main2Activity"
+            android:name="android.prosotec.proyectocierzo.LoginActivity"
             android:launchMode="singleTop">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN"/>
@@ -59,7 +59,7 @@
             android:theme="@style/AppTheme">
         </activity>
         <activity
-            android:name="android.prosotec.proyectocierzo.LoginActivity"
+            android:name="android.prosotec.proyectocierzo.Main2Activity"
             android:theme="@style/AppTheme">
         </activity>
         <activity

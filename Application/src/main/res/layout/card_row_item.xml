@@ -18,7 +18,7 @@
             android:orientation="vertical">
 
             <com.makeramen.roundedimageview.RoundedImageView
-                android:id="@+id/iv"
+                android:id="@+id/card_image"
                 android:layout_width="match_parent"
                 android:layout_height="120dp"
                 android:scaleType="centerCrop"
@@ -36,7 +36,7 @@
                 android:padding="16dp">
 
                 <TextView
-                    android:id="@+id/textView"
+                    android:id="@+id/card_title"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:text="Lista de reproducción"
@@ -44,7 +44,7 @@
                     android:textSize="18sp" />
 
                 <TextView
-                    android:id="@+id/textView2"
+                    android:id="@+id/card_subtitle"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:text="N canciones"

@@ -11,6 +11,10 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import com.example.android.mediasession.R
+import android.R.attr.defaultValue
+import android.R.attr.key
+import com.example.android.mediasession.CierzoApp
+
 
 /**
  * Demonstrates the use of [RecyclerView] with a [LinearLayoutManager] and a
@@ -49,7 +53,18 @@ class CardsRecyclerViewFragment : Fragment() {
             mRecyclerView.setLayoutManager(GridLayoutManager(activity, 6))
         }
 
-        mAdapter = CardAdapter(mDataset)
+        var mode: Int? = null
+        var id: Int? = null
+        val bundle = this.arguments
+        if (bundle != null) {
+            mode = bundle.getInt("MODE")
+            id = bundle.getInt("LIST_ID")
+        }
+
+        if (mode == MODE_USERLOGGED_PLAYLISTS) {
+            mAdapter = CardAdapter((activity?.application as CierzoApp).mUserLogged.getUser().getPlaylists())
+        }
+
         // Set CardAdapter as the adapter for RecyclerView.
         mRecyclerView.adapter = mAdapter
         // END_INCLUDE(initializeRecyclerView)
@@ -67,5 +82,6 @@ class CardsRecyclerViewFragment : Fragment() {
 
     companion object {
         private val TAG = "CardsRecyclerViewFragment"
+        public const val MODE_USERLOGGED_PLAYLISTS = 0
     }
 }

@@ -46,7 +46,10 @@ import android.Manifest.permission.WAKE_LOCK
 import android.Manifest.permission.READ_EXTERNAL_STORAGE
 import android.Manifest.permission.RECORD_AUDIO
 import android.content.Intent
+import android.os.AsyncTask
+import android.util.Log
 import android.widget.Toolbar
+import io.swagger.client.ApiException
 import kotlinx.android.synthetic.main.activity_local_player.*
 
 
@@ -149,6 +152,22 @@ class Main2Activity : AppCompatActivity() {
         //checkPermissions(this@Main2Activity)
     }
 
+    override fun onKeyDown(keyCode: Int, event: KeyEvent?): Boolean {
+        if(keyCode == KeyEvent.KEYCODE_BACK){
+            /*if(player_view.visibility == View.VISIBLE) {
+                player_view.visibility = View.GONE
+                main_layout.visibility = View.VISIBLE
+            } else {*/
+                finish()
+            //}
+            return true
+        } else {
+            return super.onKeyDown(keyCode, event)
+        }
+
+
+    }
+
     override fun onStart() {
         super.onStart()
         //mMediaBrowserHelper.onStart()
@@ -178,8 +197,10 @@ class Main2Activity : AppCompatActivity() {
                 startActivity(intent)
             }
             R.id.menu_signOut ->{
-                intent = Intent(applicationContext,LoginActivity::class.java)
+                LogoutTask().execute()
+                intent = Intent(applicationContext, LoginActivity::class.java)
                 startActivity(intent)
+                finish()
             }
         }
 
@@ -198,14 +219,20 @@ class Main2Activity : AppCompatActivity() {
         override fun getItem(position: Int): Fragment {
             // getItem is called to instantiate the fragment for the given page.
             // Return a PlaceholderFragment (defined as a static inner class below).
-            return if (position == 0) {
-                CardsRecyclerViewFragment()
-            } else if (position == 1) {
+            return if (position == 0) { // Playlists
+                var bundle: Bundle = Bundle();
+                bundle.putInt("MODE", CardsRecyclerViewFragment.MODE_USERLOGGED_PLAYLISTS);
+                var fragment: Fragment = CardsRecyclerViewFragment()
+                fragment.setArguments(bundle)
+                fragment
+            } /*else if (position == 1) { // Canciones
                 SongRowRecyclerViewFragment()
-            } else if (position == 3) {
-                PersonRowRecyclerViewFragment()
-            } else {
+            } else if (position == 2) { // Albumes
                 CardsRecyclerViewFragment()
+            } else if (position == 3) { // Artistas
+                PersonRowRecyclerViewFragment()
+            }*/ else {
+                PruebaFragment()
             }
         }
 
@@ -380,6 +407,18 @@ class Main2Activity : AppCompatActivity() {
                 .setNegativeButton("Cancel", null)
                 .create()
                 .show()
+    }
+
+    private inner class LogoutTask : AsyncTask<Void, Void, Boolean>() {
+        override fun doInBackground(vararg params: Void?): Boolean {
+            try {
+                cierzo.model.logout()
+                return true
+            } catch (e: ApiException) {
+                Log.e("Main2Activity", e.responseBody)
+                return false
+            }
+        }
     }
 
 
