@@ -193,21 +193,25 @@ class Main2Activity : AppCompatActivity() {
 
         back_eq.setOnClickListener {
             equalizer_view.visibility = View.GONE
-            main_layout.visibility = View.VISIBLE
+            main_layout.visibility = View.GONE
+            player_view.visibility = View.VISIBLE
         }
         player_back.setOnClickListener {
             player_view.visibility = View.GONE
             main_layout.visibility = View.VISIBLE
+            equalizer_view.visibility = View.GONE
         }
         player_view.visibility = View.GONE
         mAlbumArt!!.setOnClickListener {
             player_view.visibility = View.VISIBLE
             main_layout.visibility = View.GONE
+            equalizer_view.visibility = View.GONE
         }
 
         equalizer_view.visibility = View.GONE
         equalizer_bt.setOnClickListener{
             equalizer_view.visibility = View.VISIBLE
+            player_view.visibility = View.GONE
             main_layout.visibility = View.GONE
         }
 
@@ -274,12 +278,17 @@ class Main2Activity : AppCompatActivity() {
 
     override fun onKeyDown(keyCode: Int, event: KeyEvent?): Boolean {
         if(keyCode == KeyEvent.KEYCODE_BACK){
-            /*if(player_view.visibility == View.VISIBLE) {
+            if(player_view.visibility == View.VISIBLE) {
+                equalizer_view.visibility = View.GONE
                 player_view.visibility = View.GONE
                 main_layout.visibility = View.VISIBLE
-            } else {*/
+            } else if(equalizer_view.visibility == View.VISIBLE){
+                equalizer_view.visibility = View.GONE
+                player_view.visibility = View.VISIBLE
+                main_layout.visibility = View.GONE
+            }else{
                 finish()
-            //}
+            }
             return true
         } else {
             return super.onKeyDown(keyCode, event)
