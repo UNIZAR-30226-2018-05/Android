@@ -29,9 +29,6 @@ import android.support.v4.media.session.MediaSessionCompat
 import android.support.v4.media.session.PlaybackStateCompat
 import android.support.v7.app.AlertDialog
 import android.view.*
-import android.widget.ImageButton
-import android.widget.ImageView
-import android.widget.TextView
 import com.example.android.mediasession.R
 import com.example.android.mediasession.client.MediaBrowserHelper
 import com.example.android.mediasession.service.MusicService
@@ -49,7 +46,7 @@ import android.content.Intent
 import android.os.AsyncTask
 import android.util.Log
 import android.prosotec.proyectocierzo.view.PlayerView
-import android.widget.Toolbar
+import android.widget.*
 import io.swagger.client.ApiException
 import kotlinx.android.synthetic.main.activity_local_player.*
 
@@ -175,10 +172,15 @@ class Main2Activity : AppCompatActivity() {
         mPlayerBig.findViewById<View>(R.id.skip_prev).setOnClickListener(clickListener)
         mPlayerBig.findViewById<View>(R.id.play).setOnClickListener(clickListener)
         mPlayerBig.findViewById<View>(R.id.skip_next).setOnClickListener(clickListener)
-
+        mPlayerBig.findViewById<View>(R.id.ib_shuffle).setOnClickListener(clickListener)
+        mPlayerBig.findViewById<View>(R.id.ib_repeat).setOnClickListener(clickListener)
 
         mMediaBrowserHelper = MediaBrowserConnection(this)
         mMediaBrowserHelper.registerCallback(MediaBrowserListener())
+
+        val checkListener = CheckListener()
+        mPlayerBig.findViewById<CompoundButton>(R.id.ib_shuffle).setOnCheckedChangeListener(checkListener)
+        mPlayerBig.findViewById<CompoundButton>(R.id.ib_repeat).setOnCheckedChangeListener(checkListener)
 
         player_back.setOnClickListener {
             player_view.visibility = View.GONE
@@ -315,6 +317,24 @@ class Main2Activity : AppCompatActivity() {
         }
     }
 
+    private inner class CheckListener : CompoundButton.OnCheckedChangeListener {
+        override fun onCheckedChanged(buttonView: CompoundButton?, isChecked: Boolean) {
+            when(buttonView?.id){
+                R.id.ib_shuffle -> if(isChecked){
+                    mMediaBrowserHelper.transportControls.setShuffleMode(PlaybackStateCompat.SHUFFLE_MODE_ALL)
+                }else{
+                    mMediaBrowserHelper.transportControls.setShuffleMode(PlaybackStateCompat.SHUFFLE_MODE_NONE)
+                }
+                R.id.ib_repeat -> if(isChecked){
+                    mMediaBrowserHelper.transportControls.setRepeatMode(PlaybackStateCompat.REPEAT_MODE_ALL)
+                }else{
+                    mMediaBrowserHelper.transportControls.setRepeatMode(PlaybackStateCompat.REPEAT_MODE_NONE)
+                }
+            }
+        }
+    }
+
+
     /**
      * Customize the connection to our [android.support.v4.media.MediaBrowserServiceCompat]
      * and implement our app specific desires.
@@ -351,6 +371,7 @@ class Main2Activity : AppCompatActivity() {
             }*/
         }
     }
+
 
     /**
      * Implementation of the [MediaControllerCompat.Callback] methods we're interested in.
@@ -404,6 +425,25 @@ class Main2Activity : AppCompatActivity() {
 
         override fun onQueueChanged(queue: List<MediaSessionCompat.QueueItem>?) {
             super.onQueueChanged(queue)
+        }
+
+        /** AQUI SE CAMBIA EL ESTADO DE LOS BOTONES :D **/
+        override fun onRepeatModeChanged(repeatMode: Int) {
+            super.onRepeatModeChanged(repeatMode)
+            if(repeatMode == PlaybackStateCompat.REPEAT_MODE_ALL){
+                Snackbar.make(window.decorView, "repeatMode = REPEAT_MODE_ALL", Snackbar.LENGTH_LONG).show()
+            }else if(repeatMode == PlaybackStateCompat.REPEAT_MODE_NONE){
+                Snackbar.make(window.decorView, "repeatMode = REPEAT_MODE_NONE", Snackbar.LENGTH_LONG).show()
+            }
+        }
+
+        override fun onShuffleModeChanged(shuffleMode: Int) {
+            super.onShuffleModeChanged(shuffleMode)
+            if(shuffleMode == PlaybackStateCompat.SHUFFLE_MODE_ALL){
+                Snackbar.make(window.decorView, "shuffleMode = SHUFFLE_MODE_ALL", Snackbar.LENGTH_LONG).show()
+            }else if(shuffleMode == PlaybackStateCompat.SHUFFLE_MODE_NONE){
+                Snackbar.make(window.decorView, "shuffleMode = SHUFFLE_MODE_NONE", Snackbar.LENGTH_LONG).show()
+            }
         }
     }
 

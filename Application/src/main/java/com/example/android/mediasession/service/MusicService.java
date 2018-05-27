@@ -18,6 +18,7 @@ package com.example.android.mediasession.service;
 
 import android.app.Notification;
 import android.content.Intent;
+import android.media.session.MediaSession;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v4.content.ContextCompat;
@@ -25,6 +26,7 @@ import android.support.v4.media.MediaBrowserCompat;
 import android.support.v4.media.MediaBrowserServiceCompat;
 import android.support.v4.media.MediaDescriptionCompat;
 import android.support.v4.media.MediaMetadataCompat;
+import android.support.v4.media.session.MediaControllerCompat;
 import android.support.v4.media.session.MediaSessionCompat;
 import android.support.v4.media.session.PlaybackStateCompat;
 import android.util.Log;
@@ -175,12 +177,13 @@ public class MusicService extends MediaBrowserServiceCompat {
         }
 
         @Override
-        public void onSetRepeatMode(int repeatMode) {
+        public void onSetRepeatMode(int repeatMode){
             mSession.setRepeatMode(repeatMode);
+
         }
 
         @Override
-        public void onSetShuffleMode(int shuffleMode) {
+        public void onSetShuffleMode(int shuffleMode){
             mSession.setShuffleMode(shuffleMode);
         }
 

@@ -70,6 +70,30 @@ public class MusicLibrary {
                 R.drawable.album_youtube_audio_library_rock_2,
                 "album_youtube_audio_library_rock_2",
                 null);
+        createMediaMetadataCompat(
+                "Pipo el mejor",
+                "La epica historia de pipo",
+                "Alexelcapo",
+                "Canciones sobre Youtubers",
+                "Gringe",
+                96,
+                TimeUnit.SECONDS,
+                "La Leyenda del Perro Pipo Gambino -Alexelcapo.mp3",
+                R.drawable.album_youtube_audio_library_rock_2,
+                "album_youtube_audio_library_rock_2",
+                null);
+        createMediaMetadataCompat(
+                "SkilletNueva",
+                "Feel Invencible",
+                "Skillet",
+                "NewAlbum",
+                "Rock",
+                227,
+                TimeUnit.SECONDS,
+                "Skillet - Feel Invincible.mp3",
+                R.drawable.album_jazz_blues,
+                "album_youtube_audio_library_rock_2",
+                null);
     }
 
     public static String getRoot() {

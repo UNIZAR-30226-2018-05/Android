@@ -71,6 +71,8 @@ public final class MediaPlayerAdapter extends PlayerAdapter {
                 public void onCompletion(MediaPlayer mediaPlayer) {
                     mPlaybackInfoListener.onPlaybackCompleted();
 
+                    /**Crear aqui el next??*/
+
                     // Set the state to "paused" because it most closely matches the state
                     // in MediaPlayer with regards to available state transitions compared
                     // to "stop".
