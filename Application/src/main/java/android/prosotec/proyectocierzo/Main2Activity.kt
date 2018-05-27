@@ -268,9 +268,13 @@ class Main2Activity : AppCompatActivity() {
                 fragment
             } /*else if (position == 1) { // Canciones
                 SongRowRecyclerViewFragment()
-            } else if (position == 2) { // Albumes
-                CardsRecyclerViewFragment()
-            } else if (position == 3) { // Artistas
+            }*/ else if (position == 2) { // Albumes
+                var bundle: Bundle = Bundle();
+                bundle.putInt("MODE", CardsRecyclerViewFragment.MODE_FROMFAVORITE_ALBUMS);
+                var fragment: Fragment = CardsRecyclerViewFragment()
+                fragment.setArguments(bundle)
+                fragment
+            }/* else if (position == 3) { // Artistas
                 PersonRowRecyclerViewFragment()
             }*/ else {
                 PruebaFragment()

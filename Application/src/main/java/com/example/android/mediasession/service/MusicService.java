@@ -175,6 +175,16 @@ public class MusicService extends MediaBrowserServiceCompat {
         }
 
         @Override
+        public void onSetRepeatMode(int repeatMode) {
+            mSession.setRepeatMode(repeatMode);
+        }
+
+        @Override
+        public void onSetShuffleMode(int shuffleMode) {
+            mSession.setShuffleMode(shuffleMode);
+        }
+
+        @Override
         public void onSeekTo(long pos) {
             mPlayback.seekTo(pos);
         }

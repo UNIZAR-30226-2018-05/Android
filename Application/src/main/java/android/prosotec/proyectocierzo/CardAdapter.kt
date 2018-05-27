@@ -29,9 +29,9 @@ class CardAdapter
 
     init {
         if (mDataSet.size > 0 && mDataSet.elementAt(0) is Playlist) {
-            mPlaylists = mDataSet as List<Playlist>
+            mPlaylists = mDataSet.distinctBy { (it as Playlist).getInfo().elementAt(0) } as List<Playlist>
         } else if (mDataSet.size > 0 && mDataSet.elementAt(0) is Album) {
-            mAlbums = mDataSet as List<Album>
+            mAlbums = mDataSet.distinctBy { (it as Album).id } as List<Album>
         }
     }
 
@@ -82,6 +82,8 @@ class CardAdapter
             var album: Album = mAlbums!!.get(position)
             viewHolder.card_title.text = album.name
             viewHolder.card_subtitle.text = album.authorName
+            var imageURL: String = album.imageURL
+            Picasso.get().load(imageURL).into(viewHolder.card_image)
         }
 
     }
@@ -89,7 +91,13 @@ class CardAdapter
 
     // Return the size of your dataset (invoked by the layout manager)
     override fun getItemCount(): Int {
-        return mDataSet.size
+        return if (mPlaylists != null) {
+            mPlaylists!!.size
+        } else if (mAlbums != null) {
+            mAlbums!!.size
+        } else {
+            mDataSet.size
+        }
     }
 
     companion object {
