@@ -1,5 +1,6 @@
 package android.prosotec.proyectocierzo.fragment.recyclerview
 
+import android.os.AsyncTask
 import android.os.Bundle
 import android.prosotec.proyectocierzo.PersonRowAdapter
 import android.prosotec.proyectocierzo.SimpleItemTouchHelperCallback
@@ -11,6 +12,7 @@ import android.support.v7.widget.helper.ItemTouchHelper
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import com.example.android.mediasession.CierzoApp
 import com.example.android.mediasession.R
 
 /**
@@ -46,7 +48,7 @@ class PersonRowRecyclerViewFragment : Fragment()  {
 
         mRecyclerView.setLayoutManager(LinearLayoutManager(activity))
 
-        mAdapter = PersonRowAdapter(mDataset)
+        mAdapter = PersonRowAdapter(getAuthorsAsync().execute().get().toMutableList())
         // Set CardAdapter as the adapter for RecyclerView.
         mRecyclerView.adapter = mAdapter
         // END_INCLUDE(initializeRecyclerView)
@@ -68,5 +70,11 @@ class PersonRowRecyclerViewFragment : Fragment()  {
 
     companion object {
         private val TAG = "CardsRecyclerViewFragment"
+    }
+
+    inner class getAuthorsAsync : AsyncTask<Int, Void, List<Any>>() {
+        override fun doInBackground(vararg params: Int?): List<Any> {
+            return (activity?.application as CierzoApp).mUserLogged.getAuthorsFromFavorite()
+        }
     }
 }

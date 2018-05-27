@@ -276,9 +276,9 @@ class Main2Activity : AppCompatActivity() {
                 var fragment: Fragment = CardsRecyclerViewFragment()
                 fragment.setArguments(bundle)
                 fragment
-            }/* else if (position == 3) { // Artistas
+            } else if (position == 3) { // Artistas
                 PersonRowRecyclerViewFragment()
-            }*/ else {
+            } else {
                 PruebaFragment()
             }
         }

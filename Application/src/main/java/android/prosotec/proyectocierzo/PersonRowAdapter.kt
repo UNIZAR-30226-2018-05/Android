@@ -5,9 +5,14 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ImageView
 import android.widget.TextView
+import cierzo.model.objects.Author
+import cierzo.model.objects.User
 import com.example.android.mediasession.R
+import com.squareup.picasso.Picasso
 import kotlinx.android.synthetic.main.person_row_item.view.*
+import org.w3c.dom.Text
 import java.util.*
 
 /**
@@ -21,22 +26,35 @@ class PersonRowAdapter
  *
  * @param dataSet String[] containing the data to populate views to be used by RecyclerView.
  */
-(private val mDataSet: MutableList<String>,
+(private val mDataSet: MutableList<Any>,
  private val showFavIcon: Boolean = false,
  private val showDragAndDropIcon: Boolean = false) : RecyclerView.Adapter<PersonRowAdapter.ViewHolder>(), ItemTouchHelperAdapter {
+    private var mAuthors: MutableList<Author> = mutableListOf()
+    private var mUsers: MutableList<User> = mutableListOf()
 
+    init {
+        if (mDataSet[0] is Author) {
+            mAuthors = mDataSet as MutableList<Author>
+        } else if (mDataSet[0] is User) {
+            mUsers = mDataSet as MutableList<User>
+        }
+    }
 
     // BEGIN_INCLUDE(recyclerViewSampleViewHolder)
     /**
      * Provide a reference to the type of views that you are using (custom ViewHolder)
      */
     class ViewHolder(v: View) : RecyclerView.ViewHolder(v) {
-        val textView: TextView
+        val title: TextView
+        val subtitle: TextView
+        val image: ImageView
 
         init {
             // Define click listener for the ViewHolder's View.
             v.setOnClickListener { Log.d(TAG, "Element $adapterPosition clicked.") }
-            textView = v.findViewById(R.id.text_row_name) as TextView
+            title = v.findViewById(R.id.text_row_title) as TextView
+            subtitle = v.findViewById(R.id.text_row_subtitle) as TextView
+            image = v.findViewById(R.id.text_row_image) as ImageView
         }
     }
 
@@ -66,7 +84,16 @@ class PersonRowAdapter
 
         // Get element from your dataset at this position and replace the contents of the view
         // with that element
-        viewHolder.textView.text_row_name.text = mDataSet[position]
+        if (mAuthors.size > 0) {
+            viewHolder.title.text = mAuthors[position].name
+            viewHolder.subtitle.visibility = View.GONE
+            var imageURL: String = mAuthors[position].imageURL
+            Picasso.get().load(imageURL).into(viewHolder.image)
+        } else if (mUsers.size > 0) {
+            viewHolder.title.text = mUsers[position].getInfo().elementAt(2) // Name
+            viewHolder.subtitle.text = mUsers[position].getInfo().elementAt(1) // Username
+            viewHolder.image.setImageResource(R.drawable.ic_account_circle_black_24dp)
+        }
 
     }
     // END_INCLUDE(recyclerViewOnBindViewHolder)
@@ -77,12 +104,17 @@ class PersonRowAdapter
     }
 
     override fun onItemDismiss(position: Int) {
-        mDataSet.removeAt(position)
-        notifyItemRemoved(position)
+        if (mAuthors.size > 0) {
+            mAuthors.removeAt(position)
+            notifyItemRemoved(position)
+        } else if (mUsers.size > 0) {
+            mUsers.removeAt(position)
+            notifyItemRemoved(position)
+        }
     }
 
     override fun onItemMove(fromPosition: Int, toPosition: Int) {
-        if (fromPosition < toPosition) {
+        /*if (fromPosition < toPosition) {
             for (i in fromPosition until toPosition) {
                 Collections.swap(mDataSet, i, i + 1)
             }
@@ -91,7 +123,7 @@ class PersonRowAdapter
                 Collections.swap(mDataSet, i, i - 1)
             }
         }
-        notifyItemMoved(fromPosition, toPosition)
+        notifyItemMoved(fromPosition, toPosition)*/
     }
 
     companion object {
