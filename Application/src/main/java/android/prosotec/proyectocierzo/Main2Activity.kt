@@ -43,10 +43,12 @@ import android.Manifest.permission.WAKE_LOCK
 import android.Manifest.permission.READ_EXTERNAL_STORAGE
 import android.Manifest.permission.RECORD_AUDIO
 import android.content.Intent
+import android.media.audiofx.Equalizer
 import android.os.AsyncTask
 import android.util.Log
 import android.prosotec.proyectocierzo.view.PlayerView
 import android.widget.*
+import com.chibde.visualizer.LineVisualizer
 import io.swagger.client.ApiException
 import kotlinx.android.synthetic.main.activity_local_player.*
 
@@ -54,6 +56,8 @@ import kotlinx.android.synthetic.main.activity_local_player.*
 import kotlinx.android.synthetic.main.activity_main2.*
 import kotlinx.android.synthetic.main.view_new_mini_player.*
 import kotlinx.android.synthetic.main.view_player.*
+import com.example.android.mediasession.service.players.MediaPlayerAdapter.MEDIA_PLAYER_ID
+import kotlinx.android.synthetic.main.equalizer_view.*
 
 
 class Main2Activity : AppCompatActivity() {
@@ -112,6 +116,9 @@ class Main2Activity : AppCompatActivity() {
     private var mUpdaterRunning: Boolean = false
     private var mTime: Int = 0
 
+    private var mlineVisualizer: LineVisualizer? = null
+
+    private var mEqualizer: Equalizer? = null
 
     private val PERMISSION_REQUEST_CODE = 200
 
@@ -182,6 +189,10 @@ class Main2Activity : AppCompatActivity() {
         mPlayerBig.findViewById<CompoundButton>(R.id.ib_shuffle).setOnCheckedChangeListener(checkListener)
         mPlayerBig.findViewById<CompoundButton>(R.id.ib_repeat).setOnCheckedChangeListener(checkListener)
 
+        back_eq.setOnClickListener {
+            equalizer_view.visibility = View.GONE
+            main_layout.visibility = View.VISIBLE
+        }
         player_back.setOnClickListener {
             player_view.visibility = View.GONE
             main_layout.visibility = View.VISIBLE
@@ -192,6 +203,71 @@ class Main2Activity : AppCompatActivity() {
             main_layout.visibility = View.GONE
         }
 
+        equalizer_view.visibility = View.GONE
+        equalizer_bt.setOnClickListener{
+            equalizer_view.visibility = View.VISIBLE
+            main_layout.visibility = View.GONE
+        }
+
+
+        mlineVisualizer = LineVisualizer(this)
+        var mainLayout: LinearLayout = findViewById(R.id.fullscreen_content)
+        mainLayout.addView(mlineVisualizer)
+        mlineVisualizer?.setColor(ContextCompat.getColor(this, R.color.colorAccent))
+        mlineVisualizer?.setStrokeWidth(5)
+
+        var vCreatorTask: VisualizerCreatorTask = VisualizerCreatorTask()
+        vCreatorTask.execute(this)
+
+        prepareButtonsEqualizer()
+        prepareButtonsEqualizerListeners()
+
+    }
+
+    private fun prepareButtonsEqualizer(){
+        pre1.text = mEqualizer?.getPresetName(0)
+        pre2.text = mEqualizer?.getPresetName(1)
+        pre3.text = mEqualizer?.getPresetName(2)
+        pre4.text = mEqualizer?.getPresetName(3)
+        pre5.text = mEqualizer?.getPresetName(4)
+        pre6.text = mEqualizer?.getPresetName(5)
+        pre7.text = mEqualizer?.getPresetName(6)
+        pre8.text = mEqualizer?.getPresetName(7)
+        pre9.text = mEqualizer?.getPresetName(8)
+        pre10.text = mEqualizer?.getPresetName(9)
+    }
+
+    private fun prepareButtonsEqualizerListeners(){
+        pre1.setOnClickListener{
+            mEqualizer?.usePreset(0)
+        }
+        pre2.setOnClickListener{
+            mEqualizer?.usePreset(1)
+        }
+        pre3.setOnClickListener{
+            mEqualizer?.usePreset(2)
+        }
+        pre4.setOnClickListener{
+            mEqualizer?.usePreset(3)
+        }
+        pre5.setOnClickListener{
+            mEqualizer?.usePreset(4)
+        }
+        pre6.setOnClickListener{
+            mEqualizer?.usePreset(5)
+        }
+        pre7.setOnClickListener{
+            mEqualizer?.usePreset(6)
+        }
+        pre8.setOnClickListener{
+            mEqualizer?.usePreset(7)
+        }
+        pre9.setOnClickListener{
+            mEqualizer?.usePreset(8)
+        }
+        pre10.setOnClickListener{
+            mEqualizer?.usePreset(9)
+        }
     }
 
     override fun onKeyDown(keyCode: Int, event: KeyEvent?): Boolean {
@@ -220,6 +296,8 @@ class Main2Activity : AppCompatActivity() {
         mSeekBarAudio?.disconnectController()
          mSeekBarAudio2?.disconnectController()
         mMediaBrowserHelper.onStop()
+         mlineVisualizer?.release()
+         mEqualizer?.release()
     }
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
@@ -314,7 +392,9 @@ class Main2Activity : AppCompatActivity() {
 
                 R.id.skip_next -> {mMediaBrowserHelper.getTransportControls().skipToNext()
                 mPlayButton?.setImageResource(R.drawable.ic_pause_white_24dp)
-                        mPlayButton2?.setImageResource(R.drawable.ic_pause_white_24dp)}
+                        mPlayButton2?.setImageResource(R.drawable.ic_pause_white_24dp)
+                    }
+
             }
         }
     }
@@ -363,14 +443,14 @@ class Main2Activity : AppCompatActivity() {
             // Call prepare now so pressing play just works.
             mediaController.transportControls.prepare()
 
-        /*    // Se provoca un PlaybackStateChanged para que se recargue la seekbar
+            // Se provoca un PlaybackStateChanged para que se recargue la seekbar
             if (!mIsPlaying) {
                 mMediaBrowserHelper.getTransportControls().play()
                 mMediaBrowserHelper.getTransportControls().pause()
             } else {
                 mMediaBrowserHelper.getTransportControls().pause()
                 mMediaBrowserHelper.getTransportControls().play()
-            }*/
+            }
         }
     }
 
@@ -395,6 +475,7 @@ class Main2Activity : AppCompatActivity() {
                 mUpdaterRunning = true
                 mCurrentTime?.post(mUpdateTime)
             }
+
         }
 
         override fun onMetadataChanged(mediaMetadata: MediaMetadataCompat?) {
@@ -419,6 +500,16 @@ class Main2Activity : AppCompatActivity() {
             mFinalTime2?.setDuration(mediaMetadata.getLong(MediaMetadataCompat.METADATA_KEY_DURATION).toInt())
             mCurrentTime?.setCurrentTime(0)
             mCurrentTime2?.setCurrentTime(0)
+
+            if(mlineVisualizer?.getVisualizer() != null){
+                mlineVisualizer?.release()
+                mlineVisualizer?.setPlayer(MEDIA_PLAYER_ID)
+                mEqualizer?.release()
+                mEqualizer = Equalizer(0, MEDIA_PLAYER_ID)
+                mEqualizer?.setEnabled(true)
+                prepareButtonsEqualizerListeners()
+            }
+
         }
 
         override fun onSessionDestroyed() {
@@ -429,22 +520,21 @@ class Main2Activity : AppCompatActivity() {
             super.onQueueChanged(queue)
         }
 
-        /** AQUI SE CAMBIA EL ESTADO DE LOS BOTONES :D **/
         override fun onRepeatModeChanged(repeatMode: Int) {
             super.onRepeatModeChanged(repeatMode)
             if(repeatMode == PlaybackStateCompat.REPEAT_MODE_ALL){
-                Snackbar.make(window.decorView, "repeatMode = REPEAT_MODE_ALL", Snackbar.LENGTH_LONG).show()
+                Snackbar.make(window.decorView, "Modo repetición activado", Snackbar.LENGTH_LONG).show()
             }else if(repeatMode == PlaybackStateCompat.REPEAT_MODE_NONE){
-                Snackbar.make(window.decorView, "repeatMode = REPEAT_MODE_NONE", Snackbar.LENGTH_LONG).show()
+                Snackbar.make(window.decorView, "Modo repetición desactivado", Snackbar.LENGTH_LONG).show()
             }
         }
 
         override fun onShuffleModeChanged(shuffleMode: Int) {
             super.onShuffleModeChanged(shuffleMode)
             if(shuffleMode == PlaybackStateCompat.SHUFFLE_MODE_ALL){
-                Snackbar.make(window.decorView, "shuffleMode = SHUFFLE_MODE_ALL", Snackbar.LENGTH_LONG).show()
+                Snackbar.make(window.decorView, "Modo aleatorio activado", Snackbar.LENGTH_LONG).show()
             }else if(shuffleMode == PlaybackStateCompat.SHUFFLE_MODE_NONE){
-                Snackbar.make(window.decorView, "shuffleMode = SHUFFLE_MODE_NONE", Snackbar.LENGTH_LONG).show()
+                Snackbar.make(window.decorView, "Modo aleatorio desactivado", Snackbar.LENGTH_LONG).show()
             }
         }
     }
@@ -522,5 +612,21 @@ class Main2Activity : AppCompatActivity() {
         }
     }
 
+
+    inner class VisualizerCreatorTask: AsyncTask<Context,Void,Boolean>() {
+        override fun doInBackground(vararg params: Context?): Boolean {
+            while (MEDIA_PLAYER_ID == -1) {
+                Log.d("VisualizerCreatorTask", "Waiting for Media Player to initialize.")
+                Thread.sleep(250)
+            }
+            Log.d("VisualizerCreatorTask", "Media Player initialized. ID: $MEDIA_PLAYER_ID")
+            mlineVisualizer?.setPlayer(MEDIA_PLAYER_ID)
+            mEqualizer = Equalizer(0, MEDIA_PLAYER_ID)
+            mEqualizer?.setEnabled(true)
+            prepareButtonsEqualizer()
+            Log.d("Equalizer",mEqualizer?.numberOfPresets.toString())
+            return true
+        }
+    }
 
 }
