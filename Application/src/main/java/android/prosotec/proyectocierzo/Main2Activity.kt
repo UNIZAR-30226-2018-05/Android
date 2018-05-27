@@ -99,7 +99,7 @@ class Main2Activity : AppCompatActivity() {
 
     private var mIsPlaying: Boolean = false
 
-    private var mTimeToCheck: Long = 0
+    private var mTimeToCheck: Long = 666
 
     private var mUpdateTime: Runnable = object : Runnable {
         override fun run() {
@@ -482,7 +482,10 @@ class Main2Activity : AppCompatActivity() {
                 mCurrentTime?.post(mUpdateTime)
             }
 
-
+            if (playbackState?.state == PlaybackStateCompat.STATE_PAUSED
+                    && playbackState?.position in mTimeToCheck-3000..mTimeToCheck+1000) {
+                mMediaBrowserHelper.transportControls.skipToNext()
+            }
 
         }
 
@@ -508,6 +511,8 @@ class Main2Activity : AppCompatActivity() {
             mFinalTime2?.setDuration(mediaMetadata.getLong(MediaMetadataCompat.METADATA_KEY_DURATION).toInt())
             mCurrentTime?.setCurrentTime(0)
             mCurrentTime2?.setCurrentTime(0)
+
+            mTimeToCheck = mediaMetadata.getLong(MediaMetadataCompat.METADATA_KEY_DURATION)
 
             if(mlineVisualizer?.getVisualizer() != null){
                 mlineVisualizer?.release()
