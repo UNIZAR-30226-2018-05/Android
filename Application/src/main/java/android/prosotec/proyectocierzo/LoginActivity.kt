@@ -15,7 +15,7 @@ import com.example.android.mediasession.R.id.et_mail
 import io.swagger.client.ApiException
 import kotlinx.android.synthetic.main.activity_login.*
 import android.widget.Toast
-
+import org.jetbrains.annotations.Nullable
 
 
 class LoginActivity : AppCompatActivity() {
@@ -28,6 +28,7 @@ class LoginActivity : AppCompatActivity() {
         findViewById<View>(R.id.bt_access).setOnClickListener(clickListener)
         findViewById<View>(R.id.et_mail).setOnClickListener(clickListener)
         findViewById<View>(R.id.et_pass).setOnClickListener(clickListener)
+        findViewById<View>(R.id.bt_access_direct).setOnClickListener(clickListener)
         findViewById<View>(R.id.et_pass).setOnKeyListener(View.OnKeyListener {
             v, keyCode, event ->
             if (event.action == KeyEvent.ACTION_DOWN && keyCode == KeyEvent.KEYCODE_ENTER) {
@@ -53,39 +54,47 @@ class LoginActivity : AppCompatActivity() {
         }
     }
 
-    private fun checkValues() {
-        val mail: String = findViewById<EditText>(R.id.et_mail).text.toString()
-        val pass: String = findViewById<EditText>(R.id.et_pass).text.toString()
-        var error_text: TextView = findViewById(R.id.error_text)
-        var error_layout: LinearLayout = findViewById(R.id.error_layout)
-        var success: Boolean = false
-
-        var result: Any = loginTask().execute(mail, pass).get()
-        if (result is ApiException) {
-            error_text.text = when (result.code) {
-                400 -> "El correo y la contraseña no coinciden"
-                401 -> "Error 401"
-                else -> "Error desconocido"
-            }
-            error_layout.visibility = View.VISIBLE
-            success = false
-        } else if (result is Boolean){
-            success = result
-        }
-
-        if (success) {
-            intent = Intent(applicationContext,Main2Activity::class.java)
+    private fun checkValues(hardMail: String?, hardPass: String?) {
+        if (hardMail != null && hardPass != null) {
+            loginTask().execute(hardMail,hardPass)
+            intent = Intent(applicationContext, Main2Activity::class.java)
             startActivity(intent)
             finish()
+        } else {
+            val mail: String = findViewById<EditText>(R.id.et_mail).text.toString()
+            val pass: String = findViewById<EditText>(R.id.et_pass).text.toString()
+            var error_text: TextView = findViewById(R.id.error_text)
+            var error_layout: LinearLayout = findViewById(R.id.error_layout)
+            var success: Boolean = false
+
+            var result: Any = loginTask().execute(mail, pass).get()
+            if (result is ApiException) {
+                error_text.text = when (result.code) {
+                    400 -> "El correo y la contraseña no coinciden"
+                    401 -> "Error 401"
+                    else -> "Error desconocido"
+                }
+                error_layout.visibility = View.VISIBLE
+                success = false
+            } else if (result is Boolean) {
+                success = result
+            }
+
+            if (success) {
+                intent = Intent(applicationContext, Main2Activity::class.java)
+                startActivity(intent)
+                finish()
+            }
         }
     }
 
     private inner class ClickListener : View.OnClickListener {
         override fun onClick(v: View) {
             when (v.id) {
-                R.id.bt_access -> checkValues()
+                R.id.bt_access -> checkValues(null, null)
                 R.id.et_mail -> findViewById<LinearLayout>(R.id.error_layout).visibility = View.GONE
                 R.id.et_pass-> findViewById<LinearLayout>(R.id.error_layout).visibility = View.GONE
+                R.id.bt_access_direct -> checkValues("alice@mail.net","ApassA")
             }
         }
     }

@@ -157,7 +157,7 @@ public class MusicLibrary {
         return musicFileUri.get(mediaId);
     }
 
-    public static void removeAllMusic() {
+    private static void removeAllMusic() {
         music.clear();
         albumRes.clear();
         musicFileName.clear();
