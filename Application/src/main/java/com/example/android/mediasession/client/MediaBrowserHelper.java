@@ -118,6 +118,7 @@ public class MediaBrowserHelper {
      * Called when the {@link MediaBrowserServiceCompat} connection is lost.
      */
     protected void onDisconnected() {
+
     }
 
     @NonNull
@@ -255,6 +256,26 @@ public class MediaBrowserHelper {
             onPlaybackStateChanged(null);
 
             MediaBrowserHelper.this.onDisconnected();
+        }
+
+        @Override
+        public void onRepeatModeChanged(final int repeatMode) {
+            performOnAllCallbacks(new CallbackCommand() {
+                @Override
+                public void perform(@NonNull Callback callback) {
+                    callback.onRepeatModeChanged(repeatMode);
+                }
+            });
+        }
+
+        @Override
+        public void onShuffleModeChanged(final int shuffleMode){
+            performOnAllCallbacks(new CallbackCommand() {
+                @Override
+                public void perform(@NonNull Callback callback) {
+                    callback.onShuffleModeChanged(shuffleMode);
+                }
+            });
         }
     }
 }

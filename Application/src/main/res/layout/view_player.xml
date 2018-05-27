@@ -115,15 +115,14 @@
                     android:src="@drawable/ic_skip_previous_white_24dp"
                     />
 
-                <ImageButton
+                <CheckBox
                     android:id="@+id/ib_shuffle"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
+                    android:layout_width="24dp"
+                    android:layout_height="24dp"
                     android:layout_gravity="center"
-                    android:layout_marginBottom="10dp"
-                    android:layout_weight="1"
-                    android:background="@android:color/transparent"
-                    android:src="@drawable/ic_shuffle_white_24dp"/>
+                    android:buttonTint="#00000000"
+                    android:background="@drawable/shuffle_button"
+                    android:padding="8dp"/>
 
             </LinearLayout>
 
@@ -133,7 +132,7 @@
                 android:layout_width="60dp"
                 android:layout_height="60dp"
                 android:layout_weight="1"
-                android:src="@drawable/ic_pause_white_24dp"
+                android:src="@drawable/ic_play_arrow_white_24dp"
                 app:fabSize="mini" />
 
 
@@ -154,15 +153,14 @@
                     android:background="@android:color/transparent"
                     android:src="@drawable/ic_skip_next_white_24dp" />
 
-                <ImageButton
+                <CheckBox
                     android:id="@+id/ib_repeat"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
+                    android:layout_width="24dp"
+                    android:layout_height="24dp"
                     android:layout_gravity="center"
-                    android:layout_marginBottom="10dp"
-                    android:layout_weight="1"
-                    android:background="@android:color/transparent"
-                    android:src="@drawable/ic_sync_white_24dp" />
+                    android:buttonTint="#00000000"
+                    android:background="@drawable/repeat_button"
+                    android:padding="8dp"/>
 
             </LinearLayout>
 
