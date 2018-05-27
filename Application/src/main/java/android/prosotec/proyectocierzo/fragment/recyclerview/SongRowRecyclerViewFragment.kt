@@ -11,6 +11,7 @@ import android.support.v7.widget.helper.ItemTouchHelper
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import com.example.android.mediasession.CierzoApp
 import com.example.android.mediasession.R
 
 /**
@@ -46,12 +47,13 @@ class SongRowRecyclerViewFragment : Fragment()  {
 
         mRecyclerView.setLayoutManager(LinearLayoutManager(activity))
 
-        mAdapter = SongRowAdapter(mDataset)
+        mAdapter = SongRowAdapter(activity!!, (activity?.application as CierzoApp).mUserLogged.getFavoritePlaylist(),
+                showCrossIcon = false, showDragAndDropIcon = false, favAsRemove = true)
         // Set CardAdapter as the adapter for RecyclerView.
         mRecyclerView.adapter = mAdapter
         // END_INCLUDE(initializeRecyclerView)
 
-        val callback = SimpleItemTouchHelperCallback(mAdapter, true, false)
+        val callback = SimpleItemTouchHelperCallback(mAdapter, false, false)
         val touchHelper = ItemTouchHelper(callback)
         touchHelper.attachToRecyclerView(mRecyclerView)
 

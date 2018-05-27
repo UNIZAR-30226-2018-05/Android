@@ -346,11 +346,15 @@ class Main2Activity : AppCompatActivity() {
                 var fragment: Fragment = CardsRecyclerViewFragment()
                 fragment.setArguments(bundle)
                 fragment
-            } /*else if (position == 1) { // Canciones
+            } else if (position == 1) { // Canciones
                 SongRowRecyclerViewFragment()
             } else if (position == 2) { // Albumes
-                CardsRecyclerViewFragment()
-            } else if (position == 3) { // Artistas
+                var bundle: Bundle = Bundle();
+                bundle.putInt("MODE", CardsRecyclerViewFragment.MODE_FROMFAVORITE_ALBUMS);
+                var fragment: Fragment = CardsRecyclerViewFragment()
+                fragment.setArguments(bundle)
+                fragment
+            }/* else if (position == 3) { // Artistas
                 PersonRowRecyclerViewFragment()
             }*/ else {
                 PruebaFragment()

@@ -13,6 +13,8 @@ import android.view.ViewGroup
 import com.example.android.mediasession.R
 import android.R.attr.defaultValue
 import android.R.attr.key
+import android.os.AsyncTask
+import cierzo.model.objects.Playlist
 import com.example.android.mediasession.CierzoApp
 
 
@@ -54,15 +56,19 @@ class CardsRecyclerViewFragment : Fragment() {
         }
 
         var mode: Int? = null
-        var id: Int? = null
+        var id: String? = null
         val bundle = this.arguments
         if (bundle != null) {
             mode = bundle.getInt("MODE")
-            id = bundle.getInt("LIST_ID")
+            id = bundle.getString("ID")
         }
 
-        if (mode == MODE_USERLOGGED_PLAYLISTS) {
-            mAdapter = CardAdapter((activity?.application as CierzoApp).mUserLogged.getUser().getPlaylists())
+        var friendsPlaylists: MutableList<Playlist> = mutableListOf()
+
+
+        val result: Exception? = AdapterCreatorTask().execute(mode.toString(), id).get()
+        if (result != null) {
+            throw result
         }
 
         // Set CardAdapter as the adapter for RecyclerView.
@@ -83,5 +89,41 @@ class CardsRecyclerViewFragment : Fragment() {
     companion object {
         private val TAG = "CardsRecyclerViewFragment"
         public const val MODE_USERLOGGED_PLAYLISTS = 0
+        public const val MODE_FRIENDS_PLAYLISTS = 1
+        public const val MODE_USER_PLAYLISTS = 2
+        public const val MODE_FROMFAVORITE_ALBUMS = 3
+        public const val MODE_ARTIST_ALBUMS = 4
+    }
+
+    inner class AdapterCreatorTask : AsyncTask<String, Void, Exception?>() {
+        override fun doInBackground(vararg params: String?): Exception? {
+            val mode: Int = params[0]?.toInt()!!
+            val id: String = params[1] ?: ""
+            var friendsPlaylists: MutableList<Playlist> = mutableListOf()
+
+            try {
+                if (mode == MODE_USERLOGGED_PLAYLISTS) {
+                    mAdapter = CardAdapter((activity?.application as CierzoApp)
+                            .mUserLogged.getUser().getPlaylists())
+                } else if (mode == MODE_FRIENDS_PLAYLISTS) {
+                    for (friend in (activity?.application as CierzoApp).mUserLogged.getUser().getFriends()) {
+                        friendsPlaylists.addAll(friend.getPlaylists())
+                    }
+                    mAdapter = CardAdapter(friendsPlaylists)
+                } else if (mode == MODE_USER_PLAYLISTS) {
+                    mAdapter = CardAdapter(cierzo.model.searchUsers(username = id!!))
+                } else if (mode == MODE_FROMFAVORITE_ALBUMS) {
+                    mAdapter = CardAdapter((activity?.application as CierzoApp)
+                            .mUserLogged.getAlbumsFromFavorite())
+                } else if (mode == MODE_ARTIST_ALBUMS) {
+                    if (id != null && id != "") {
+                        mAdapter = CardAdapter(cierzo.model.searchAlbums(author = id))
+                    }
+                }
+            } catch (e: Exception) {
+                return e
+            }
+            return null
+        }
     }
 }
