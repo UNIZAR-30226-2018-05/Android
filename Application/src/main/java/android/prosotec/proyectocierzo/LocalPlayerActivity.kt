@@ -23,7 +23,12 @@ import com.example.android.mediasession.R
 import android.media.MediaMetadataRetriever
 import android.graphics.BitmapFactory
 import android.graphics.Bitmap
+import android.media.audiofx.Equalizer
 import android.util.Log
+import com.example.android.mediasession.service.players.MediaPlayerAdapter
+import kotlinx.android.synthetic.main.activity_main2.*
+import kotlinx.android.synthetic.main.equalizer_view.*
+import kotlinx.android.synthetic.main.view_player.*
 import java.io.File
 
 
@@ -35,12 +40,13 @@ class LocalPlayerActivity : AppCompatActivity() {
 
     private var mlineVisualizer: LineVisualizer? = null
     private var mMediaPlayer = MediaPlayer()
+    private var mEqualizer: Equalizer? = null
 
     private val mSeekbarUpdateHandler = Handler()
     private val mUpdateSeekbar = object : Runnable {
         override fun run() {
             seek_bar_local.setProgress(mMediaPlayer.currentPosition)
-            current_time.text = setTextTime(mMediaPlayer.currentPosition)
+            current_time_l.text = setTextTime(mMediaPlayer.currentPosition)
             mSeekbarUpdateHandler.postDelayed(this, 50)
         }
     }
@@ -58,19 +64,81 @@ class LocalPlayerActivity : AppCompatActivity() {
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
 
         val clickListener = ClickListener()
-        findViewById<View>(R.id.ib_prev).setOnClickListener(clickListener)
-        findViewById<View>(R.id.play).setOnClickListener(clickListener)
-        findViewById<View>(R.id.ib_next).setOnClickListener(clickListener)
+        findViewById<View>(R.id.ib_prev_l).setOnClickListener(clickListener)
+        findViewById<View>(R.id.play_l).setOnClickListener(clickListener)
+        findViewById<View>(R.id.ib_next_l).setOnClickListener(clickListener)
+        equalizer_view_l.visibility = View.GONE
+        equalizer_l.setOnClickListener{
+            equalizer_view_l.visibility = View.VISIBLE
+            fullscreen_content_l.visibility = View.GONE
+        }
+        back_eq.setOnClickListener{
+            equalizer_view_l.visibility = View.GONE
+            fullscreen_content_l.visibility = View.VISIBLE
+        }
+
 
         prepareSong()
         prepareUI()
         prepareVisualizer()
+        mEqualizer = Equalizer(0, mMediaPlayer.audioSessionId)
+        mEqualizer?.setEnabled(true)
+        prepareButtonsEqualizer()
+        prepareButtonsEqualizerListeners()
+    }
+
+    private fun prepareButtonsEqualizer(){
+        pre1.text = mEqualizer?.getPresetName(0)
+        pre2.text = mEqualizer?.getPresetName(1)
+        pre3.text = mEqualizer?.getPresetName(2)
+        pre4.text = mEqualizer?.getPresetName(3)
+        pre5.text = mEqualizer?.getPresetName(4)
+        pre6.text = mEqualizer?.getPresetName(5)
+        pre7.text = mEqualizer?.getPresetName(6)
+        pre8.text = mEqualizer?.getPresetName(7)
+        pre9.text = mEqualizer?.getPresetName(8)
+        pre10.text = mEqualizer?.getPresetName(9)
+    }
+
+    private fun prepareButtonsEqualizerListeners(){
+        pre1.setOnClickListener{
+            mEqualizer?.usePreset(0)
+        }
+        pre2.setOnClickListener{
+            mEqualizer?.usePreset(1)
+        }
+        pre3.setOnClickListener{
+            mEqualizer?.usePreset(2)
+        }
+        pre4.setOnClickListener{
+            mEqualizer?.usePreset(3)
+        }
+        pre5.setOnClickListener{
+            mEqualizer?.usePreset(4)
+        }
+        pre6.setOnClickListener{
+            mEqualizer?.usePreset(5)
+        }
+        pre7.setOnClickListener{
+            mEqualizer?.usePreset(6)
+        }
+        pre8.setOnClickListener{
+            mEqualizer?.usePreset(7)
+        }
+        pre9.setOnClickListener{
+            mEqualizer?.usePreset(8)
+        }
+        pre10.setOnClickListener{
+            mEqualizer?.usePreset(9)
+        }
     }
 
     override fun onDestroy() {
         super.onDestroy()
         mMediaPlayer.release()
         mSeekbarUpdateHandler.removeCallbacks(mUpdateSeekbar)
+        mlineVisualizer?.release()
+        mEqualizer?.release()
     }
 
      private fun prepareSong(){
@@ -83,16 +151,16 @@ class LocalPlayerActivity : AppCompatActivity() {
             metaRetriver.setDataSource(this, uri)
             val titulo = metaRetriver.extractMetadata(MediaMetadataRetriever.METADATA_KEY_TITLE)
             if(titulo != null){
-                song_name.text = titulo
+                song_name_l.text = titulo
             }else{
-                song_name.text = fileName
+                song_name_l.text = fileName
             }
-            artist_name.text = metaRetriver.extractMetadata(MediaMetadataRetriever.METADATA_KEY_ARTIST)
+            artist_name_l.text = metaRetriver.extractMetadata(MediaMetadataRetriever.METADATA_KEY_ARTIST)
 
             val cover = metaRetriver.embeddedPicture
             if(cover != null){
                 val image = BitmapFactory.decodeByteArray(cover, 0, cover.size)
-                cover_image.setImageBitmap(image)
+                cover_image_l.setImageBitmap(image)
             }
 
 
@@ -106,26 +174,25 @@ class LocalPlayerActivity : AppCompatActivity() {
     private inner class ClickListener : View.OnClickListener {
         override fun onClick(v: View) {
             when (v.id) {
-                R.id.ib_prev -> mMediaPlayer.seekTo(mMediaPlayer.currentPosition - 10000)
-                R.id.play -> if (mMediaPlayer.isPlaying) {
+                R.id.ib_prev_l -> mMediaPlayer.seekTo(mMediaPlayer.currentPosition - 10000)
+                R.id.play_l -> if (mMediaPlayer.isPlaying) {
                     mMediaPlayer.pause()
-                    play.isPressed  = true
-                    play.setImageResource(R.drawable.ic_play_arrow_white_24dp)
+                    play_l.isPressed  = true
+                    play_l.setImageResource(R.drawable.ic_play_arrow_white_24dp)
 
                 } else {
                     mMediaPlayer.start()
-                    play.isPressed = false
-                    play.setImageResource(R.drawable.ic_pause_white_24dp)
+                    play_l.isPressed = false
+                    play_l.setImageResource(R.drawable.ic_pause_white_24dp)
                 }
-                R.id.ib_next -> mMediaPlayer.seekTo(mMediaPlayer.currentPosition + 30000)
+                R.id.ib_next_l -> mMediaPlayer.seekTo(mMediaPlayer.currentPosition + 30000)
             }
         }
     }
 
     private fun prepareVisualizer(){
         mlineVisualizer = LineVisualizer(this)
-        var mainLayout: LinearLayout = findViewById(R.id.fullscreen_content)
-        mainLayout.addView(mlineVisualizer)
+        fullscreen_content_l.addView(mlineVisualizer)
         mlineVisualizer?.setColor(ContextCompat.getColor(this, R.color.colorAccent))
         mlineVisualizer?.setStrokeWidth(5)
         mlineVisualizer?.setPlayer(mMediaPlayer)
@@ -133,8 +200,8 @@ class LocalPlayerActivity : AppCompatActivity() {
 
     private fun prepareUI(){
         seek_bar_local.max = mMediaPlayer.duration
-        final_time.text = setTextTime(mMediaPlayer.duration)
-        current_time.text = setTextTime(0)
+        final_time_l.text = setTextTime(mMediaPlayer.duration)
+        current_time_l.text = setTextTime(0)
         mSeekbarUpdateHandler.postDelayed(mUpdateSeekbar, 0);
 
         seek_bar_local.setOnSeekBarChangeListener(object : SeekBar.OnSeekBarChangeListener {
@@ -142,7 +209,7 @@ class LocalPlayerActivity : AppCompatActivity() {
                 // Write code to perform some action when progress is changed.
                 if(fromUser){
                     mMediaPlayer.seekTo(progress)
-                    current_time.text = setTextTime(progress)
+                    current_time_l.text = setTextTime(progress)
                 }
             }
 
@@ -152,7 +219,7 @@ class LocalPlayerActivity : AppCompatActivity() {
 
             override fun onStopTrackingTouch(seekBar: SeekBar) {
                 // Write code to perform some action when touch is stopped.
-                current_time.text = setTextTime(mMediaPlayer.currentPosition)
+                current_time_l.text = setTextTime(mMediaPlayer.currentPosition)
             }
         })
     }
