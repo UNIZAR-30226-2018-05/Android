@@ -31,12 +31,14 @@ import android.support.v4.media.session.MediaSessionCompat;
 import android.support.v4.media.session.PlaybackStateCompat;
 import android.util.Log;
 
+import com.example.android.mediasession.ShuffleTool;
 import com.example.android.mediasession.service.contentcatalogs.MusicLibrary;
 import com.example.android.mediasession.service.notifications.MediaNotificationManager;
 import com.example.android.mediasession.service.players.MediaPlayerAdapter;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Random;
 
 public class MusicService extends MediaBrowserServiceCompat {
 
@@ -102,13 +104,16 @@ public class MusicService extends MediaBrowserServiceCompat {
 
     // MediaSession Callback: Transport Controls -> MediaPlayerAdapter
     public class MediaSessionCallback extends MediaSessionCompat.Callback {
-        private final List<MediaSessionCompat.QueueItem> mPlaylist = new ArrayList<>();
+        private List<MediaSessionCompat.QueueItem> mPlaylist = new ArrayList<>();
+        private List<MediaSessionCompat.QueueItem> mOriginalList = new ArrayList<>();
         private int mQueueIndex = -1;
         private MediaMetadataCompat mPreparedMedia;
+        private boolean mRepeticion = false;
 
         @Override
         public void onAddQueueItem(MediaDescriptionCompat description) {
             mPlaylist.add(new MediaSessionCompat.QueueItem(description, description.hashCode()));
+            mOriginalList.add(new MediaSessionCompat.QueueItem(description, description.hashCode()));
             mQueueIndex = (mQueueIndex == -1) ? 0 : mQueueIndex;
             mSession.setQueue(mPlaylist);
         }
@@ -116,6 +121,7 @@ public class MusicService extends MediaBrowserServiceCompat {
         @Override
         public void onRemoveQueueItem(MediaDescriptionCompat description) {
             mPlaylist.remove(new MediaSessionCompat.QueueItem(description, description.hashCode()));
+            mOriginalList.remove(new MediaSessionCompat.QueueItem(description, description.hashCode()));
             mQueueIndex = (mPlaylist.isEmpty()) ? -1 : mQueueIndex;
             mSession.setQueue(mPlaylist);
         }
@@ -164,7 +170,13 @@ public class MusicService extends MediaBrowserServiceCompat {
 
         @Override
         public void onSkipToNext() {
-            mQueueIndex = (++mQueueIndex % mPlaylist.size());
+            if(mRepeticion){
+                mQueueIndex = (++mQueueIndex % mPlaylist.size());
+            }else{
+                if((mQueueIndex+1) % mPlaylist.size() != 0){
+                    mQueueIndex = (++mQueueIndex % mPlaylist.size());
+                }
+            }
             mPreparedMedia = null;
             onPlay();
         }
@@ -179,12 +191,23 @@ public class MusicService extends MediaBrowserServiceCompat {
         @Override
         public void onSetRepeatMode(int repeatMode){
             mSession.setRepeatMode(repeatMode);
+            if(repeatMode == PlaybackStateCompat.REPEAT_MODE_ALL){
+                mRepeticion = true;
+            }else if(repeatMode == PlaybackStateCompat.REPEAT_MODE_NONE){
+                mRepeticion = false;
+            }
 
         }
 
         @Override
         public void onSetShuffleMode(int shuffleMode){
             mSession.setShuffleMode(shuffleMode);
+            if(shuffleMode == PlaybackStateCompat.SHUFFLE_MODE_ALL){
+                mOriginalList = mPlaylist;
+                mPlaylist = ShuffleTool.INSTANCE.shuffleList(mPlaylist,mQueueIndex);
+            }else if(shuffleMode == PlaybackStateCompat.SHUFFLE_MODE_NONE){
+                mPlaylist = mOriginalList;
+            }
         }
 
         @Override

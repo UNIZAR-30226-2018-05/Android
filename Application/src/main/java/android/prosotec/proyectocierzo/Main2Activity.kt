@@ -301,7 +301,10 @@ class Main2Activity : AppCompatActivity() {
     private inner class ClickListener : View.OnClickListener {
         override fun onClick(v: View) {
             when (v.id) {
-                R.id.skip_prev -> mMediaBrowserHelper.getTransportControls().skipToPrevious()
+                R.id.skip_prev -> {mMediaBrowserHelper.getTransportControls().skipToPrevious()
+                    mPlayButton?.setImageResource(R.drawable.ic_pause_white_24dp)
+                    mPlayButton2?.setImageResource(R.drawable.ic_pause_white_24dp)}
+
                 R.id.play -> if (mIsPlaying) {
                     mMediaBrowserHelper.getTransportControls().pause()
                     mPlayButton?.setImageResource(R.drawable.ic_play_arrow_white_24dp)
@@ -312,7 +315,10 @@ class Main2Activity : AppCompatActivity() {
                     mPlayButton?.setImageResource(R.drawable.ic_pause_white_24dp)
                     mPlayButton2?.setImageResource(R.drawable.ic_pause_white_24dp)
                 }
-                R.id.skip_next -> mMediaBrowserHelper.getTransportControls().skipToNext()
+
+                R.id.skip_next -> {mMediaBrowserHelper.getTransportControls().skipToNext()
+                mPlayButton?.setImageResource(R.drawable.ic_pause_white_24dp)
+                        mPlayButton2?.setImageResource(R.drawable.ic_pause_white_24dp)}
             }
         }
     }

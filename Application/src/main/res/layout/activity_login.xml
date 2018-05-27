@@ -89,6 +89,17 @@
         android:layout_marginLeft="30dp"
         android:background="@color/colorAccentDark"/>
 
+    <Button
+        android:id="@+id/bt_access_direct"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:text="Entrar como alice"
+        android:layout_marginTop="50dp"
+        android:layout_gravity="center"
+        android:layout_marginRight="30dp"
+        android:layout_marginLeft="30dp"
+        android:background="@color/colorAccentDark"/>
+
     <TextView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
