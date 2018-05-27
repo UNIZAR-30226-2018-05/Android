@@ -99,6 +99,8 @@ class Main2Activity : AppCompatActivity() {
 
     private var mIsPlaying: Boolean = false
 
+    private var mTimeToCheck: Long = 0
+
     private var mUpdateTime: Runnable = object : Runnable {
         override fun run() {
             if (mIsPlaying) {
@@ -479,6 +481,8 @@ class Main2Activity : AppCompatActivity() {
                 mUpdaterRunning = true
                 mCurrentTime?.post(mUpdateTime)
             }
+
+
 
         }
 

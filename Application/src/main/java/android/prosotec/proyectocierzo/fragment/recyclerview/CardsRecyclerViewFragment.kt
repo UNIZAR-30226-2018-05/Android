@@ -66,7 +66,7 @@ class CardsRecyclerViewFragment : Fragment() {
         var friendsPlaylists: MutableList<Playlist> = mutableListOf()
 
 
-        val result: Exception? = AdapterCreatorTask().execute(mode.toString(), id).get()
+        val result: Exception? = AdapterCreatorTask().executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, mode.toString(), id).get()
         if (result != null) {
             throw result
         }

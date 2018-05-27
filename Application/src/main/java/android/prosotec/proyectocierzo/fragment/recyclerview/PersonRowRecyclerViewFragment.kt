@@ -48,7 +48,7 @@ class PersonRowRecyclerViewFragment : Fragment()  {
 
         mRecyclerView.setLayoutManager(LinearLayoutManager(activity))
 
-        mAdapter = PersonRowAdapter(getAuthorsAsync().execute().get().toMutableList())
+        mAdapter = PersonRowAdapter(getAuthorsAsync().executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR).get().toMutableList())
         // Set CardAdapter as the adapter for RecyclerView.
         mRecyclerView.adapter = mAdapter
         // END_INCLUDE(initializeRecyclerView)
