@@ -76,7 +76,7 @@ class CardAdapter
             viewHolder.card_title.text = playlistInfo.elementAt(1) as String
             viewHolder.card_subtitle.text = "${playlistInfo.elementAt(5) as Int} canciones"
             var imageURL: String = playlistInfo.elementAt(4) as String
-            Picasso.get().load(imageURL).into(viewHolder.card_image);
+            Picasso.get().load(imageURL).into(viewHolder.card_image)
 
         } else if (mAlbums != null) {
             var album: Album = mAlbums!!.get(position)

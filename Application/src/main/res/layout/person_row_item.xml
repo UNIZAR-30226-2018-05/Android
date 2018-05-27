@@ -28,7 +28,7 @@
         android:layout_centerVertical="true">
 
         <com.makeramen.roundedimageview.RoundedImageView
-            android:id="@+id/text_row_cover_image"
+            android:id="@+id/text_row_image"
             android:layout_width="40dp"
             android:layout_height="40dp"
             android:layout_marginRight="16dp"

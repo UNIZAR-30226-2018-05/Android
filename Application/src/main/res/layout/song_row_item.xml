@@ -72,9 +72,20 @@
             android:layout_width="24dp"
             android:layout_height="24dp"
             android:gravity="end"
+            android:text=""
             android:layout_margin="8dp"
             android:buttonTint="#00000000"
             android:background="@drawable/favorite_checkbox"/>
+
+        <ImageButton
+            android:id="@+id/text_row_cross_icon"
+            android:layout_width="24dp"
+            android:layout_height="24dp"
+            android:gravity="end"
+            android:src="@drawable/ic_close_black_24dp"
+            android:tint="#000000"
+            android:backgroundTint="#00000000"
+            android:layout_margin="8dp"/>
 
         <ImageView
             android:id="@+id/text_row_dragAndDrop_icon"
@@ -83,7 +94,8 @@
             android:gravity="end"
             android:src="@drawable/ic_reorder_black_24dp"
             android:tint="#a3a3a3"
-            android:layout_margin="8dp"/>
+            android:layout_margin="8dp"
+            />
 
     </LinearLayout>
 
