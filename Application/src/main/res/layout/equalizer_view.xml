@@ -4,16 +4,11 @@
     android:layout_height="match_parent"
     android:background="@color/colorPrimaryDark"
     android:gravity="center"
+    android:orientation="vertical"
     >
-
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:orientation="vertical">
-
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="42dp"
             android:orientation="horizontal">
 
             <ImageButton
@@ -36,83 +31,147 @@
 
         </LinearLayout>
 
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:orientation="horizontal"
-            android:gravity="center">
+        <ScrollView
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
 
             <LinearLayout
-                android:layout_width="wrap_content"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="vertical"
-                android:layout_gravity="center">
+                android:layout_gravity="center"
+                android:layout_marginTop="16dp">
 
                 <Button
                     android:id="@+id/pre1"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="PRA"/>
+                    android:layout_width="match_parent"
+                    android:layout_height="50dp"
+                    android:text="Botón 1"
+                    android:layout_marginTop="16dp"
+                    android:layout_gravity="center"
+                    android:layout_marginRight="30dp"
+                    android:layout_marginLeft="30dp"
+                    android:background="#FFFFFF"
+                    android:textColor="#757575"
+                    android:elevation="4dp"/>
+
                 <Button
                     android:id="@+id/pre2"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="PRE"/>
+                    android:layout_width="match_parent"
+                    android:layout_height="50dp"
+                    android:text="Botón 2"
+                    android:layout_marginTop="8dp"
+                    android:layout_gravity="center"
+                    android:layout_marginRight="30dp"
+                    android:layout_marginLeft="30dp"
+                    android:background="#FFFFFF"
+                    android:textColor="#757575"
+                    android:elevation="4dp"/>
+
                 <Button
                     android:id="@+id/pre3"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="PRI"/>
+                    android:layout_width="match_parent"
+                    android:layout_height="50dp"
+                    android:text="Botón 3"
+                    android:layout_marginTop="8dp"
+                    android:layout_gravity="center"
+                    android:layout_marginRight="30dp"
+                    android:layout_marginLeft="30dp"
+                    android:background="#FFFFFF"
+                    android:textColor="#757575"
+                    android:elevation="4dp"/>
+
                 <Button
                     android:id="@+id/pre4"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="PRO"/>
+                    android:layout_width="match_parent"
+                    android:layout_height="50dp"
+                    android:text="Botón 4"
+                    android:layout_marginTop="8dp"
+                    android:layout_gravity="center"
+                    android:layout_marginRight="30dp"
+                    android:layout_marginLeft="30dp"
+                    android:background="#FFFFFF"
+                    android:textColor="#757575"
+                    android:elevation="4dp"/>
+
                 <Button
                     android:id="@+id/pre5"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="PRU"/>
-            </LinearLayout>
-
-            <LinearLayout
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:orientation="vertical">
-
+                    android:layout_width="match_parent"
+                    android:layout_height="50dp"
+                    android:text="Botón 5"
+                    android:layout_marginTop="8dp"
+                    android:layout_gravity="center"
+                    android:layout_marginRight="30dp"
+                    android:layout_marginLeft="30dp"
+                    android:background="#FFFFFF"
+                    android:textColor="#757575"
+                    android:elevation="4dp"/>
 
                 <Button
                     android:id="@+id/pre6"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="PRAH"/>
+                    android:layout_width="match_parent"
+                    android:layout_height="50dp"
+                    android:text="Botón 6"
+                    android:layout_marginTop="8dp"
+                    android:layout_gravity="center"
+                    android:layout_marginRight="30dp"
+                    android:layout_marginLeft="30dp"
+                    android:background="#FFFFFF"
+                    android:textColor="#757575"
+                    android:elevation="4dp"/>
+
                 <Button
                     android:id="@+id/pre7"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="PREH"/>
+                    android:layout_width="match_parent"
+                    android:layout_height="50dp"
+                    android:text="Botón 7"
+                    android:layout_marginTop="8dp"
+                    android:layout_gravity="center"
+                    android:layout_marginRight="30dp"
+                    android:layout_marginLeft="30dp"
+                    android:background="#FFFFFF"
+                    android:textColor="#757575"
+                    android:elevation="4dp"/>
+
                 <Button
                     android:id="@+id/pre8"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="PRIH"/>
+                    android:layout_width="match_parent"
+                    android:layout_height="50dp"
+                    android:text="Botón 8"
+                    android:layout_marginTop="8dp"
+                    android:layout_gravity="center"
+                    android:layout_marginRight="30dp"
+                    android:layout_marginLeft="30dp"
+                    android:background="#FFFFFF"
+                    android:textColor="#757575"
+                    android:elevation="4dp"/>
+
                 <Button
                     android:id="@+id/pre9"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="PROH"/>
+                    android:layout_width="match_parent"
+                    android:layout_height="50dp"
+                    android:text="Botón 9"
+                    android:layout_marginTop="8dp"
+                    android:layout_gravity="center"
+                    android:layout_marginRight="30dp"
+                    android:layout_marginLeft="30dp"
+                    android:background="#FFFFFF"
+                    android:textColor="#757575"
+                    android:elevation="4dp"/>
+
                 <Button
                     android:id="@+id/pre10"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="PRUH"/>
+                    android:layout_width="match_parent"
+                    android:layout_height="50dp"
+                    android:text="Botón 10"
+                    android:layout_marginTop="8dp"
+                    android:layout_gravity="center"
+                    android:layout_marginRight="30dp"
+                    android:layout_marginLeft="30dp"
+                    android:background="#FFFFFF"
+                    android:textColor="#757575"
+                    android:elevation="4dp"/>
 
             </LinearLayout>
-        </LinearLayout>
-
-    </LinearLayout>
-
-
-
+    </ScrollView>
 </LinearLayout>
