@@ -100,10 +100,12 @@
         android:layout_marginLeft="30dp"
         android:background="@color/colorAccentDark"/>
 
-    <TextView
+    <Button
+        android:id="@+id/create_button"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:text="@string/login_registro"
+        android:background="@android:color/transparent"
         android:gravity="center_horizontal"
         android:layout_marginTop="25dp"/>
 

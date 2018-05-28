@@ -38,6 +38,11 @@ class LoginActivity : AppCompatActivity() {
             false
         })
 
+        create_button.setOnClickListener{
+            intent = Intent(applicationContext, CreateAccountActivity::class.java)
+            startActivity(intent)
+        }
+
         if ((application as CierzoApp).mUserLogged.isLogged()) {
             intent = Intent(applicationContext,Main2Activity::class.java)
             startActivity(intent)
