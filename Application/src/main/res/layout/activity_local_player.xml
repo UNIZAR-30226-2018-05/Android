@@ -39,15 +39,17 @@
         </LinearLayout>
 
 
-        <ImageView
-            android:id="@+id/cover_image_l"
+        <com.makeramen.roundedimageview.RoundedImageView
+            android:id="@+id/cover_image_1"
             android:layout_width="200dp"
             android:layout_height="200dp"
             android:layout_gravity="center"
             android:layout_marginBottom="8dp"
             android:layout_marginTop="8dp"
             android:contentDescription="@string/player_album_description"
-            app:srcCompat="@drawable/ic_icono" />
+            android:scaleType="fitXY"
+            android:src="@drawable/gray_background"
+            app:riv_corner_radius="4dp"/>
 
         <TextView
             android:id="@+id/song_name_l"

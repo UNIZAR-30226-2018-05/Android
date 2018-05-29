@@ -1,0 +1,114 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:background="@color/colorPrimaryDark"
+    android:gravity="center"
+    tools:context="android.prosotec.proyectocierzo.LoginActivity">
+
+    <ImageView
+        android:layout_width="wrap_content"
+        android:layout_height="80dp"
+        android:contentDescription="@string/description_logo"
+        app:srcCompat="@drawable/logo"
+        android:layout_marginTop="40dp"/>
+
+    <LinearLayout
+        android:id="@+id/error_layout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:background="#20000000"
+        android:layout_marginTop="40dp"
+        android:paddingLeft="30dp"
+        android:paddingRight="30dp"
+        android:paddingTop="8dp"
+        android:paddingBottom="8dp"
+        android:gravity="center"
+        android:visibility="invisible">
+
+        <ImageView
+            android:layout_width="16dp"
+            android:layout_height="16dp"
+            android:layout_gravity="center_vertical"
+            android:src="@drawable/ic_error_white_24dp"
+            android:tint="#ff5555"
+            android:layout_marginEnd="8dp"/>
+
+        <TextView
+            android:id="@+id/error_text"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Error"
+            android:gravity="center"
+            android:textStyle="bold"
+            android:textColor="#ff5555" />
+    </LinearLayout>
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="30dp"
+        android:text="@string/login_user"
+        android:paddingLeft="40dp"
+        android:layout_marginTop="20dp"/>
+
+    <EditText
+        android:id="@+id/et_mail"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="30dp"
+        android:layout_marginRight="30dp"
+        android:inputType="textEmailAddress"
+        android:autofillHints="email"/>
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="30dp"
+        android:text="@string/login_password"
+        android:paddingLeft="40dp"
+        android:layout_marginTop="20dp"/>
+
+    <EditText
+        android:id="@+id/et_pass"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="30dp"
+        android:layout_marginRight="30dp"
+        android:inputType="textPassword"
+        android:autofillHints="password"/>
+
+    <Button
+        android:id="@+id/bt_access"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:text="@string/bt_login"
+        android:layout_marginTop="50dp"
+        android:layout_gravity="center"
+        android:layout_marginRight="30dp"
+        android:layout_marginLeft="30dp"
+        android:background="@color/colorAccentDark"/>
+
+    <Button
+        android:id="@+id/bt_access_direct"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:text="Entrar como alice"
+        android:layout_marginTop="50dp"
+        android:layout_gravity="center"
+        android:layout_marginRight="30dp"
+        android:layout_marginLeft="30dp"
+        android:background="@color/colorAccentDark"/>
+
+    <Button
+        android:id="@+id/create_button"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:text="@string/login_registro"
+        android:background="@android:color/transparent"
+        android:gravity="center_horizontal"
+        android:layout_marginTop="25dp"/>
+
+</LinearLayout>

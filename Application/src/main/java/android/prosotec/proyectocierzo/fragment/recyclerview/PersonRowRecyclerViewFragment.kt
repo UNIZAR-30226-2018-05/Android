@@ -4,6 +4,7 @@ import android.os.AsyncTask
 import android.os.Bundle
 import android.prosotec.proyectocierzo.PersonRowAdapter
 import android.prosotec.proyectocierzo.SimpleItemTouchHelperCallback
+import android.support.design.widget.FloatingActionButton
 import android.support.v4.app.Fragment
 import android.support.v7.widget.GridLayoutManager
 import android.support.v7.widget.LinearLayoutManager
@@ -45,6 +46,7 @@ class PersonRowRecyclerViewFragment : Fragment()  {
 
         // BEGIN_INCLUDE(initializeRecyclerView)
         mRecyclerView = rootView.findViewById(R.id.recyclerView)
+        rootView.findViewById<View>(R.id.floatButton).visibility = View.GONE
 
         mRecyclerView.setLayoutManager(LinearLayoutManager(activity))
 

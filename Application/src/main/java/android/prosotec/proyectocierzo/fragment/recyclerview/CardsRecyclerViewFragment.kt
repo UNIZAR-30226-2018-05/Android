@@ -65,6 +65,12 @@ class CardsRecyclerViewFragment : Fragment() {
 
         var friendsPlaylists: MutableList<Playlist> = mutableListOf()
 
+        if (mode == MODE_USERLOGGED_PLAYLISTS) {
+            rootView.findViewById<View>(R.id.floatButton).visibility = View.VISIBLE
+        } else {
+            rootView.findViewById<View>(R.id.floatButton).visibility = View.GONE
+        }
+
 
         val result: Exception? = AdapterCreatorTask().executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, mode.toString(), id).get()
         if (result != null) {

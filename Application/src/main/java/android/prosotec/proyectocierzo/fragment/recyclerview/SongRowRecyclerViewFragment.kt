@@ -44,6 +44,7 @@ class SongRowRecyclerViewFragment : Fragment()  {
 
         // BEGIN_INCLUDE(initializeRecyclerView)
         mRecyclerView = rootView.findViewById(R.id.recyclerView)
+        rootView.findViewById<View>(R.id.floatButton).visibility = View.GONE
 
         mRecyclerView.setLayoutManager(LinearLayoutManager(activity))
 

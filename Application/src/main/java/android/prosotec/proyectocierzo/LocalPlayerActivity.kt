@@ -160,7 +160,7 @@ class LocalPlayerActivity : AppCompatActivity() {
             val cover = metaRetriver.embeddedPicture
             if(cover != null){
                 val image = BitmapFactory.decodeByteArray(cover, 0, cover.size)
-                cover_image_l.setImageBitmap(image)
+                cover_image_1.setImageBitmap(image)
             }
 
 

@@ -23,12 +23,16 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.media.MediaMetadataRetriever;
 import android.net.Uri;
+import android.os.AsyncTask;
 import android.provider.MediaStore;
 import android.support.v4.media.MediaBrowserCompat;
 import android.support.v4.media.MediaMetadataCompat;
+import android.util.Log;
 
 import com.example.android.mediasession.BuildConfig;
 import com.example.android.mediasession.R;
+import com.koushikdutta.async.future.FutureCallback;
+import com.koushikdutta.ion.Ion;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -36,6 +40,10 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.TreeMap;
 import java.util.concurrent.TimeUnit;
+
+import cierzo.model.FacadeKt;
+import cierzo.model.objects.Playlist;
+import cierzo.model.objects.Song;
 
 
 public class MusicLibrary {
@@ -45,9 +53,15 @@ public class MusicLibrary {
     private static final HashMap<String, String> musicFileName = new HashMap<>();
     private static final HashMap<String, Uri> musicFileUri = new HashMap<>();
 
+    private static final TreeMap<String, Song> songs = new TreeMap<>();
+    private static final HashMap<String, String> imageURL = new HashMap<>();
+    private static final HashMap<String, Bitmap> bitmaps = new HashMap<>();
+    private static final HashMap<String, String> fileURL = new HashMap<>();
+    public static Playlist currentPlaylist = null;
+
     static {
         createMediaMetadataCompat(
-                "Jazz_In_Paris",
+                "1",
                 "Jazz in Paris",
                 "Media Right Productions",
                 "Jazz & Blues",
@@ -59,7 +73,7 @@ public class MusicLibrary {
                 "album_jazz_blues",
                 null);
         createMediaMetadataCompat(
-                "The_Coldest_Shoulder",
+                "2",
                 "The Coldest Shoulder",
                 "The 126ers",
                 "Youtube Audio Library Rock 2",
@@ -71,7 +85,7 @@ public class MusicLibrary {
                 "album_youtube_audio_library_rock_2",
                 null);
         createMediaMetadataCompat(
-                "Pipo el mejor",
+                "3",
                 "La epica historia de pipo",
                 "Alexelcapo",
                 "Canciones sobre Youtubers",
@@ -83,7 +97,7 @@ public class MusicLibrary {
                 "album_youtube_audio_library_rock_2",
                 null);
         createMediaMetadataCompat(
-                "SkilletNueva",
+                "4",
                 "Feel Invencible",
                 "Skillet",
                 "NewAlbum",
@@ -94,6 +108,11 @@ public class MusicLibrary {
                 R.drawable.album_jazz_blues,
                 "album_youtube_audio_library_rock_2",
                 null);
+        try {
+            createMediaMetadataCompat(new GetSongFromServerTask().executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, "5").get());
+        } catch (Exception e) {
+            Log.e("createMediaMetadata", e.toString());
+        }
     }
 
     public static String getRoot() {
@@ -110,7 +129,11 @@ public class MusicLibrary {
     }
 
     private static int getAlbumRes(String mediaId) {
-        return albumRes.containsKey(mediaId) ? albumRes.get(mediaId) : 0;
+        if (albumRes.containsKey(mediaId)) {
+            return albumRes.containsKey(mediaId) ? albumRes.get(mediaId) : 0;
+        } else {
+            return -1;
+        }
     }
 
     public static Bitmap getAlbumBitmap(Context context, String mediaId) {
@@ -162,6 +185,10 @@ public class MusicLibrary {
         albumRes.clear();
         musicFileName.clear();
         musicFileUri.clear();
+
+        songs.clear();
+        imageURL.clear();
+        fileURL.clear();
     }
 
     public static void replaceWithSong(Uri uri, Context context) {
@@ -222,4 +249,69 @@ public class MusicLibrary {
         musicFileUri.put(mediaId, uri);
     }
 
+    public static String getMusicFileURL(String songId) {
+        return fileURL.containsKey(songId) ? fileURL.get(songId) : null;
+    }
+
+    private static String getMusicImageURL(String songId) {
+        return imageURL.containsKey(songId) ? imageURL.get(songId) : null;
+    }
+
+/*public static Bitmap getAlbumBitmap(Context context, String mediaId) {
+    return BitmapFactory.decodeResource(context.getResources(),
+            MusicLibrary.getAlbumRes(mediaId));
+}*/
+
+    /*public static Uri getMusicUri(String songId) {
+        return Uri.parse(getMusicFileURL(songId));
+    }
+
+    public static Uri getAlbumArtUri(String songId) {
+        return Uri.parse(getMusicImageURL(songId));
+    }*/
+
+    public static Bitmap getAlbumBitmap(String songId) {
+        return bitmaps.get(songId);
+
+    }
+
+    public static void replaceWithSongs(Playlist playlist) {
+        removeAllMusic();
+        currentPlaylist = playlist;
+
+        for (Song song : currentPlaylist.getSongs()) {
+            createMediaMetadataCompat(song);
+        }
+    }
+
+
+    private static void createMediaMetadataCompat(Song song) {
+        music.put(
+                song.getId(),
+                new MediaMetadataCompat.Builder()
+                        .putString(MediaMetadataCompat.METADATA_KEY_MEDIA_ID, song.getId())
+                        .putString(MediaMetadataCompat.METADATA_KEY_ALBUM, song.getAlbumName())
+                        .putString(MediaMetadataCompat.METADATA_KEY_ARTIST, song.getAuthorName())
+                        .putLong(MediaMetadataCompat.METADATA_KEY_DURATION,
+                                TimeUnit.MILLISECONDS.convert(Long.parseLong(song.getLength()), TimeUnit.SECONDS))
+                        .putString(MediaMetadataCompat.METADATA_KEY_GENRE, song.getGenre().get(0))
+                        .putString(
+                                MediaMetadataCompat.METADATA_KEY_ALBUM_ART_URI,
+                                Uri.parse(song.getImageURL()).toString())
+                        .putString(
+                                MediaMetadataCompat.METADATA_KEY_DISPLAY_ICON_URI,
+                                Uri.parse(song.getImageURL()).toString())
+                        .putString(MediaMetadataCompat.METADATA_KEY_TITLE, song.getName())
+                        .build());
+        imageURL.put(song.getId(), song.getImageURL());
+        fileURL.put(song.getId(), song.getFileURL());
+        songs.put(song.getId(), song);
+    }
+
+    static class GetSongFromServerTask extends AsyncTask<String, Void, Song> {
+        @Override
+        protected Song doInBackground(String... strings) {
+            return (Song) cierzo.model.FacadeKt.getFromServer(FacadeKt.SONG, strings[0]);
+        }
+    }
 }
