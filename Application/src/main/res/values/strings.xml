@@ -142,4 +142,6 @@
     <string name="title_activity_new_playlist">NewPlaylistActivity</string>
 
     <string name="title_activity_profile_change">ProfileChangeActivity</string>
+
+    <string name="title_activity_search_view">SearchView</string>
 </resources>

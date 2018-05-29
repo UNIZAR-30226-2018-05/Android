@@ -41,7 +41,9 @@
                     android:layout_height="wrap_content"
                     android:text="Lista de reproducción"
                     android:textColor="#eb000000"
-                    android:textSize="16sp" />
+                    android:textSize="16sp"
+                    android:singleLine="true"
+                    android:ellipsize="end"/>
 
                 <TextView
                     android:id="@+id/card_subtitle"

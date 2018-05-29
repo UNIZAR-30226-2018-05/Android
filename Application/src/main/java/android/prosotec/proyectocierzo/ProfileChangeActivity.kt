@@ -23,7 +23,7 @@ class ProfileChangeActivity : AppCompatActivity() {
         setContentView(R.layout.activity_profile_change)
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
 
-
+        prepareListeners()
 
     }
 

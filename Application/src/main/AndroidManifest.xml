@@ -107,6 +107,11 @@
             android:name="android.prosotec.proyectocierzo.ProfileChangeActivity"
             android:configChanges="orientation|keyboardHidden|screenSize"
             android:label="@string/title_activity_profile_change"
+            android:theme="@style/FullscreenTheme" />
+        <activity
+            android:name="android.prosotec.proyectocierzo.SearchView"
+            android:configChanges="orientation|keyboardHidden|screenSize"
+            android:label="@string/title_activity_search_view"
             android:theme="@style/FullscreenTheme"></activity>
     </application>
 
