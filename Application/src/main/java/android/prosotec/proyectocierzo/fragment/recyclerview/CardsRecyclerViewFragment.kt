@@ -71,6 +71,10 @@ class CardsRecyclerViewFragment : Fragment() {
 
         if (mode == MODE_USERLOGGED_PLAYLISTS) {
             rootView.findViewById<View>(R.id.floatButton).visibility = View.VISIBLE
+            rootView.findViewById<View>(R.id.floatButton).setOnClickListener {
+                val intent = Intent(context, NewPlaylistActivity::class.java)
+                startActivity(intent)
+            }
         } else {
             rootView.findViewById<View>(R.id.floatButton).visibility = View.GONE
         }
@@ -116,10 +120,6 @@ class CardsRecyclerViewFragment : Fragment() {
                 if (mode == MODE_USERLOGGED_PLAYLISTS) {
                     mAdapter = CardAdapter((activity?.application as CierzoApp)
                             .mUserLogged.getUser().getPlaylists())
-                    floatButton.setOnClickListener {
-                        val intent = Intent(context, NewPlaylistActivity::class.java)
-                        startActivity(intent)
-                    }
                 } else if (mode == MODE_FRIENDS_PLAYLISTS) {
                     for (friend in (activity?.application as CierzoApp).mUserLogged.getUser().getFriends()) {
                         friendsPlaylists.addAll(friend.getPlaylists())
