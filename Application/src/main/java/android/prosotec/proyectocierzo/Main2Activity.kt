@@ -95,7 +95,7 @@ class Main2Activity : AppCompatActivity() {
     private lateinit var mMiniPlayer: MiniPlayerView
     private lateinit var mPlayerBig: PlayerView
 
-    private lateinit var mMediaBrowserHelper: MediaBrowserHelper
+    public lateinit var mMediaBrowserHelper: MediaBrowserHelper
 
     private var mIsPlaying: Boolean = false
 

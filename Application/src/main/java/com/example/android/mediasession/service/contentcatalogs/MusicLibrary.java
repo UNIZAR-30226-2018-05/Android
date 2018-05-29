@@ -60,7 +60,7 @@ public class MusicLibrary {
 
     static {
         createMediaMetadataCompat(
-                "1",
+                "9999",
                 "Jazz in Paris",
                 "Media Right Productions",
                 "Jazz & Blues",
@@ -71,7 +71,7 @@ public class MusicLibrary {
                 R.drawable.album_jazz_blues,
                 "album_jazz_blues");
         createMediaMetadataCompat(
-                "2",
+                "9998",
                 "The Coldest Shoulder",
                 "The 126ers",
                 "Youtube Audio Library Rock 2",
@@ -82,7 +82,7 @@ public class MusicLibrary {
                 R.drawable.album_youtube_audio_library_rock_2,
                 "album_youtube_audio_library_rock_2");
         createMediaMetadataCompat(
-                "3",
+                "9997",
                 "La epica historia de pipo",
                 "Alexelcapo",
                 "Canciones sobre Youtubers",
@@ -93,7 +93,7 @@ public class MusicLibrary {
                 R.drawable.album_youtube_audio_library_rock_2,
                 "album_youtube_audio_library_rock_2");
         createMediaMetadataCompat(
-                "4",
+                "9996",
                 "Feel Invencible",
                 "Skillet",
                 "NewAlbum",
@@ -103,11 +103,10 @@ public class MusicLibrary {
                 "Skillet - Feel Invincible.mp3",
                 R.drawable.album_jazz_blues,
                 "album_youtube_audio_library_rock_2");
-        try {
-            createMediaMetadataCompat(new GetSongFromServerTask().executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, "5").get());
-        } catch (Exception e) {
-            Log.e("createMediaMetadata", e.toString());
-        }
+    }
+
+    public static List<MediaMetadataCompat> getAllSongs() {
+        return new ArrayList(music.values());
     }
 
     public static String getRoot() {
@@ -135,20 +134,27 @@ public class MusicLibrary {
 
     public static Bitmap getAlbumBitmap(Context context, String mediaId) {
         int albumRes = MusicLibrary.getAlbumRes(mediaId);
-        if (albumRes > -1) {
-            return BitmapFactory.decodeResource(context.getResources(), albumRes);
-        } else if (albumRes == -1) {
-            return Ion.with(context)
-                    .load(imageURL.get(mediaId))
-                    .withBitmap()
-                    .asBitmap()
-                    .setCallback(new FutureCallback<Bitmap>() {
-                        @Override
-                        public void onCompleted(Exception e, Bitmap result) {
-                        }
-                    }).tryGet();
+        if (bitmaps.containsKey(mediaId)) {
+            return bitmaps.get(mediaId);
         } else {
-            return null;
+            if (albumRes > -1) {
+                return BitmapFactory.decodeResource(context.getResources(), albumRes);
+            } else if (albumRes == -1) {
+                Bitmap bitmap = Ion.with(context)
+                        .load(imageURL.get(mediaId))
+                        .withBitmap()
+                        .placeholder(R.drawable.gray_background)
+                        .asBitmap()
+                        .setCallback(new FutureCallback<Bitmap>() {
+                            @Override
+                            public void onCompleted(Exception e, Bitmap result) {
+                            }
+                        }).tryGet();
+                bitmaps.put(mediaId, bitmap);
+                return bitmap;
+            } else {
+                return null;
+            }
         }
     }
 
@@ -184,6 +190,31 @@ public class MusicLibrary {
                 MediaMetadataCompat.METADATA_KEY_DURATION,
                 metadataWithoutBitmap.getLong(MediaMetadataCompat.METADATA_KEY_DURATION));
         builder.putBitmap(MediaMetadataCompat.METADATA_KEY_ALBUM_ART, albumArt);
+        return builder.build();
+    }
+
+    public static MediaMetadataCompat getMetadata(String mediaId) {
+        if (music.get(mediaId) == null) mediaId = "0";
+        MediaMetadataCompat metadataWithoutBitmap = music.get(mediaId);
+        //Bitmap albumArt = getAlbumBitmap(context, mediaId);
+
+        // Since MediaMetadataCompat is immutable, we need to create a copy to set the album art.
+        // We don't set it initially on all items so that they don't take unnecessary memory.
+        MediaMetadataCompat.Builder builder = new MediaMetadataCompat.Builder();
+        for (String key :
+                new String[]{
+                        MediaMetadataCompat.METADATA_KEY_MEDIA_ID,
+                        MediaMetadataCompat.METADATA_KEY_ALBUM,
+                        MediaMetadataCompat.METADATA_KEY_ARTIST,
+                        MediaMetadataCompat.METADATA_KEY_GENRE,
+                        MediaMetadataCompat.METADATA_KEY_TITLE
+                }) {
+            builder.putString(key, metadataWithoutBitmap.getString(key));
+        }
+        builder.putLong(
+                MediaMetadataCompat.METADATA_KEY_DURATION,
+                metadataWithoutBitmap.getLong(MediaMetadataCompat.METADATA_KEY_DURATION));
+        //builder.putBitmap(MediaMetadataCompat.METADATA_KEY_ALBUM_ART, albumArt);
         return builder.build();
     }
 

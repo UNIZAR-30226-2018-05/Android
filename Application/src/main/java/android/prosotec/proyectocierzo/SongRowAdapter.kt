@@ -1,10 +1,13 @@
 package android.prosotec.proyectocierzo
 
+import android.content.Context
 import android.net.Uri
 import android.os.AsyncTask
 import android.support.v4.app.FragmentActivity
 import android.support.v4.media.MediaBrowserCompat
 import android.support.v4.media.MediaDescriptionCompat
+import android.support.v4.media.MediaMetadataCompat
+import android.support.v7.app.AppCompatActivity
 import android.support.v7.widget.RecyclerView
 import android.util.Log
 import android.view.LayoutInflater
@@ -19,6 +22,7 @@ import java.util.*
 import cierzo.model.objects.Playlist
 import cierzo.model.objects.Song
 import com.example.android.mediasession.CierzoApp
+import com.example.android.mediasession.service.contentcatalogs.MusicLibrary
 import com.koushikdutta.ion.Ion
 import java.net.URL
 
@@ -33,7 +37,7 @@ class SongRowAdapter
  *
  * @param dataSet String[] containing the data to populate views to be used by RecyclerView.
  */
-(private val activity: FragmentActivity,
+(private val activity: AppCompatActivity,
  private val mPlaylist: Playlist,
  private val showFavIcon: Boolean = true,
  private val showDragAndDropIcon: Boolean = true,
@@ -49,7 +53,7 @@ class SongRowAdapter
     /**
      * Provide a reference to the type of views that you are using (custom ViewHolder)
      */
-    class ViewHolder(v: View) : RecyclerView.ViewHolder(v) {
+    class ViewHolder(mPlaylist: Playlist, context: Context, v: View) : RecyclerView.ViewHolder(v) {
         val title: TextView
         val artist: TextView
         var coverImage: ImageView
@@ -57,7 +61,14 @@ class SongRowAdapter
 
         init {
             // Define click listener for the ViewHolder's View.
-            //v.setOnClickListener { Log.d(TAG, "Element $adapterPosition clicked.") }
+            v.setOnClickListener {
+                var metadata: MediaMetadataCompat = MediaMetadataCompat.Builder()
+                        .putString(MediaMetadataCompat.METADATA_KEY_MEDIA_ID, mPlaylist.getInfo().elementAt(0) as String)
+                        .build()
+                if (context is Main2Activity) {
+                    context.mMediaBrowserHelper.setQueue(metadata, adapterPosition)
+                }
+            }
             title = v.findViewById(R.id.text_row_title) as TextView
             artist = v.findViewById(R.id.text_row_artist) as TextView
             coverImage = v.findViewById(R.id.text_row_cover_image) as ImageView
@@ -86,7 +97,7 @@ class SongRowAdapter
             v.text_row_cross_icon.visibility = View.GONE
         }
 
-        return ViewHolder(v)
+        return ViewHolder(mPlaylist, activity, v)
     }
     // END_INCLUDE(recyclerViewOnCreateViewHolder)
 
@@ -102,10 +113,7 @@ class SongRowAdapter
         viewHolder.artist.text = mSongs[position].authorName
         viewHolder.favIcon.text = position.toString()
         viewHolder.coverImage.setOnClickListener({loadPlaylist()})
-        var imageURL: String = mSongs[position].imageURL
-        Ion.with(viewHolder.coverImage)
-                .placeholder(R.drawable.gray_background)
-                .load(imageURL)
+        viewHolder.coverImage.setImageBitmap(MusicLibrary.getAlbumBitmap(activity, mSongs[position].id))
     }
     // END_INCLUDE(recyclerViewOnBindViewHolder)
 

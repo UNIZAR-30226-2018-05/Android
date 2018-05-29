@@ -18,6 +18,8 @@ package com.example.android.mediasession.client;
 
 import android.content.ComponentName;
 import android.content.Context;
+import android.net.Uri;
+import android.os.AsyncTask;
 import android.os.RemoteException;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -31,9 +33,13 @@ import android.support.v4.media.session.PlaybackStateCompat;
 import android.util.Log;
 
 import com.example.android.mediasession.service.MusicService;
+import com.example.android.mediasession.service.contentcatalogs.MusicLibrary;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.TimeUnit;
+
+import cierzo.model.objects.Playlist;
 
 /**
  * Helper class for a MediaBrowser that handles connecting, disconnecting,
@@ -65,6 +71,7 @@ public class MediaBrowserHelper {
         mMediaBrowserConnectionCallback = new MediaBrowserConnectionCallback();
         mMediaControllerCallback = new MediaControllerCallback();
         mMediaBrowserSubscriptionCallback = new MediaBrowserSubscriptionCallback();
+
     }
 
     public void onStart() {
@@ -91,6 +98,26 @@ public class MediaBrowserHelper {
         }
         resetState();
         Log.d(TAG, "onStop: Releasing MediaController, Disconnecting from MediaBrowser");
+    }
+
+    public void setQueue(MediaMetadataCompat metadata, int index) {
+        //for (MediaSessionCompat.QueueItem queueItem : mMediaController.getQueue() ) {
+        //    mMediaController.removeQueueItem(queueItem.getDescription());
+        //}
+
+        //MusicLibrary.replaceWithSongs(playlist);
+        //List<MediaMetadataCompat> metadata = MusicLibrary.getAllSongs();
+        /*for (MediaMetadataCompat m : metadata) {
+            mMediaController.addQueueItem(m.getDescription());
+        }*/
+        //mMediaController.addQueueItem(metadata.get(0).getDescription());
+        mMediaController.removeQueueItem(metadata.getDescription());
+        mMediaController.addQueueItem(metadata.getDescription());
+
+        for (int i = 0; i < index; i++) {
+            mMediaController.getTransportControls().skipToNext();
+        }
+
     }
 
     /**
@@ -177,6 +204,7 @@ public class MediaBrowserHelper {
             }
         }
     }
+
 
     /**
      * Helper for more easily performing operations on all listening clients.

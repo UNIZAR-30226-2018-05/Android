@@ -19,6 +19,7 @@ package com.example.android.mediasession.service;
 import android.app.Notification;
 import android.content.Intent;
 import android.media.session.MediaSession;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v4.content.ContextCompat;
@@ -39,6 +40,10 @@ import com.example.android.mediasession.service.players.MediaPlayerAdapter;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
+
+import cierzo.model.FacadeKt;
+import cierzo.model.objects.Playlist;
+import cierzo.model.objects.Song;
 
 public class MusicService extends MediaBrowserServiceCompat {
 
@@ -112,16 +117,39 @@ public class MusicService extends MediaBrowserServiceCompat {
 
         @Override
         public void onAddQueueItem(MediaDescriptionCompat description) {
-            mPlaylist.add(new MediaSessionCompat.QueueItem(description, description.hashCode()));
-            mOriginalList.add(new MediaSessionCompat.QueueItem(description, description.hashCode()));
+            /*mPlaylist.add(new MediaSessionCompat.QueueItem(description, Long.parseLong(description.getMediaId())));
+            mOriginalList.add(new MediaSessionCompat.QueueItem(description, Long.parseLong(description.getMediaId())));
             mQueueIndex = (mQueueIndex == -1) ? 0 : mQueueIndex;
-            mSession.setQueue(mPlaylist);
+            mSession.setQueue(mPlaylist);*/
+            if (description.getTitle() == null) {
+                try {
+                    String mediaId = description.getMediaId();
+                    Playlist playlist = new GetPlaylistFromServerTask().executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, mediaId).get();
+                    MusicLibrary.replaceWithSongs(playlist);
+                    for (Song song : playlist.getSongs()) {
+                        MediaMetadataCompat metadata = MusicLibrary.getMetadata(song.getId());
+                        mPlaylist.add(new MediaSessionCompat.QueueItem(metadata.getDescription(), metadata.getDescription().hashCode()));
+                    }
+                    mQueueIndex = 0;
+                    mSession.setQueue(mPlaylist);
+                } catch (Exception e) {
+                    Log.e("onAddQueueItem", e.toString());
+                }
+            } else {
+                mPlaylist.add(new MediaSessionCompat.QueueItem(description, Long.parseLong(description.getMediaId())));
+                mOriginalList.add(new MediaSessionCompat.QueueItem(description, Long.parseLong(description.getMediaId())));
+                mQueueIndex = (mQueueIndex == -1) ? 0 : mQueueIndex;
+                mSession.setQueue(mPlaylist);
+            }
+
         }
 
         @Override
         public void onRemoveQueueItem(MediaDescriptionCompat description) {
-            mPlaylist.remove(new MediaSessionCompat.QueueItem(description, description.hashCode()));
-            mOriginalList.remove(new MediaSessionCompat.QueueItem(description, description.hashCode()));
+            mPlaylist.clear();
+            mOriginalList.clear();
+            //mPlaylist.remove(new MediaSessionCompat.QueueItem(description, Long.parseLong(description.getMediaId())));
+            //mOriginalList.remove(new MediaSessionCompat.QueueItem(description, Long.parseLong(description.getMediaId())));
             mQueueIndex = (mPlaylist.isEmpty()) ? -1 : mQueueIndex;
             mSession.setQueue(mPlaylist);
         }
@@ -210,10 +238,10 @@ public class MusicService extends MediaBrowserServiceCompat {
         public void onSetShuffleMode(int shuffleMode){
             mSession.setShuffleMode(shuffleMode);
             if(shuffleMode == PlaybackStateCompat.SHUFFLE_MODE_ALL){
-                mOriginalList = mPlaylist;
-                mPlaylist = ShuffleTool.INSTANCE.shuffleList(mPlaylist,mQueueIndex);
+                //mOriginalList = mPlaylist;
+                //mPlaylist = ShuffleTool.INSTANCE.shuffleList(mPlaylist,mQueueIndex);
             }else if(shuffleMode == PlaybackStateCompat.SHUFFLE_MODE_NONE){
-                mPlaylist = mOriginalList;
+                //mPlaylist = mOriginalList;
             }
         }
 
@@ -288,6 +316,13 @@ public class MusicService extends MediaBrowserServiceCompat {
             }
         }
 
+    }
+
+    static class GetPlaylistFromServerTask extends AsyncTask<String, Void, Playlist> {
+        @Override
+        protected Playlist doInBackground(String... strings) {
+            return (Playlist) cierzo.model.FacadeKt.getFromServer(FacadeKt.PLAYLIST, strings[0]);
+        }
     }
 
 }

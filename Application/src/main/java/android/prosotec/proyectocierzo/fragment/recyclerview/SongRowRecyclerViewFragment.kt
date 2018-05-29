@@ -1,6 +1,7 @@
 package android.prosotec.proyectocierzo.fragment.recyclerview
 
 import android.os.Bundle
+import android.prosotec.proyectocierzo.Main2Activity
 import android.prosotec.proyectocierzo.SongRowAdapter
 import android.prosotec.proyectocierzo.SimpleItemTouchHelperCallback
 import android.support.v4.app.Fragment
@@ -48,7 +49,7 @@ class SongRowRecyclerViewFragment : Fragment()  {
 
         mRecyclerView.setLayoutManager(LinearLayoutManager(activity))
 
-        mAdapter = SongRowAdapter(activity!!, (activity?.application as CierzoApp).mUserLogged.getFavoritePlaylist(),
+        mAdapter = SongRowAdapter((activity as Main2Activity), (activity?.application as CierzoApp).mUserLogged.getFavoritePlaylist(),
                 showCrossIcon = false, showDragAndDropIcon = false, favAsRemove = true)
         // Set CardAdapter as the adapter for RecyclerView.
         mRecyclerView.adapter = mAdapter
