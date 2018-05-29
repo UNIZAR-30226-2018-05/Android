@@ -5,21 +5,22 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:fitsSystemWindows="true"
-    tools:context="android.prosotec.proyectocierzo.ListActivity">
+    tools:context="android.prosotec.proyectocierzo.ListActivity"
+    >
 
     <android.support.design.widget.AppBarLayout
         android:id="@+id/app_bar"
         android:layout_width="match_parent"
         android:layout_height="@dimen/app_bar_height"
         android:fitsSystemWindows="true"
-        android:theme="@style/AppTheme.AppBarOverlay">
+        android:theme="@style/AppTheme"
+        android:background="@color/colorPrimaryDark">
 
         <android.support.design.widget.CollapsingToolbarLayout
             android:id="@+id/toolbar_layout"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:fitsSystemWindows="true"
-            app:contentScrim="?attr/colorPrimary"
             app:layout_scrollFlags="scroll|exitUntilCollapsed"
             app:toolbarId="@+id/toolbar">
 
@@ -28,11 +29,14 @@
                 android:layout_height="match_parent"
                 android:orientation="horizontal">
 
-                <ImageView
+                <com.makeramen.roundedimageview.RoundedImageView
                     android:id="@+id/portada_normal"
                     android:layout_width="150dp"
                     android:layout_height="150dp"
-                    android:src="@mipmap/ic_launcher" />
+                    android:src="@mipmap/ic_launcher"
+                    app:riv_corner_radius="150dp"
+                    android:tint="#a3a3a3"
+                    android:layout_margin="10dp"/>
 
 
                 <LinearLayout
@@ -66,8 +70,6 @@
                         android:textSize="15sp"/>
 
                 </LinearLayout>
-
-
             </LinearLayout>
 
         </android.support.design.widget.CollapsingToolbarLayout>
@@ -76,7 +78,7 @@
     <include layout="@layout/content_list" />
 
     <android.support.design.widget.FloatingActionButton
-        android:id="@+id/shufle"
+        android:id="@+id/bt_list"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_margin="@dimen/fab_margin"

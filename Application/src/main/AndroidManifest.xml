@@ -57,18 +57,23 @@
         <activity
             android:name="android.prosotec.proyectocierzo.SocialActivity"
             android:screenOrientation="portrait"
-            android:theme="@style/AppTheme"></activity>
+            android:theme="@style/AppTheme" />
         <activity
             android:name="android.prosotec.proyectocierzo.Main2Activity"
             android:screenOrientation="portrait"
-            android:theme="@style/AppTheme"></activity>
+            android:theme="@style/AppTheme" />
         <activity
             android:name="android.prosotec.proyectocierzo.ListActivity"
             android:screenOrientation="portrait"
-            android:theme="@style/AppTheme"></activity>
-        <activity android:name="android.prosotec.proyectocierzo.CreateAccountActivity"
+            android:theme="@style/AppTheme" />
+        <activity
+            android:name="android.prosotec.proyectocierzo.CreateAccountActivity"
             android:screenOrientation="portrait"
-            android:theme="@style/AppTheme"></activity>
+            android:theme="@style/AppTheme" />
+        <activity
+            android:name="android.prosotec.proyectocierzo.ProfileActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/AppTheme" />
 
         <service
             android:name=".service.MusicService"
@@ -94,9 +99,14 @@
         </receiver>
 
         <activity
-            android:name="android.prosotec.proyectocierzo.createAccountActivity"
+            android:name="android.prosotec.proyectocierzo.CreateAccountActivity"
             android:configChanges="orientation|keyboardHidden|screenSize"
             android:label="@string/title_activity_create_account"
+            android:theme="@style/FullscreenTheme" />
+        <activity
+            android:name="android.prosotec.proyectocierzo.NewPlaylistActivity"
+            android:configChanges="orientation|keyboardHidden|screenSize"
+            android:label="@string/title_activity_new_playlist"
             android:theme="@style/FullscreenTheme"></activity>
     </application>
 
