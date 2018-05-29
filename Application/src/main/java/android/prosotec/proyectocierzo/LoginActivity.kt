@@ -77,7 +77,7 @@ class LoginActivity : AppCompatActivity() {
                 error_text.text = when (result.code) {
                     400 -> "El correo y la contraseña no coinciden"
                     401 -> "Error 401"
-                    else -> "Error desconocido"
+                    else -> "No se ha podido conectar con el servidor"
                 }
                 error_layout.visibility = View.VISIBLE
                 success = false
