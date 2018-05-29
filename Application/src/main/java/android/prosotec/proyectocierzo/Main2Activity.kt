@@ -511,12 +511,10 @@ class Main2Activity : AppCompatActivity() {
                     mediaMetadata.getString(MediaMetadataCompat.METADATA_KEY_ARTIST))
             mArtistTextView2?.setText(
                     mediaMetadata.getString(MediaMetadataCompat.METADATA_KEY_ARTIST))
-            mAlbumArt?.setImageBitmap(MusicLibrary.getAlbumBitmap(
-                    this@Main2Activity,
-                    mediaMetadata.getString(MediaMetadataCompat.METADATA_KEY_MEDIA_ID)))
-            mAlbumArt2?.setImageBitmap(MusicLibrary.getAlbumBitmap(
-                    this@Main2Activity,
-                    mediaMetadata.getString(MediaMetadataCompat.METADATA_KEY_MEDIA_ID)))
+            MusicLibrary.putAlbumBitmap(mAlbumArt,
+                    mediaMetadata.getString(MediaMetadataCompat.METADATA_KEY_MEDIA_ID))
+            MusicLibrary.putAlbumBitmap(mAlbumArt2,
+                    mediaMetadata.getString(MediaMetadataCompat.METADATA_KEY_MEDIA_ID))
             mFinalTime?.setDuration(mediaMetadata.getLong(MediaMetadataCompat.METADATA_KEY_DURATION).toInt())
             mFinalTime2?.setDuration(mediaMetadata.getLong(MediaMetadataCompat.METADATA_KEY_DURATION).toInt())
             mCurrentTime?.setCurrentTime(0)

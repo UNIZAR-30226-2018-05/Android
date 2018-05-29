@@ -28,6 +28,7 @@ import android.provider.MediaStore;
 import android.support.v4.media.MediaBrowserCompat;
 import android.support.v4.media.MediaMetadataCompat;
 import android.util.Log;
+import android.widget.ImageView;
 
 import com.example.android.mediasession.BuildConfig;
 import com.example.android.mediasession.R;
@@ -140,22 +141,33 @@ public class MusicLibrary {
             if (albumRes > -1) {
                 return BitmapFactory.decodeResource(context.getResources(), albumRes);
             } else if (albumRes == -1) {
-                Bitmap bitmap = Ion.with(context)
-                        .load(imageURL.get(mediaId))
-                        .withBitmap()
-                        .placeholder(R.drawable.gray_background)
-                        .asBitmap()
-                        .setCallback(new FutureCallback<Bitmap>() {
-                            @Override
-                            public void onCompleted(Exception e, Bitmap result) {
-                            }
-                        }).tryGet();
-                bitmaps.put(mediaId, bitmap);
-                return bitmap;
+                try {
+                    Bitmap bitmap = Ion.with(context)
+                            .load(imageURL.get(mediaId))
+                            .withBitmap()
+                            .placeholder(R.drawable.gray_background)
+                            .asBitmap()
+                            .setCallback(new FutureCallback<Bitmap>() {
+                                @Override
+                                public void onCompleted(Exception e, Bitmap result) {
+                                }
+                            }).get();
+                    bitmaps.put(mediaId, bitmap);
+                    return bitmap;
+                } catch (Exception e) {
+                    Log.e("getAlbumBitmap", e.toString());
+                    return null;
+                }
             } else {
                 return null;
             }
         }
+    }
+
+    public static void putAlbumBitmap(ImageView imageView, String mediaId) {
+        Ion.with(imageView)
+                .placeholder(R.drawable.gray_background)
+                .load(imageURL.get(mediaId));
     }
 
     public static List<MediaBrowserCompat.MediaItem> getMediaItems() {

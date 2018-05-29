@@ -112,8 +112,7 @@ class SongRowAdapter
         viewHolder.title.text = mSongs[position].name
         viewHolder.artist.text = mSongs[position].authorName
         viewHolder.favIcon.text = position.toString()
-        viewHolder.coverImage.setOnClickListener({loadPlaylist()})
-        viewHolder.coverImage.setImageBitmap(MusicLibrary.getAlbumBitmap(activity, mSongs[position].id))
+        MusicLibrary.putAlbumBitmap(viewHolder.coverImage, mSongs[position].id)
     }
     // END_INCLUDE(recyclerViewOnBindViewHolder)
 
