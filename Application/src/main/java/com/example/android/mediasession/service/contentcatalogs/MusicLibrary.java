@@ -51,7 +51,6 @@ public class MusicLibrary {
     private static final TreeMap<String, MediaMetadataCompat> music = new TreeMap<>();
     private static final HashMap<String, Integer> albumRes = new HashMap<>();
     private static final HashMap<String, String> musicFileName = new HashMap<>();
-    private static final HashMap<String, Uri> musicFileUri = new HashMap<>();
 
     private static final TreeMap<String, Song> songs = new TreeMap<>();
     private static final HashMap<String, String> imageURL = new HashMap<>();
@@ -70,8 +69,7 @@ public class MusicLibrary {
                 TimeUnit.SECONDS,
                 "jazz_in_paris.mp3",
                 R.drawable.album_jazz_blues,
-                "album_jazz_blues",
-                null);
+                "album_jazz_blues");
         createMediaMetadataCompat(
                 "2",
                 "The Coldest Shoulder",
@@ -82,8 +80,7 @@ public class MusicLibrary {
                 TimeUnit.SECONDS,
                 "the_coldest_shoulder.mp3",
                 R.drawable.album_youtube_audio_library_rock_2,
-                "album_youtube_audio_library_rock_2",
-                null);
+                "album_youtube_audio_library_rock_2");
         createMediaMetadataCompat(
                 "3",
                 "La epica historia de pipo",
@@ -94,8 +91,7 @@ public class MusicLibrary {
                 TimeUnit.SECONDS,
                 "La Leyenda del Perro Pipo Gambino -Alexelcapo.mp3",
                 R.drawable.album_youtube_audio_library_rock_2,
-                "album_youtube_audio_library_rock_2",
-                null);
+                "album_youtube_audio_library_rock_2");
         createMediaMetadataCompat(
                 "4",
                 "Feel Invencible",
@@ -106,8 +102,7 @@ public class MusicLibrary {
                 TimeUnit.SECONDS,
                 "Skillet - Feel Invincible.mp3",
                 R.drawable.album_jazz_blues,
-                "album_youtube_audio_library_rock_2",
-                null);
+                "album_youtube_audio_library_rock_2");
         try {
             createMediaMetadataCompat(new GetSongFromServerTask().executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, "5").get());
         } catch (Exception e) {
@@ -131,14 +126,30 @@ public class MusicLibrary {
     private static int getAlbumRes(String mediaId) {
         if (albumRes.containsKey(mediaId)) {
             return albumRes.containsKey(mediaId) ? albumRes.get(mediaId) : 0;
-        } else {
+        } else if (imageURL.containsKey(mediaId)){
             return -1;
+        } else {
+            return -2;
         }
     }
 
     public static Bitmap getAlbumBitmap(Context context, String mediaId) {
-        return BitmapFactory.decodeResource(context.getResources(),
-                MusicLibrary.getAlbumRes(mediaId));
+        int albumRes = MusicLibrary.getAlbumRes(mediaId);
+        if (albumRes > -1) {
+            return BitmapFactory.decodeResource(context.getResources(), albumRes);
+        } else if (albumRes == -1) {
+            return Ion.with(context)
+                    .load(imageURL.get(mediaId))
+                    .withBitmap()
+                    .asBitmap()
+                    .setCallback(new FutureCallback<Bitmap>() {
+                        @Override
+                        public void onCompleted(Exception e, Bitmap result) {
+                        }
+                    }).tryGet();
+        } else {
+            return null;
+        }
     }
 
     public static List<MediaBrowserCompat.MediaItem> getMediaItems() {
@@ -177,14 +188,17 @@ public class MusicLibrary {
     }
 
     public static Uri getMusicUri(String mediaId) {
-        return musicFileUri.get(mediaId);
+        if (fileURL.containsKey(mediaId)) {
+            return Uri.parse(fileURL.get(mediaId));
+        } else {
+            return null;
+        }
     }
 
     private static void removeAllMusic() {
         music.clear();
         albumRes.clear();
         musicFileName.clear();
-        musicFileUri.clear();
 
         songs.clear();
         imageURL.clear();
@@ -211,8 +225,7 @@ public class MusicLibrary {
                 TimeUnit.MILLISECONDS,
                 "",
                 R.drawable.caratula_acdc,
-                "",
-                uri);
+                "");
     }
 
     private static void createMediaMetadataCompat(
@@ -225,8 +238,7 @@ public class MusicLibrary {
             TimeUnit durationUnit,
             String musicFilename,
             int albumArtResId,
-            String albumArtResName,
-            Uri uri) {
+            String albumArtResName) {
         music.put(
                 mediaId,
                 new MediaMetadataCompat.Builder()
@@ -246,7 +258,6 @@ public class MusicLibrary {
                         .build());
         albumRes.put(mediaId, albumArtResId);
         musicFileName.put(mediaId, musicFilename);
-        musicFileUri.put(mediaId, uri);
     }
 
     public static String getMusicFileURL(String songId) {
@@ -255,24 +266,6 @@ public class MusicLibrary {
 
     private static String getMusicImageURL(String songId) {
         return imageURL.containsKey(songId) ? imageURL.get(songId) : null;
-    }
-
-/*public static Bitmap getAlbumBitmap(Context context, String mediaId) {
-    return BitmapFactory.decodeResource(context.getResources(),
-            MusicLibrary.getAlbumRes(mediaId));
-}*/
-
-    /*public static Uri getMusicUri(String songId) {
-        return Uri.parse(getMusicFileURL(songId));
-    }
-
-    public static Uri getAlbumArtUri(String songId) {
-        return Uri.parse(getMusicImageURL(songId));
-    }*/
-
-    public static Bitmap getAlbumBitmap(String songId) {
-        return bitmaps.get(songId);
-
     }
 
     public static void replaceWithSongs(Playlist playlist) {
@@ -306,6 +299,7 @@ public class MusicLibrary {
         imageURL.put(song.getId(), song.getImageURL());
         fileURL.put(song.getId(), song.getFileURL());
         songs.put(song.getId(), song);
+        musicFileName.put(song.getId(), song.getName());
     }
 
     static class GetSongFromServerTask extends AsyncTask<String, Void, Song> {
