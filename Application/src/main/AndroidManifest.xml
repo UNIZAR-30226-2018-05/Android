@@ -99,14 +99,14 @@
         </receiver>
 
         <activity
-            android:name="android.prosotec.proyectocierzo.CreateAccountActivity"
-            android:configChanges="orientation|keyboardHidden|screenSize"
-            android:label="@string/title_activity_create_account"
-            android:theme="@style/FullscreenTheme" />
-        <activity
             android:name="android.prosotec.proyectocierzo.NewPlaylistActivity"
             android:configChanges="orientation|keyboardHidden|screenSize"
             android:label="@string/title_activity_new_playlist"
+            android:theme="@style/FullscreenTheme" />
+        <activity
+            android:name="android.prosotec.proyectocierzo.ProfileChangeActivity"
+            android:configChanges="orientation|keyboardHidden|screenSize"
+            android:label="@string/title_activity_profile_change"
             android:theme="@style/FullscreenTheme"></activity>
     </application>
 

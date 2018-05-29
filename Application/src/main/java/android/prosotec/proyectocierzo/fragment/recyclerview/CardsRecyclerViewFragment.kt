@@ -13,9 +13,13 @@ import android.view.ViewGroup
 import com.example.android.mediasession.R
 import android.R.attr.defaultValue
 import android.R.attr.key
+import android.content.Intent
 import android.os.AsyncTask
+import android.prosotec.proyectocierzo.NewPlaylistActivity
+import android.prosotec.proyectocierzo.SocialActivity
 import cierzo.model.objects.Playlist
 import com.example.android.mediasession.CierzoApp
+import kotlinx.android.synthetic.main.recycler_view_frag.*
 
 
 /**
@@ -107,10 +111,15 @@ class CardsRecyclerViewFragment : Fragment() {
             val id: String = params[1] ?: ""
             var friendsPlaylists: MutableList<Playlist> = mutableListOf()
 
+
             try {
                 if (mode == MODE_USERLOGGED_PLAYLISTS) {
                     mAdapter = CardAdapter((activity?.application as CierzoApp)
                             .mUserLogged.getUser().getPlaylists())
+                    floatButton.setOnClickListener {
+                        val intent = Intent(context, NewPlaylistActivity::class.java)
+                        startActivity(intent)
+                    }
                 } else if (mode == MODE_FRIENDS_PLAYLISTS) {
                     for (friend in (activity?.application as CierzoApp).mUserLogged.getUser().getFriends()) {
                         friendsPlaylists.addAll(friend.getPlaylists())

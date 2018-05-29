@@ -356,6 +356,7 @@ class Main2Activity : AppCompatActivity() {
                 bundle.putInt("MODE", CardsRecyclerViewFragment.MODE_USERLOGGED_PLAYLISTS);
                 var fragment: Fragment = CardsRecyclerViewFragment()
                 fragment.setArguments(bundle)
+
                 fragment
             } else if (position == 1) { // Canciones
                 SongRowRecyclerViewFragment()
