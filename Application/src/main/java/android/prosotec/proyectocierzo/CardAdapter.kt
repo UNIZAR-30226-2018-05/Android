@@ -10,7 +10,7 @@ import android.widget.TextView
 import cierzo.model.objects.Album
 import cierzo.model.objects.Playlist
 import com.example.android.mediasession.R
-import com.squareup.picasso.Picasso
+import com.koushikdutta.ion.Ion
 
 /**
  * Provide views to RecyclerView with data from mDataSet.
@@ -76,14 +76,22 @@ class CardAdapter
             viewHolder.card_title.text = playlistInfo.elementAt(1) as String
             viewHolder.card_subtitle.text = "${playlistInfo.elementAt(5) as Int} canciones"
             var imageURL: String = playlistInfo.elementAt(4) as String
-            Picasso.get().load(imageURL).into(viewHolder.card_image)
+            if (mPlaylists!!.get(position).getSongs().size > 0) {
+                Ion.with(viewHolder.card_image)
+                        .placeholder(R.drawable.gray_background)
+                        .load(imageURL)
+            }
 
         } else if (mAlbums != null) {
             var album: Album = mAlbums!!.get(position)
             viewHolder.card_title.text = album.name
             viewHolder.card_subtitle.text = album.authorName
             var imageURL: String = album.imageURL
-            Picasso.get().load(imageURL).into(viewHolder.card_image)
+            if (mAlbums!!.get(position).songs.size > 0) {
+                Ion.with(viewHolder.card_image)
+                        .placeholder(R.drawable.gray_background)
+                        .load(imageURL)
+            }
         }
 
     }

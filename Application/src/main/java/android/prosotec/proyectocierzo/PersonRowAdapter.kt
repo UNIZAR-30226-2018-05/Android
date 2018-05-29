@@ -10,7 +10,7 @@ import android.widget.TextView
 import cierzo.model.objects.Author
 import cierzo.model.objects.User
 import com.example.android.mediasession.R
-import com.squareup.picasso.Picasso
+import com.koushikdutta.ion.Ion
 import kotlinx.android.synthetic.main.person_row_item.view.*
 import org.w3c.dom.Text
 import java.util.*
@@ -34,9 +34,9 @@ class PersonRowAdapter
 
     init {
         if (mDataSet[0] is Author) {
-            mAuthors = mDataSet as MutableList<Author>
+            mAuthors = mDataSet.distinctBy { (it as Author).id } as MutableList<Author>
         } else if (mDataSet[0] is User) {
-            mUsers = mDataSet as MutableList<User>
+            mUsers = mDataSet.distinctBy { (it as User).getInfo().elementAt(0) } as MutableList<User>
         }
     }
 
@@ -88,7 +88,9 @@ class PersonRowAdapter
             viewHolder.title.text = mAuthors[position].name
             viewHolder.subtitle.visibility = View.GONE
             var imageURL: String = mAuthors[position].imageURL
-            Picasso.get().load(imageURL).into(viewHolder.image)
+            Ion.with(viewHolder.image)
+                    .placeholder(R.drawable.gray_background)
+                    .load(imageURL)
         } else if (mUsers.size > 0) {
             viewHolder.title.text = mUsers[position].getInfo().elementAt(2) // Name
             viewHolder.subtitle.text = mUsers[position].getInfo().elementAt(1) // Username
@@ -100,7 +102,7 @@ class PersonRowAdapter
 
     // Return the size of your dataset (invoked by the layout manager)
     override fun getItemCount(): Int {
-        return mDataSet.size
+        return if (mAuthors.size > 0) { mAuthors.size } else { mUsers.size }
     }
 
     override fun onItemDismiss(position: Int) {

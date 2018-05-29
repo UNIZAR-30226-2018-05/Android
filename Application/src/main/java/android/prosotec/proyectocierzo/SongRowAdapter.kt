@@ -1,7 +1,10 @@
 package android.prosotec.proyectocierzo
 
+import android.net.Uri
 import android.os.AsyncTask
 import android.support.v4.app.FragmentActivity
+import android.support.v4.media.MediaBrowserCompat
+import android.support.v4.media.MediaDescriptionCompat
 import android.support.v7.widget.RecyclerView
 import android.util.Log
 import android.view.LayoutInflater
@@ -16,7 +19,8 @@ import java.util.*
 import cierzo.model.objects.Playlist
 import cierzo.model.objects.Song
 import com.example.android.mediasession.CierzoApp
-import com.squareup.picasso.Picasso
+import com.koushikdutta.ion.Ion
+import java.net.URL
 
 /**
  * Provide views to RecyclerView with data from mDataSet.
@@ -53,7 +57,7 @@ class SongRowAdapter
 
         init {
             // Define click listener for the ViewHolder's View.
-            v.setOnClickListener { Log.d(TAG, "Element $adapterPosition clicked.") }
+            //v.setOnClickListener { Log.d(TAG, "Element $adapterPosition clicked.") }
             title = v.findViewById(R.id.text_row_title) as TextView
             artist = v.findViewById(R.id.text_row_artist) as TextView
             coverImage = v.findViewById(R.id.text_row_cover_image) as ImageView
@@ -97,8 +101,11 @@ class SongRowAdapter
         viewHolder.title.text = mSongs[position].name
         viewHolder.artist.text = mSongs[position].authorName
         viewHolder.favIcon.text = position.toString()
+        viewHolder.coverImage.setOnClickListener({loadPlaylist()})
         var imageURL: String = mSongs[position].imageURL
-        Picasso.get().load(imageURL).into(viewHolder.coverImage)
+        Ion.with(viewHolder.coverImage)
+                .placeholder(R.drawable.gray_background)
+                .load(imageURL)
     }
     // END_INCLUDE(recyclerViewOnBindViewHolder)
 
@@ -126,6 +133,19 @@ class SongRowAdapter
             }
         }
         notifyItemMoved(fromPosition, toPosition)
+    }
+
+    fun loadPlaylist() {
+        var children: MutableList<MediaBrowserCompat.MediaItem> = mutableListOf()
+
+        var mediaDescription: MediaDescriptionCompat = MediaDescriptionCompat.Builder()
+                .setMediaId(mPlaylist.getInfo().elementAt(0) as String)
+                .build()
+
+        children.add(MediaBrowserCompat.MediaItem(mediaDescription, MediaBrowserCompat.MediaItem.FLAG_PLAYABLE))
+
+        /*(activity as Main2Activity).mMediaBrowserHelper
+                .mMediaBrowserSubscriptionCallback.onChildrenLoaded("root", children)*/
     }
 
     companion object {

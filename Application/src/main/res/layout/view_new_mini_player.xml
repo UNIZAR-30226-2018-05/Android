@@ -50,13 +50,13 @@
                 android:paddingTop="8dp"
                 >
 
-                <ImageButton
+                <com.makeramen.roundedimageview.RoundedImageView
                     android:id="@+id/cover_image"
                     android:layout_alignParentLeft="true"
                     android:layout_width="66dp"
                     android:layout_height="66dp"
-                    android:background="#ffffff"
-                    android:src="@mipmap/ic_launcher_round" />
+                    android:src="@drawable/gray_background"
+                    app:riv_corner_radius="4dp"/>
 
                 <LinearLayout
                     android:layout_centerVertical="true"
