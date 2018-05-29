@@ -238,10 +238,13 @@ public class MusicService extends MediaBrowserServiceCompat {
         public void onSetShuffleMode(int shuffleMode){
             mSession.setShuffleMode(shuffleMode);
             if(shuffleMode == PlaybackStateCompat.SHUFFLE_MODE_ALL){
-                //mOriginalList = mPlaylist;
-                //mPlaylist = ShuffleTool.INSTANCE.shuffleList(mPlaylist,mQueueIndex);
+                mOriginalList.clear();
+                mOriginalList.addAll(mPlaylist);
+                mPlaylist.clear();
+                mPlaylist.addAll(ShuffleTool.INSTANCE.shuffleList(mOriginalList,mQueueIndex));
             }else if(shuffleMode == PlaybackStateCompat.SHUFFLE_MODE_NONE){
-                //mPlaylist = mOriginalList;
+                mPlaylist.clear();
+                mPlaylist.addAll(mOriginalList);
             }
         }
 
