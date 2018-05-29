@@ -4,7 +4,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    tools:context=".SocialActivity">
+    tools:context="android.prosotec.proyectocierzo.SocialActivity">
 
     <android.support.design.widget.CoordinatorLayout
         android:id="@+id/fullscreen_content"
@@ -16,7 +16,8 @@
             android:layout_width="match_parent"
             android:layout_height="@dimen/app_bar_height"
             android:fitsSystemWindows="true"
-            android:theme="@style/AppTheme.AppBarOverlay">
+            android:theme="@style/AppTheme.AppBarOverlay"
+            >
 
             <android.support.design.widget.CollapsingToolbarLayout
                 android:id="@+id/toolbar_layout"
@@ -43,9 +44,11 @@
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
                         android:orientation="vertical"
-                        android:layout_margin="10dp">
+                        android:layout_margin="10dp"
+                        android:gravity="center">
 
                         <TextView
+                            android:id="@+id/tv_social_name"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:text="PERSONA"
@@ -53,6 +56,7 @@
                             android:layout_margin="10dp"/>
 
                         <TextView
+                            android:id="@+id/tv_social_mail"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:text="E-Mail"
@@ -60,6 +64,7 @@
                             android:layout_margin="10dp"/>
 
                         <TextView
+                            android:id="@+id/tv_social_bio"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:text="Pequeña biografia"
@@ -77,7 +82,7 @@
         <include layout="@layout/content_list" />
 
         <android.support.design.widget.FloatingActionButton
-            android:id="@+id/shufle"
+            android:id="@+id/bt_social"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_margin="@dimen/fab_margin"

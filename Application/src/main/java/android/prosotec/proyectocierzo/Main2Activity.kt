@@ -132,7 +132,7 @@ class Main2Activity : AppCompatActivity() {
         mPlayerBig = player_view
 
         setSupportActionBar(toolbar)
-        getSupportActionBar()!!.setDisplayShowTitleEnabled(false)  /* Quitamos el título de la barra*/
+        getSupportActionBar()!!.setDisplayShowTitleEnabled(false)  // Quitamos el título de la barra
 
         // Create the adapter that will return a fragment for each of the three
         // primary sections of the activity.
@@ -325,7 +325,7 @@ class Main2Activity : AppCompatActivity() {
         val intent: Intent
         when(id){
             R.id.menu_profile -> {
-                intent = Intent(applicationContext,ListActivity::class.java)
+                intent = Intent(applicationContext,SocialActivity::class.java)
                 startActivity(intent)
             }
             R.id.menu_signOut ->{
@@ -356,6 +356,7 @@ class Main2Activity : AppCompatActivity() {
                 bundle.putInt("MODE", CardsRecyclerViewFragment.MODE_USERLOGGED_PLAYLISTS);
                 var fragment: Fragment = CardsRecyclerViewFragment()
                 fragment.setArguments(bundle)
+
                 fragment
             } else if (position == 1) { // Canciones
                 SongRowRecyclerViewFragment()
