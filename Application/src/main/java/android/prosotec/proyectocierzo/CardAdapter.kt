@@ -1,5 +1,7 @@
 package android.prosotec.proyectocierzo
 
+import android.content.Context
+import android.support.v7.app.AppCompatActivity
 import android.support.v7.widget.RecyclerView
 import android.util.Log
 import android.view.LayoutInflater
@@ -11,6 +13,7 @@ import cierzo.model.objects.Album
 import cierzo.model.objects.Playlist
 import com.example.android.mediasession.R
 import com.koushikdutta.ion.Ion
+import kotlinx.android.synthetic.main.activity_main2.*
 
 /**
  * Provide views to RecyclerView with data from mDataSet.
@@ -23,7 +26,8 @@ class CardAdapter
  *
  * @param dataSet String[] containing the data to populate views to be used by RecyclerView.
  */
-(private val mDataSet: List<Any>) : RecyclerView.Adapter<CardAdapter.ViewHolder>() {
+(private val mDataSet: List<Any>,
+ private val activity: AppCompatActivity) : RecyclerView.Adapter<CardAdapter.ViewHolder>() {
     private var mPlaylists: List<Playlist>? = null
     private var mAlbums: List<Album>? = null
 
@@ -39,14 +43,43 @@ class CardAdapter
     /**
      * Provide a reference to the type of views that you are using (custom ViewHolder)
      */
-    class ViewHolder(v: View) : RecyclerView.ViewHolder(v) {
+    class ViewHolder(v: View, listAux: List<Any>,context: Context) : RecyclerView.ViewHolder(v) {
         val card_title: TextView
         val card_subtitle: TextView
         val card_image: ImageView
 
         init {
             // Define click listener for the ViewHolder's View.
-            v.setOnClickListener { Log.d(TAG, "Element $adapterPosition clicked.") }
+            v.setOnClickListener {
+                if(listAux.elementAt(0) is Playlist){
+                    if (context is Main2Activity) {
+                        var playlistAux: Playlist = listAux.get(adapterPosition) as Playlist
+                        var infoPlay: Set<Any> = playlistAux.getInfo()
+                        context.cTitle.text = infoPlay.elementAt(1) as String
+                        context.cOwner.text = playlistAux.getOwner().getInfo().elementAt(2)
+                        context.cBio.text = infoPlay.elementAt(2) as String
+                        var imageURL = infoPlay.elementAt(4) as String
+                        Ion.with(context.cImage)
+                                .placeholder(R.drawable.gray_background)
+                                .load(imageURL)
+                        context.cards_view.visibility = View.VISIBLE
+                        context.main_layout.visibility = View.GONE
+                    }
+                }else if(listAux.elementAt(0) is Album){
+                    if (context is Main2Activity) {
+                        var albumAux: Album = listAux.get(adapterPosition) as Album
+                        context.cTitle.text = albumAux.name
+                        context.cOwner.text = albumAux.authorName
+                        context.cBio.text = albumAux.desc
+                        var imageURL = albumAux.imageURL
+                        Ion.with(context.cImage)
+                                .placeholder(R.drawable.gray_background)
+                                .load(imageURL)
+                        context.cards_view.visibility = View.VISIBLE
+                        context.main_layout.visibility = View.GONE
+                    }
+                }
+            }
             card_title = v.findViewById(R.id.card_title) as TextView
             card_subtitle = v.findViewById(R.id.card_subtitle) as TextView
             card_image = v.findViewById(R.id.card_image) as ImageView
@@ -60,7 +93,7 @@ class CardAdapter
         val v = LayoutInflater.from(viewGroup.context)
                 .inflate(R.layout.card_row_item, viewGroup, false)
 
-        return ViewHolder(v)
+        return ViewHolder(v,mDataSet,activity)
     }
     // END_INCLUDE(recyclerViewOnCreateViewHolder)
 

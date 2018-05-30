@@ -45,6 +45,7 @@ import android.Manifest.permission.RECORD_AUDIO
 import android.content.Intent
 import android.media.audiofx.Equalizer
 import android.os.AsyncTask
+import android.prosotec.proyectocierzo.view.CardsView
 import android.util.Log
 import android.prosotec.proyectocierzo.view.PlayerView
 import android.widget.*
@@ -57,6 +58,7 @@ import kotlinx.android.synthetic.main.activity_main2.*
 import kotlinx.android.synthetic.main.view_new_mini_player.*
 import kotlinx.android.synthetic.main.view_player.*
 import com.example.android.mediasession.service.players.MediaPlayerAdapter.MEDIA_PLAYER_ID
+import kotlinx.android.synthetic.main.card_row_item.*
 import kotlinx.android.synthetic.main.equalizer_view.*
 
 
@@ -94,6 +96,7 @@ class Main2Activity : AppCompatActivity() {
 
     private lateinit var mMiniPlayer: MiniPlayerView
     private lateinit var mPlayerBig: PlayerView
+    private lateinit var mCards: CardsView
 
     public lateinit var mMediaBrowserHelper: MediaBrowserHelper
 
@@ -124,12 +127,19 @@ class Main2Activity : AppCompatActivity() {
 
     private val PERMISSION_REQUEST_CODE = 200
 
+    lateinit var cTitle: TextView
+    lateinit var cOwner: TextView
+    lateinit var cBio: TextView
+    lateinit var cImage: ImageView
+
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main2)
 
         mMiniPlayer = mini_player_view
         mPlayerBig = player_view
+        mCards = cards_view
 
         setSupportActionBar(toolbar)
         getSupportActionBar()!!.setDisplayShowTitleEnabled(false)  // Quitamos el título de la barra
@@ -153,6 +163,8 @@ class Main2Activity : AppCompatActivity() {
 
         checkPermission()
         requestPermission()
+
+        prepareVarForAlbums()
 
         // Código para el reproductor mini
 
@@ -215,7 +227,7 @@ class Main2Activity : AppCompatActivity() {
             main_layout.visibility = View.GONE
         }
 
-
+        mCards.visibility = View.GONE
         mlineVisualizer = LineVisualizer(this)
         var mainLayout: LinearLayout = findViewById(R.id.fullscreen_content)
         mainLayout.addView(mlineVisualizer)
@@ -228,6 +240,13 @@ class Main2Activity : AppCompatActivity() {
         prepareButtonsEqualizer()
         prepareButtonsEqualizerListeners()
 
+    }
+
+    private fun prepareVarForAlbums(){
+        cTitle = mCards.findViewById(R.id.name_playlist)
+        cOwner = mCards.findViewById(R.id.owner_playlist)
+        cBio = mCards.findViewById(R.id.bio_playlist)
+        cImage = mCards.findViewById(R.id.portada_playlist)
     }
 
     private fun prepareButtonsEqualizer(){
@@ -286,6 +305,10 @@ class Main2Activity : AppCompatActivity() {
                 equalizer_view.visibility = View.GONE
                 player_view.visibility = View.VISIBLE
                 main_layout.visibility = View.GONE
+            }else if(cards_view.visibility == View.VISIBLE){
+                cards_view.visibility = View.GONE
+                main_layout.visibility = View.VISIBLE
+                equalizer_view.visibility = View.GONE
             }else{
                 finish()
             }
