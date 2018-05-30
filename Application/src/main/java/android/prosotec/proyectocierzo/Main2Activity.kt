@@ -320,11 +320,6 @@ class Main2Activity : AppCompatActivity() {
             search_view.visibility = View.GONE
         }
 
-        bt_social_profile.setOnClickListener {
-            intent = Intent(applicationContext,ProfileChangeActivity::class.java)
-            startActivity(intent)
-        }
-
         mCards.visibility = View.GONE
         mlineVisualizer = LineVisualizer(this)
         var mainLayout: LinearLayout = findViewById(R.id.fullscreen_content)
@@ -456,6 +451,7 @@ class Main2Activity : AppCompatActivity() {
         when(id){
             R.id.menu_profile -> {
                 intent = Intent(applicationContext,SocialActivity::class.java)
+                intent.putExtra("MODE", 0)
                 startActivity(intent)
             }
             R.id.menu_signOut ->{
