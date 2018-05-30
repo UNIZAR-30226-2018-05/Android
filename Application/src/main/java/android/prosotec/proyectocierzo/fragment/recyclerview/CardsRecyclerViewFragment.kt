@@ -61,10 +61,12 @@ class CardsRecyclerViewFragment : Fragment() {
 
         var mode: Int? = null
         var id: String? = null
+        var search: String? = null
         val bundle = this.arguments
         if (bundle != null) {
             mode = bundle.getInt("MODE")
             id = bundle.getString("ID")
+            search = bundle.getString("search")
         }
 
         var friendsPlaylists: MutableList<Playlist> = mutableListOf()
@@ -80,7 +82,7 @@ class CardsRecyclerViewFragment : Fragment() {
         }
 
 
-        val result: Exception? = AdapterCreatorTask().executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, mode.toString(), id).get()
+        val result: Exception? = AdapterCreatorTask().executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, mode.toString(), id, search).get()
         if (result != null) {
             throw result
         }
@@ -107,12 +109,14 @@ class CardsRecyclerViewFragment : Fragment() {
         public const val MODE_USER_PLAYLISTS = 2
         public const val MODE_FROMFAVORITE_ALBUMS = 3
         public const val MODE_ARTIST_ALBUMS = 4
+        public const val MODE_SEARCH_ALBUMS = 5
     }
 
     inner class AdapterCreatorTask : AsyncTask<String, Void, Exception?>() {
         override fun doInBackground(vararg params: String?): Exception? {
             val mode: Int = params[0]?.toInt()!!
             val id: String = params[1] ?: ""
+            val search: String = params[2] ?: ""
             var friendsPlaylists: MutableList<Playlist> = mutableListOf()
 
 
@@ -134,6 +138,8 @@ class CardsRecyclerViewFragment : Fragment() {
                     if (id != null && id != "") {
                         mAdapter = CardAdapter(cierzo.model.searchAlbums(author = id))
                     }
+                } else if (mode == MODE_SEARCH_ALBUMS) {
+                    mAdapter = CardAdapter(cierzo.model.searchAlbums(search))
                 }
             } catch (e: Exception) {
                 return e

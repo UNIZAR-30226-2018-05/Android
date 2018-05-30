@@ -47,7 +47,12 @@ import android.media.audiofx.Equalizer
 import android.os.AsyncTask
 import android.util.Log
 import android.prosotec.proyectocierzo.view.PlayerView
+import android.prosotec.proyectocierzo.view.SearchResultView
+import android.support.v7.widget.RecyclerView
 import android.widget.*
+import cierzo.model.objects.Album
+import cierzo.model.objects.Author
+import cierzo.model.objects.Song
 import com.chibde.visualizer.LineVisualizer
 import io.swagger.client.ApiException
 import kotlinx.android.synthetic.main.activity_local_player.*
@@ -88,12 +93,15 @@ class Main2Activity : AppCompatActivity() {
     private var mCurrentTime2: MediaCurrentTime? = null
     private var mFinalTime2: MediaFinalTime? = null
 
+    private var mSearchView: SearchView? = null
+
     private var mPlayerFragment: Fragment? = PlayerFragment()
 
     private val mFragmentManager = supportFragmentManager
 
     private lateinit var mMiniPlayer: MiniPlayerView
     private lateinit var mPlayerBig: PlayerView
+    private lateinit var mSearchResult: SearchResultView
 
     public lateinit var mMediaBrowserHelper: MediaBrowserHelper
 
@@ -130,6 +138,7 @@ class Main2Activity : AppCompatActivity() {
 
         mMiniPlayer = mini_player_view
         mPlayerBig = player_view
+        mSearchResult = search_result_view
 
         setSupportActionBar(toolbar)
         getSupportActionBar()!!.setDisplayShowTitleEnabled(false)  // Quitamos el título de la barra
@@ -153,6 +162,61 @@ class Main2Activity : AppCompatActivity() {
 
         checkPermission()
         requestPermission()
+
+        mSearchView = findViewById(R.id.search_view)
+        mSearchResult.visibility = View.GONE
+        mSearchView?.setOnQueryTextListener( object : SearchView.OnQueryTextListener {
+            override fun onQueryTextChange(newText: String?): Boolean {
+                return true
+            }
+
+            override fun onQueryTextSubmit(query: String?): Boolean {
+                mSearchResult.findViewById<TextView>(R.id.search_title).text = query
+
+                // Resultados de albumes
+                var bundleAlbums = Bundle();
+                bundleAlbums.putInt("MODE", CardsRecyclerViewFragment.MODE_SEARCH_ALBUMS)
+                bundleAlbums.putString("search", query ?: "")
+                var albumsFragment = CardsRecyclerViewFragment()
+                albumsFragment.setArguments(bundleAlbums)
+                var transactionAl = supportFragmentManager.beginTransaction()
+                transactionAl.replace(R.id.albums_container, albumsFragment as android.support.v4.app.Fragment)
+                transactionAl.addToBackStack(null)
+                transactionAl.commit()
+
+
+                // Resultados de autores
+                var bundleAuthors = Bundle();
+                bundleAuthors.putInt("MODE", PersonRowRecyclerViewFragment.MODE_SEARCH_AUTHORS)
+                bundleAuthors.putString("search", query ?: "")
+                var fragmentAuthors = PersonRowRecyclerViewFragment()
+                fragmentAuthors.setArguments(bundleAuthors)
+                var transactionAu = supportFragmentManager.beginTransaction()
+                transactionAu.replace(R.id.authors_container, fragmentAuthors as android.support.v4.app.Fragment)
+                transactionAu.addToBackStack(null)
+                transactionAu.commit()
+
+
+                // Resultados de canciones
+                var bundleSongs = Bundle();
+                bundleSongs.putInt("MODE", SongRowRecyclerViewFragment.MODE_SEARCH_SONGS)
+                bundleSongs.putString("search", query ?: "")
+                var fragmentSongs = SongRowRecyclerViewFragment()
+                fragmentSongs.setArguments(bundleSongs)
+                var transactionS = supportFragmentManager.beginTransaction()
+                transactionS.replace(R.id.songs_container, fragmentSongs as android.support.v4.app.Fragment)
+                transactionS.addToBackStack(null)
+                transactionS.commit()
+
+
+                // Resultados de generos
+                /*if (query != null || !query.equals("")) {
+                    var generos: List<Song> = cierzo.model.searchSongs(genre = query!!)
+                }*/
+                mSearchResult.visibility = View.VISIBLE
+                return true
+            }
+        })
 
         // Código para el reproductor mini
 

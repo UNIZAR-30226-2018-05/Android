@@ -33,10 +33,12 @@ class PersonRowAdapter
     private var mUsers: MutableList<User> = mutableListOf()
 
     init {
-        if (mDataSet[0] is Author) {
-            mAuthors = mDataSet.distinctBy { (it as Author).id } as MutableList<Author>
-        } else if (mDataSet[0] is User) {
-            mUsers = mDataSet.distinctBy { (it as User).getInfo().elementAt(0) } as MutableList<User>
+        if (mDataSet.size > 0) {
+            if (mDataSet[0] is Author) {
+                mAuthors = mDataSet.distinctBy { (it as Author).id } as MutableList<Author>
+            } else if (mDataSet[0] is User) {
+                mUsers = mDataSet.distinctBy { (it as User).getInfo().elementAt(0) } as MutableList<User>
+            }
         }
     }
 

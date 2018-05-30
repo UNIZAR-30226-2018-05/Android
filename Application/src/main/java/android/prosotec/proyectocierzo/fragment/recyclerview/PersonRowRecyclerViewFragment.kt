@@ -13,6 +13,10 @@ import android.support.v7.widget.helper.ItemTouchHelper
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import cierzo.model.AUTHOR
+import cierzo.model.USER
+import cierzo.model.objects.Author
+import cierzo.model.objects.User
 import com.example.android.mediasession.CierzoApp
 import com.example.android.mediasession.R
 
@@ -50,7 +54,27 @@ class PersonRowRecyclerViewFragment : Fragment()  {
 
         mRecyclerView.setLayoutManager(LinearLayoutManager(activity))
 
-        mAdapter = PersonRowAdapter(getAuthorsAsync().executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR).get().toMutableList())
+        var mode: Int? = null
+        var search: String? = null
+        var listIds: List<String>? = null
+        val bundle = this.arguments
+        if (bundle != null) {
+            mode = bundle.getInt("MODE")
+            search = bundle.getString("search")
+            listIds = bundle.getStringArrayList("listIds")
+        }
+
+        if (mode == MODE_SEARCH_AUTHORS) {
+            mAdapter = PersonRowAdapter(searchAuthorsAsync().executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, search).get().toMutableList())
+        } else if (mode == MODE_SEARCH_MULTIPLE_AUTHORS){
+            mAdapter = PersonRowAdapter(getMultiAuthorsAsync().executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, listIds).get().toMutableList())
+        } else if (mode == MODE_SEARCH_USERS) {
+            mAdapter = PersonRowAdapter(searchUsersAsync().executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, search).get().toMutableList())
+        } else if (mode == MODE_SEARCH_MULTIPLE_USERS) {
+            mAdapter = PersonRowAdapter(getMultiUsersAsync().executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, listIds).get().toMutableList())
+        } else {
+            mAdapter = PersonRowAdapter(getAuthorsFavAsync().executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR).get().toMutableList())
+        }
         // Set CardAdapter as the adapter for RecyclerView.
         mRecyclerView.adapter = mAdapter
         // END_INCLUDE(initializeRecyclerView)
@@ -72,11 +96,47 @@ class PersonRowRecyclerViewFragment : Fragment()  {
 
     companion object {
         private val TAG = "CardsRecyclerViewFragment"
+        public const val MODE_SEARCH_AUTHORS = 1
+        public const val MODE_SEARCH_MULTIPLE_AUTHORS = 2
+        public const val MODE_SEARCH_MULTIPLE_USERS = 3
+        public const val MODE_SEARCH_USERS = 4
     }
 
-    inner class getAuthorsAsync : AsyncTask<Int, Void, List<Any>>() {
+    inner class getAuthorsFavAsync : AsyncTask<Int, Void, List<Any>>() {
         override fun doInBackground(vararg params: Int?): List<Any> {
             return (activity?.application as CierzoApp).mUserLogged.getAuthorsFromFavorite()
+        }
+    }
+
+    inner class searchAuthorsAsync : AsyncTask<String, Void, List<Any>>() {
+        override fun doInBackground(vararg params: String?): List<Any> {
+            return cierzo.model.searchAuthors(name = params[0] ?: "")
+        }
+    }
+
+    inner class searchUsersAsync : AsyncTask<String, Void, List<Any>>() {
+        override fun doInBackground(vararg params: String?): List<Any> {
+            return cierzo.model.searchUsers(username = params[0] ?: "")
+        }
+    }
+
+    inner class getMultiAuthorsAsync : AsyncTask<List<String>, Void, List<Any>>() {
+        override fun doInBackground(vararg params: List<String>?): List<Any> {
+            var returnList: MutableList<Author> = mutableListOf()
+            for (id in params[0]!!) {
+                returnList.add(cierzo.model.getFromServer(AUTHOR,id) as Author)
+            }
+            return returnList
+        }
+    }
+
+    inner class getMultiUsersAsync : AsyncTask<List<String>, Void, List<Any>>() {
+        override fun doInBackground(vararg params: List<String>?): List<Any> {
+            var returnList: MutableList<User> = mutableListOf()
+            for (id in params[0]!!) {
+                returnList.add(cierzo.model.getFromServer(USER,id) as User)
+            }
+            return returnList
         }
     }
 }

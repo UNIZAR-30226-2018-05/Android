@@ -1,0 +1,150 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android" android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@android:color/white">
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="56dp"
+        android:orientation="horizontal"
+        android:background="@color/colorPrimary"
+        android:padding="16dp"
+        android:elevation="4dp">
+
+        <ImageButton
+            android:layout_width="24dp"
+            android:layout_height="24dp"
+            android:src="@drawable/ic_arrow_back_white_24dp"
+            android:background="@android:color/transparent"/>
+
+        <TextView
+            android:id="@+id/search_title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="32dp"
+            android:layout_gravity="center_vertical"
+            android:text="Búsqueda"
+            android:textSize="18sp"
+            android:textStyle="bold"/>
+
+    </LinearLayout>
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginTop="56dp">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/songs_title"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textSize="18sp"
+                android:textColor="@android:color/black"
+                android:textStyle="bold"
+                android:text="Canciones"
+                android:padding="16dp"/>
+
+            <ScrollView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+                <GridLayout
+                    android:id="@+id/songs_container"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content" />
+            </ScrollView>
+
+            <ImageView
+                android:id="@+id/songs_divider"
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:background="#bdbdbd"
+                android:layout_margin="16dp"/>
+
+            <TextView
+                android:id="@+id/authors_title"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textSize="18sp"
+                android:textColor="@android:color/black"
+                android:textStyle="bold"
+                android:text="Autores"
+                android:padding="16dp"/>
+
+            <ScrollView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+                <GridLayout
+                    android:id="@+id/authors_container"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content" />
+            </ScrollView>
+
+            <ImageView
+                android:id="@+id/authors_divider"
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:background="#bdbdbd"
+                android:layout_margin="16dp"/>
+
+            <TextView
+                android:id="@+id/albums_title"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textSize="18sp"
+                android:textColor="@android:color/black"
+                android:textStyle="bold"
+                android:text="Albumes"
+                android:padding="16dp"/>
+
+            <ScrollView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+                <GridLayout
+                    android:id="@+id/albums_container"
+                    android:layout_width="wrap_content"
+                    android:layout_height="225dp" />
+            </ScrollView>
+
+            <ImageView
+                android:id="@+id/albums_divider"
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:background="#bdbdbd"
+                android:layout_margin="16dp"/>
+
+            <TextView
+                android:id="@+id/genres_title"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textSize="18sp"
+                android:textColor="@android:color/black"
+                android:textStyle="bold"
+                android:text="Géneros"
+                android:padding="16dp"/>
+
+            <ScrollView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+                <GridLayout
+                    android:id="@+id/genres_container"
+                    android:layout_width="wrap_content"
+                    android:layout_height="225dp" />
+            </ScrollView>
+
+            <ImageView
+                android:id="@+id/genres_divider"
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:background="#bdbdbd"
+                android:layout_margin="16dp"/>
+
+        </LinearLayout>
+
+    </ScrollView>
+
+</android.support.constraint.ConstraintLayout>

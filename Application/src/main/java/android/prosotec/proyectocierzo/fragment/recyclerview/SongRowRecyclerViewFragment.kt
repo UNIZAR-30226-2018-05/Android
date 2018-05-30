@@ -1,10 +1,13 @@
 package android.prosotec.proyectocierzo.fragment.recyclerview
 
+import android.os.AsyncTask
 import android.os.Bundle
 import android.prosotec.proyectocierzo.Main2Activity
+import android.prosotec.proyectocierzo.PersonRowAdapter
 import android.prosotec.proyectocierzo.SongRowAdapter
 import android.prosotec.proyectocierzo.SimpleItemTouchHelperCallback
 import android.support.v4.app.Fragment
+import android.support.v7.app.AppCompatActivity
 import android.support.v7.widget.GridLayoutManager
 import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.RecyclerView
@@ -12,6 +15,12 @@ import android.support.v7.widget.helper.ItemTouchHelper
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import cierzo.model.AUTHOR
+import cierzo.model.PLAYLIST
+import cierzo.model.SONG
+import cierzo.model.objects.Author
+import cierzo.model.objects.Playlist
+import cierzo.model.objects.Song
 import com.example.android.mediasession.CierzoApp
 import com.example.android.mediasession.R
 
@@ -49,8 +58,49 @@ class SongRowRecyclerViewFragment : Fragment()  {
 
         mRecyclerView.setLayoutManager(LinearLayoutManager(activity))
 
-        mAdapter = SongRowAdapter((activity as Main2Activity), (activity?.application as CierzoApp).mUserLogged.getFavoritePlaylist(),
-                showCrossIcon = false, showDragAndDropIcon = false, favAsRemove = true)
+        var mode: Int? = null
+        var search: String? = null
+        var listIds: ArrayList<String>? = null
+        var playlistId: String? = null
+        val bundle = this.arguments
+        if (bundle != null) {
+            mode = bundle.getInt("MODE")
+            search = bundle.getString("search")
+            listIds = bundle.getStringArrayList("listIds")
+            playlistId = bundle.getString("playlistId)")
+        }
+
+        if (mode == MODE_SEARCH_SONGS) {
+            mAdapter = SongRowAdapter((activity as Main2Activity),
+                    null,
+                    true,
+                    false,
+                    false,
+                    false,
+                    searchSongsAsync().executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, search)
+                            .get().toMutableList() as MutableList<Song>)
+
+        } else if (mode == MODE_SEARCH_MULTIPLE_SONGS) {
+            mAdapter = SongRowAdapter((activity as Main2Activity),
+                    null,
+                    true,
+                    false,
+                    false,
+                    false,
+                    getMultiSongsAsync().executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, listIds)
+                            .get().toMutableList() as MutableList<Song>)
+        } else if (mode == MODE_PLAYLIST_SONGS) {
+            mAdapter = SongRowAdapter((activity as Main2Activity),
+                    getPlaylistAsync().executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, playlistId)
+                            .get(),
+                    true,
+                    false,
+                    false,
+                    false)
+        } else {
+            mAdapter = SongRowAdapter((activity as Main2Activity), (activity?.application as CierzoApp).mUserLogged.getFavoritePlaylist(),
+                    showCrossIcon = false, showDragAndDropIcon = false, favAsRemove = true)
+        }
         // Set CardAdapter as the adapter for RecyclerView.
         mRecyclerView.adapter = mAdapter
         // END_INCLUDE(initializeRecyclerView)
@@ -72,5 +122,30 @@ class SongRowRecyclerViewFragment : Fragment()  {
 
     companion object {
         private val TAG = "CardsRecyclerViewFragment"
+        public const val MODE_SEARCH_SONGS = 1
+        public const val MODE_SEARCH_MULTIPLE_SONGS = 2
+        public const val MODE_PLAYLIST_SONGS = 3
+    }
+
+    inner class searchSongsAsync : AsyncTask<String, Void, List<Any>>() {
+        override fun doInBackground(vararg params: String?): List<Any> {
+            return cierzo.model.searchSongs(name = params[0] ?: "")
+        }
+    }
+
+    inner class getMultiSongsAsync : AsyncTask<List<String>, Void, List<Any>>() {
+        override fun doInBackground(vararg params: List<String>?): List<Any> {
+            var returnList: MutableList<Song> = mutableListOf()
+            for (id in params[0]!!) {
+                returnList.add(cierzo.model.getFromServer(SONG,id) as Song)
+            }
+            return returnList
+        }
+    }
+
+    inner class getPlaylistAsync : AsyncTask<String, Void, Playlist>() {
+        override fun doInBackground(vararg params: String?): Playlist {
+            return cierzo.model.getFromServer(PLAYLIST,params[0]!!) as Playlist
+        }
     }
 }
