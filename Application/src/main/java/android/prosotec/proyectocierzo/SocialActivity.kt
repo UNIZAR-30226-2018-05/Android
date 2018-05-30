@@ -1,5 +1,6 @@
 package android.prosotec.proyectocierzo
 
+import android.content.Intent
 import android.os.AsyncTask
 import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
@@ -28,6 +29,11 @@ class SocialActivity : AppCompatActivity() {
             }
         } else {
             throw IllegalArgumentException("Activity cannot find  extras " + "MODE");
+        }
+
+        bt_social_profile.setOnClickListener {
+            intent = Intent(applicationContext, ProfileChangeActivity::class.java)
+            startActivity(intent)
         }
 
 
