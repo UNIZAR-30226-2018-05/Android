@@ -140,7 +140,7 @@ class CardsRecyclerViewFragment : Fragment() {
                         mAdapter = CardAdapter(cierzo.model.searchAlbums(author = id),(activity as Main2Activity))
                     }
                 } else if (mode == MODE_SEARCH_ALBUMS) {
-                    mAdapter = CardAdapter(cierzo.model.searchAlbums(search))
+                    mAdapter = CardAdapter(cierzo.model.searchAlbums(search),(activity as Main2Activity))
                 }
             } catch (e: Exception) {
                 return e
