@@ -15,6 +15,7 @@ import android.R.attr.defaultValue
 import android.R.attr.key
 import android.content.Intent
 import android.os.AsyncTask
+import android.prosotec.proyectocierzo.Main2Activity
 import android.prosotec.proyectocierzo.NewPlaylistActivity
 import android.prosotec.proyectocierzo.SocialActivity
 import cierzo.model.objects.Playlist
@@ -123,20 +124,20 @@ class CardsRecyclerViewFragment : Fragment() {
             try {
                 if (mode == MODE_USERLOGGED_PLAYLISTS) {
                     mAdapter = CardAdapter((activity?.application as CierzoApp)
-                            .mUserLogged.getUser().getPlaylists())
+                            .mUserLogged.getUser().getPlaylists(),(activity as Main2Activity))
                 } else if (mode == MODE_FRIENDS_PLAYLISTS) {
                     for (friend in (activity?.application as CierzoApp).mUserLogged.getUser().getFriends()) {
                         friendsPlaylists.addAll(friend.getPlaylists())
                     }
-                    mAdapter = CardAdapter(friendsPlaylists)
+                    mAdapter = CardAdapter(friendsPlaylists,(activity as Main2Activity))
                 } else if (mode == MODE_USER_PLAYLISTS) {
-                    mAdapter = CardAdapter(cierzo.model.searchUsers(username = id!!))
+                    mAdapter = CardAdapter(cierzo.model.searchUsers(username = id!!),(activity as Main2Activity))
                 } else if (mode == MODE_FROMFAVORITE_ALBUMS) {
                     mAdapter = CardAdapter((activity?.application as CierzoApp)
-                            .mUserLogged.getAlbumsFromFavorite())
+                            .mUserLogged.getAlbumsFromFavorite(),(activity as Main2Activity))
                 } else if (mode == MODE_ARTIST_ALBUMS) {
                     if (id != null && id != "") {
-                        mAdapter = CardAdapter(cierzo.model.searchAlbums(author = id))
+                        mAdapter = CardAdapter(cierzo.model.searchAlbums(author = id),(activity as Main2Activity))
                     }
                 } else if (mode == MODE_SEARCH_ALBUMS) {
                     mAdapter = CardAdapter(cierzo.model.searchAlbums(search))
