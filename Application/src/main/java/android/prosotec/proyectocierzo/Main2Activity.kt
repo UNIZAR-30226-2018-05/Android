@@ -17,7 +17,6 @@ import android.prosotec.proyectocierzo.fragment.*
 import android.prosotec.proyectocierzo.fragment.recyclerview.CardsRecyclerViewFragment
 import android.prosotec.proyectocierzo.fragment.recyclerview.PersonRowRecyclerViewFragment
 import android.prosotec.proyectocierzo.fragment.recyclerview.SongRowRecyclerViewFragment
-import android.prosotec.proyectocierzo.view.MiniPlayerView
 import android.support.design.widget.Snackbar
 import android.support.design.widget.TabLayout
 import android.support.v4.app.ActivityCompat
@@ -45,10 +44,8 @@ import android.Manifest.permission.RECORD_AUDIO
 import android.content.Intent
 import android.media.audiofx.Equalizer
 import android.os.AsyncTask
-import android.prosotec.proyectocierzo.view.CardsView
+import android.prosotec.proyectocierzo.view.*
 import android.util.Log
-import android.prosotec.proyectocierzo.view.PlayerView
-import android.prosotec.proyectocierzo.view.SearchResultView
 import android.support.v7.widget.RecyclerView
 import android.widget.*
 import cierzo.model.objects.Album
@@ -63,8 +60,11 @@ import kotlinx.android.synthetic.main.activity_main2.*
 import kotlinx.android.synthetic.main.view_new_mini_player.*
 import kotlinx.android.synthetic.main.view_player.*
 import com.example.android.mediasession.service.players.MediaPlayerAdapter.MEDIA_PLAYER_ID
+import kotlinx.android.synthetic.main.activity_social.*
 import kotlinx.android.synthetic.main.card_row_item.*
 import kotlinx.android.synthetic.main.equalizer_view.*
+import kotlinx.android.synthetic.main.person_view.*
+import kotlinx.android.synthetic.main.view_search_result.*
 
 
 class Main2Activity : AppCompatActivity() {
@@ -95,7 +95,7 @@ class Main2Activity : AppCompatActivity() {
     private var mCurrentTime2: MediaCurrentTime? = null
     private var mFinalTime2: MediaFinalTime? = null
 
-    private var mSearchView: SearchView? = null
+    private var mSearchView: android.widget.SearchView? = null
 
     private var mPlayerFragment: Fragment? = PlayerFragment()
 
@@ -140,6 +140,11 @@ class Main2Activity : AppCompatActivity() {
     lateinit var cBio: TextView
     lateinit var cImage: ImageView
 
+    lateinit var pName: TextView
+    lateinit var pBio: TextView
+
+    private lateinit var mAuthors: PersonView
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -149,6 +154,7 @@ class Main2Activity : AppCompatActivity() {
         mPlayerBig = player_view
         mCards = cards_view
         mSearchResult = search_result_view
+        mAuthors = person_view
 
         setSupportActionBar(toolbar)
         getSupportActionBar()!!.setDisplayShowTitleEnabled(false)  // Quitamos el título de la barra
@@ -173,11 +179,15 @@ class Main2Activity : AppCompatActivity() {
         checkPermission()
         requestPermission()
 
+        mAuthors.visibility = View.GONE
+
+
         prepareVarForAlbums()
+        prepareVarForAuthors()
 
         mSearchView = findViewById(R.id.search_view)
         mSearchResult.visibility = View.GONE
-        mSearchView?.setOnQueryTextListener( object : SearchView.OnQueryTextListener {
+        mSearchView?.setOnQueryTextListener( object : android.widget.SearchView.OnQueryTextListener {
             override fun onQueryTextChange(newText: String?): Boolean {
                 return true
             }
@@ -271,17 +281,20 @@ class Main2Activity : AppCompatActivity() {
             equalizer_view.visibility = View.GONE
             main_layout.visibility = View.GONE
             player_view.visibility = View.VISIBLE
+            search_view.visibility = View.GONE
         }
         player_back.setOnClickListener {
             player_view.visibility = View.GONE
             main_layout.visibility = View.VISIBLE
             equalizer_view.visibility = View.GONE
+            search_view.visibility = View.GONE
         }
         player_view.visibility = View.GONE
         mAlbumArt!!.setOnClickListener {
             player_view.visibility = View.VISIBLE
             main_layout.visibility = View.GONE
             equalizer_view.visibility = View.GONE
+            search_view.visibility = View.GONE
         }
 
         equalizer_view.visibility = View.GONE
@@ -289,6 +302,27 @@ class Main2Activity : AppCompatActivity() {
             equalizer_view.visibility = View.VISIBLE
             player_view.visibility = View.GONE
             main_layout.visibility = View.GONE
+            search_view.visibility = View.GONE
+        }
+
+        back_search.setOnClickListener{
+            mSearchResult.visibility = View.GONE
+            equalizer_view.visibility = View.GONE
+            player_view.visibility = View.GONE
+            main_layout.visibility = View.VISIBLE
+            search_view.visibility = View.GONE
+        }
+        author_back.setOnClickListener{
+            mAuthors.visibility = View.GONE
+            equalizer_view.visibility = View.GONE
+            player_view.visibility = View.GONE
+            main_layout.visibility = View.VISIBLE
+            search_view.visibility = View.GONE
+        }
+
+        bt_social_profile.setOnClickListener {
+            intent = Intent(applicationContext,ProfileChangeActivity::class.java)
+            startActivity(intent)
         }
 
         mCards.visibility = View.GONE
@@ -311,6 +345,11 @@ class Main2Activity : AppCompatActivity() {
         cOwner = mCards.findViewById(R.id.owner_playlist)
         cBio = mCards.findViewById(R.id.bio_playlist)
         cImage = mCards.findViewById(R.id.portada_playlist)
+    }
+
+    private fun prepareVarForAuthors(){
+        pName = mAuthors.findViewById(R.id.author_name)
+        pBio = mAuthors.findViewById(R.id.author_bio)
     }
 
     private fun prepareButtonsEqualizer(){
@@ -370,6 +409,10 @@ class Main2Activity : AppCompatActivity() {
                 player_view.visibility = View.VISIBLE
                 main_layout.visibility = View.GONE
             }else if(cards_view.visibility == View.VISIBLE){
+                cards_view.visibility = View.GONE
+                main_layout.visibility = View.VISIBLE
+                equalizer_view.visibility = View.GONE
+            }else if(person_view.visibility == View.GONE){
                 cards_view.visibility = View.GONE
                 main_layout.visibility = View.VISIBLE
                 equalizer_view.visibility = View.GONE

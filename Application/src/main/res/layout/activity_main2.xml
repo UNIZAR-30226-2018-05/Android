@@ -119,5 +119,9 @@
         android:id="@+id/search_result_view"
         android:layout_width="match_parent"
         android:layout_height="match_parent"/>
+    <android.prosotec.proyectocierzo.view.PersonView
+        android:id="@+id/person_view"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"/>
 
 </RelativeLayout>

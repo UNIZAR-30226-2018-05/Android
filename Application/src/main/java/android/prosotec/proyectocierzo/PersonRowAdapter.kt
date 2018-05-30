@@ -1,5 +1,7 @@
 package android.prosotec.proyectocierzo
 
+import android.content.Context
+import android.support.v7.app.AppCompatActivity
 import android.support.v7.widget.RecyclerView
 import android.util.Log
 import android.view.LayoutInflater
@@ -7,10 +9,13 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
+import cierzo.model.objects.Album
 import cierzo.model.objects.Author
+import cierzo.model.objects.Playlist
 import cierzo.model.objects.User
 import com.example.android.mediasession.R
 import com.koushikdutta.ion.Ion
+import kotlinx.android.synthetic.main.activity_main2.*
 import kotlinx.android.synthetic.main.person_row_item.view.*
 import org.w3c.dom.Text
 import java.util.*
@@ -27,6 +32,7 @@ class PersonRowAdapter
  * @param dataSet String[] containing the data to populate views to be used by RecyclerView.
  */
 (private val mDataSet: MutableList<Any>,
+ private val activity: AppCompatActivity,
  private val showFavIcon: Boolean = false,
  private val showDragAndDropIcon: Boolean = false) : RecyclerView.Adapter<PersonRowAdapter.ViewHolder>(), ItemTouchHelperAdapter {
     private var mAuthors: MutableList<Author> = mutableListOf()
@@ -46,14 +52,23 @@ class PersonRowAdapter
     /**
      * Provide a reference to the type of views that you are using (custom ViewHolder)
      */
-    class ViewHolder(v: View) : RecyclerView.ViewHolder(v) {
+    class ViewHolder(v: View,listAux: MutableList<Author>,context: Context) : RecyclerView.ViewHolder(v) {
         val title: TextView
         val subtitle: TextView
         val image: ImageView
 
         init {
             // Define click listener for the ViewHolder's View.
-            v.setOnClickListener { Log.d(TAG, "Element $adapterPosition clicked.") }
+            v.setOnClickListener {
+                if (context is Main2Activity) {
+                        var authorAux: Author = listAux.get(adapterPosition)
+                        context.pName.text = authorAux.name
+                        context.pBio.text = authorAux.bio
+                        context.person_view.visibility = View.VISIBLE
+                        context.main_layout.visibility = View.GONE
+                        context.search_view.visibility = View.GONE
+                }
+            }
             title = v.findViewById(R.id.text_row_title) as TextView
             subtitle = v.findViewById(R.id.text_row_subtitle) as TextView
             image = v.findViewById(R.id.text_row_image) as ImageView
@@ -75,7 +90,7 @@ class PersonRowAdapter
             v.text_row_dragAndDrop_icon.visibility = View.GONE
         }
 
-        return ViewHolder(v)
+        return ViewHolder(v,mAuthors,activity)
     }
     // END_INCLUDE(recyclerViewOnCreateViewHolder)
 

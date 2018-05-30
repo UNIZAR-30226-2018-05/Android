@@ -34,6 +34,7 @@
                     android:orientation="horizontal">
 
                     <ImageButton
+                        android:id="@+id/author_back"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:src="@drawable/ic_arrow_back_white_24dp"
@@ -48,7 +49,7 @@
                         android:gravity="center">
 
                         <TextView
-                            android:id="@+id/tv_social_name"
+                            android:id="@+id/author_name"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:text="PERSONA"
@@ -56,15 +57,7 @@
                             android:layout_margin="10dp"/>
 
                         <TextView
-                            android:id="@+id/tv_social_mail"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="E-Mail"
-                            android:textSize="20sp"
-                            android:layout_margin="10dp"/>
-
-                        <TextView
-                            android:id="@+id/tv_social_bio"
+                            android:id="@+id/author_bio"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:text="Pequeña biografia"
@@ -81,14 +74,6 @@
 
         <include layout="@layout/content_list" />
 
-        <android.support.design.widget.FloatingActionButton
-            android:id="@+id/bt_social_profile"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_margin="@dimen/fab_margin"
-            app:layout_anchor="@id/app_bar"
-            app:layout_anchorGravity="bottom|end"
-            app:srcCompat="@drawable/ic_favorite_white_24dp" />
 
     </android.support.design.widget.CoordinatorLayout>
 

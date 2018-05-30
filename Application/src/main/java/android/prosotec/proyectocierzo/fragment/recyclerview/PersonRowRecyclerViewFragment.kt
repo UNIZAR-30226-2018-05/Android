@@ -2,6 +2,7 @@ package android.prosotec.proyectocierzo.fragment.recyclerview
 
 import android.os.AsyncTask
 import android.os.Bundle
+import android.prosotec.proyectocierzo.Main2Activity
 import android.prosotec.proyectocierzo.PersonRowAdapter
 import android.prosotec.proyectocierzo.SimpleItemTouchHelperCallback
 import android.support.design.widget.FloatingActionButton
@@ -65,15 +66,15 @@ class PersonRowRecyclerViewFragment : Fragment()  {
         }
 
         if (mode == MODE_SEARCH_AUTHORS) {
-            mAdapter = PersonRowAdapter(searchAuthorsAsync().executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, search).get().toMutableList())
+            mAdapter = PersonRowAdapter(searchAuthorsAsync().executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, search).get().toMutableList(),(activity as Main2Activity))
         } else if (mode == MODE_SEARCH_MULTIPLE_AUTHORS){
-            mAdapter = PersonRowAdapter(getMultiAuthorsAsync().executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, listIds).get().toMutableList())
+            mAdapter = PersonRowAdapter(getMultiAuthorsAsync().executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, listIds).get().toMutableList(),(activity as Main2Activity))
         } else if (mode == MODE_SEARCH_USERS) {
-            mAdapter = PersonRowAdapter(searchUsersAsync().executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, search).get().toMutableList())
+            mAdapter = PersonRowAdapter(searchUsersAsync().executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, search).get().toMutableList(),(activity as Main2Activity))
         } else if (mode == MODE_SEARCH_MULTIPLE_USERS) {
-            mAdapter = PersonRowAdapter(getMultiUsersAsync().executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, listIds).get().toMutableList())
+            mAdapter = PersonRowAdapter(getMultiUsersAsync().executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, listIds).get().toMutableList(),(activity as Main2Activity))
         } else {
-            mAdapter = PersonRowAdapter(getAuthorsFavAsync().executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR).get().toMutableList())
+            mAdapter = PersonRowAdapter(getAuthorsFavAsync().executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR).get().toMutableList(),(activity as Main2Activity))
         }
         // Set CardAdapter as the adapter for RecyclerView.
         mRecyclerView.adapter = mAdapter
