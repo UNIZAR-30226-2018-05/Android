@@ -1,6 +1,8 @@
 package android.prosotec.proyectocierzo
 
 import android.content.Context
+import android.os.Bundle
+import android.prosotec.proyectocierzo.fragment.recyclerview.SongRowRecyclerViewFragment
 import android.support.v7.app.AppCompatActivity
 import android.support.v7.widget.RecyclerView
 import android.util.Log
@@ -64,6 +66,16 @@ class CardAdapter
                                 .load(imageURL)
                         context.cards_view.visibility = View.VISIBLE
                         context.main_layout.visibility = View.GONE
+
+                        var bundleSongs = Bundle();
+                        bundleSongs.putInt("MODE", SongRowRecyclerViewFragment.MODE_PLAYLIST_SONGS)
+                        bundleSongs.putString("playlistId", infoPlay.elementAt(0) as String)
+                        var fragmentSongs = SongRowRecyclerViewFragment()
+                        fragmentSongs.setArguments(bundleSongs)
+                        var transactionS = context.supportFragmentManager.beginTransaction()
+                        transactionS.replace(R.id.card_view_contents, fragmentSongs as android.support.v4.app.Fragment)
+                        transactionS.addToBackStack(null)
+                        transactionS.commit()
                     }
                 }else if(listAux.elementAt(0) is Album){
                     if (context is Main2Activity) {
@@ -77,6 +89,16 @@ class CardAdapter
                                 .load(imageURL)
                         context.cards_view.visibility = View.VISIBLE
                         context.main_layout.visibility = View.GONE
+
+                        var bundleSongs = Bundle();
+                        bundleSongs.putInt("MODE", SongRowRecyclerViewFragment.MODE_ALBUM_SONGS)
+                        bundleSongs.putString("playlistId", albumAux.id )
+                        var fragmentSongs = SongRowRecyclerViewFragment()
+                        fragmentSongs.setArguments(bundleSongs)
+                        var transactionS = context.supportFragmentManager.beginTransaction()
+                        transactionS.replace(R.id.card_view_contents, fragmentSongs as android.support.v4.app.Fragment)
+                        transactionS.addToBackStack(null)
+                        transactionS.commit()
                     }
                 }
             }
@@ -92,6 +114,7 @@ class CardAdapter
         // Create a new view.
         val v = LayoutInflater.from(viewGroup.context)
                 .inflate(R.layout.card_row_item, viewGroup, false)
+
 
         return ViewHolder(v,mDataSet,activity)
     }

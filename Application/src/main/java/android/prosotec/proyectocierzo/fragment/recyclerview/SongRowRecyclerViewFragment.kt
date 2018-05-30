@@ -15,9 +15,11 @@ import android.support.v7.widget.helper.ItemTouchHelper
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import cierzo.model.ALBUM
 import cierzo.model.AUTHOR
 import cierzo.model.PLAYLIST
 import cierzo.model.SONG
+import cierzo.model.objects.Album
 import cierzo.model.objects.Author
 import cierzo.model.objects.Playlist
 import cierzo.model.objects.Song
@@ -67,7 +69,7 @@ class SongRowRecyclerViewFragment : Fragment()  {
             mode = bundle.getInt("MODE")
             search = bundle.getString("search")
             listIds = bundle.getStringArrayList("listIds")
-            playlistId = bundle.getString("playlistId)")
+            playlistId = bundle.getString("playlistId")
         }
 
         if (mode == MODE_SEARCH_SONGS) {
@@ -97,6 +99,15 @@ class SongRowRecyclerViewFragment : Fragment()  {
                     false,
                     false,
                     false)
+        } else if (mode == MODE_ALBUM_SONGS) {
+            mAdapter = SongRowAdapter((activity as Main2Activity),
+                    null,
+                    true,
+                    false,
+                    false,
+                    false,
+                    getAlbumAsync().executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, playlistId)
+                            .get().songs.toMutableList())
         } else {
             mAdapter = SongRowAdapter((activity as Main2Activity), (activity?.application as CierzoApp).mUserLogged.getFavoritePlaylist(),
                     showCrossIcon = false, showDragAndDropIcon = false, favAsRemove = true)
@@ -125,6 +136,7 @@ class SongRowRecyclerViewFragment : Fragment()  {
         public const val MODE_SEARCH_SONGS = 1
         public const val MODE_SEARCH_MULTIPLE_SONGS = 2
         public const val MODE_PLAYLIST_SONGS = 3
+        public const val MODE_ALBUM_SONGS = 4
     }
 
     inner class searchSongsAsync : AsyncTask<String, Void, List<Any>>() {
@@ -146,6 +158,12 @@ class SongRowRecyclerViewFragment : Fragment()  {
     inner class getPlaylistAsync : AsyncTask<String, Void, Playlist>() {
         override fun doInBackground(vararg params: String?): Playlist {
             return cierzo.model.getFromServer(PLAYLIST,params[0]!!) as Playlist
+        }
+    }
+
+    inner class getAlbumAsync : AsyncTask<String, Void, Album>() {
+        override fun doInBackground(vararg params: String?): Album {
+            return cierzo.model.getFromServer(ALBUM,params[0]!!) as Album
         }
     }
 }

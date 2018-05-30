@@ -95,7 +95,7 @@ class Main2Activity : AppCompatActivity() {
     private var mCurrentTime2: MediaCurrentTime? = null
     private var mFinalTime2: MediaFinalTime? = null
 
-    private var mSearchView: SearchView? = null
+    private var mSearchView: android.widget.SearchView? = null
 
     private var mPlayerFragment: Fragment? = PlayerFragment()
 
@@ -177,7 +177,7 @@ class Main2Activity : AppCompatActivity() {
 
         mSearchView = findViewById(R.id.search_view)
         mSearchResult.visibility = View.GONE
-        mSearchView?.setOnQueryTextListener( object : SearchView.OnQueryTextListener {
+        mSearchView?.setOnQueryTextListener( object : android.widget.SearchView.OnQueryTextListener {
             override fun onQueryTextChange(newText: String?): Boolean {
                 return true
             }

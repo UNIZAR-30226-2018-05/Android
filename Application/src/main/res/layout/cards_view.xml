@@ -4,7 +4,8 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:fitsSystemWindows="true">
+    android:fitsSystemWindows="true"
+    android:background="@android:color/white">
 
     <android.support.design.widget.AppBarLayout
         android:id="@+id/app_bar"
@@ -12,7 +13,7 @@
         android:layout_height="@dimen/app_bar_height"
         android:fitsSystemWindows="true"
         android:theme="@style/AppTheme"
-        android:background="@color/colorPrimaryDark">
+        android:background="@color/colorPrimary">
 
         <android.support.design.widget.CollapsingToolbarLayout
             android:id="@+id/toolbar_layout"
@@ -32,7 +33,7 @@
                     android:layout_width="150dp"
                     android:layout_height="150dp"
                     android:src="@mipmap/ic_launcher"
-                    app:riv_corner_radius="150dp"
+                    app:riv_corner_radius="4dp"
                     android:tint="#a3a3a3"
                     android:layout_margin="10dp"/>
 
@@ -77,7 +78,15 @@
         </android.support.design.widget.CollapsingToolbarLayout>
     </android.support.design.widget.AppBarLayout>
 
-    <include layout="@layout/content_list" />
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginTop="180dp">
+        <GridLayout
+            android:id="@+id/card_view_contents"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"/>
+    </ScrollView>
 
     <android.support.design.widget.FloatingActionButton
         android:id="@+id/bt_list"
