@@ -1,0 +1,210 @@
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/colorPrimaryDark"
+    tools:context="android.prosotec.proyectocierzo.CreateAccountActivity">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="Modifica tu perfil"
+                android:layout_gravity="center"
+                android:gravity="center"
+                android:textSize="20sp"/>
+
+        </LinearLayout>
+
+        <ScrollView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="vertical">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="30dp"
+                        android:text="Datos sociales"
+                        android:paddingLeft="60dp"
+                        android:layout_marginTop="20dp"
+                        android:textStyle="bold"
+                        android:textSize="20dp"/>
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="30dp"
+                        android:text="Nickname"
+                        android:paddingLeft="60dp"
+                        android:layout_marginTop="20dp"/>
+
+                    <EditText
+                        android:id="@+id/et_nickname_ps"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="30dp"
+                        android:layout_marginRight="30dp"/>
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="30dp"
+                        android:text="Nombre"
+                        android:paddingLeft="60dp"
+                        android:layout_marginTop="20dp"/>
+
+                    <EditText
+                        android:id="@+id/et_name_ps"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="30dp"
+                        android:layout_marginRight="30dp"/>
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="30dp"
+                        android:text="Biografía"
+                        android:paddingLeft="60dp"
+                        android:layout_marginTop="20dp"/>
+
+                    <EditText
+                        android:id="@+id/et_bio_ps"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="30dp"
+                        android:layout_marginRight="30dp"/>
+
+                    <Button
+                        android:id="@+id/bt_social_ps"
+                        android:layout_width="match_parent"
+                        android:layout_height="50dp"
+                        android:text="Actualizar datos sociales"
+                        android:layout_marginTop="50dp"
+                        android:layout_gravity="center"
+                        android:layout_marginRight="30dp"
+                        android:layout_marginLeft="30dp"
+                        android:background="@color/colorAccentDark"/>
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="30dp"
+                        android:text="Datos de inicio de sesión"
+                        android:paddingLeft="60dp"
+                        android:layout_marginTop="40dp"
+                        android:textStyle="bold"
+                        android:textSize="20dp"/>
+
+                    <LinearLayout
+                        android:id="@+id/error_layout_ps"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal"
+                        android:background="#20000000"
+                        android:layout_marginTop="15dp"
+                        android:paddingLeft="30dp"
+                        android:paddingRight="30dp"
+                        android:paddingTop="8dp"
+                        android:paddingBottom="8dp"
+                        android:gravity="center"
+                        android:visibility="invisible">
+
+                        <ImageView
+                            android:layout_width="16dp"
+                            android:layout_height="16dp"
+                            android:layout_gravity="center_vertical"
+                            android:src="@drawable/ic_error_white_24dp"
+                            android:tint="#ff5555"
+                            android:layout_marginEnd="8dp"/>
+
+                        <TextView
+                            android:id="@+id/error_text_ps"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Error"
+                            android:gravity="center"
+                            android:textStyle="bold"
+                            android:textColor="#ff5555" />
+                    </LinearLayout>
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="30dp"
+                        android:text="Correo"
+                        android:paddingLeft="60dp"
+                        android:layout_marginTop="20dp"/>
+
+                    <EditText
+                        android:id="@+id/et_mail_ps"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="30dp"
+                        android:layout_marginRight="30dp"
+                        android:inputType="textEmailAddress"/>
+
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="30dp"
+                        android:text="Contraseña"
+                        android:paddingLeft="60dp"
+                        android:layout_marginTop="20dp"/>
+
+                    <EditText
+                        android:id="@+id/et_pass_ps"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="30dp"
+                        android:layout_marginRight="30dp"
+                        android:inputType="textPassword"/>
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="30dp"
+                        android:text="Repetir contraseña"
+                        android:paddingLeft="60dp"
+                        android:layout_marginTop="20dp"/>
+
+                    <EditText
+                        android:id="@+id/et_pass2_ps"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="30dp"
+                        android:layout_marginRight="30dp"
+                        android:inputType="textPassword"/>
+
+                    <Button
+                        android:id="@+id/bt_signup_ps"
+                        android:layout_width="match_parent"
+                        android:layout_height="50dp"
+                        android:text="Actualizar datos de inicio de sesión"
+                        android:layout_marginTop="50dp"
+                        android:layout_gravity="center"
+                        android:layout_marginRight="30dp"
+                        android:layout_marginLeft="30dp"
+                        android:background="@color/colorAccentDark"/>
+
+                </LinearLayout>
+            </LinearLayout>
+
+        </ScrollView>
+
+    </LinearLayout>
+
+</FrameLayout>

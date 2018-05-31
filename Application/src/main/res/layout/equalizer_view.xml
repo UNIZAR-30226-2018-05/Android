@@ -1,0 +1,177 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android" android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/colorPrimaryDark"
+    android:gravity="center"
+    android:orientation="vertical"
+    >
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="42dp"
+            android:orientation="horizontal">
+
+            <ImageButton
+                android:id="@+id/back_eq"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/ic_arrow_back_white_24dp"
+                android:layout_margin="10dp"
+                android:background="@android:color/transparent"/>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="Selecciona el modo del ecualizador"
+                android:layout_gravity="center"
+                android:gravity="center"
+                android:textStyle="italic"
+                android:textSize="20dp"/>
+
+        </LinearLayout>
+
+        <ScrollView
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:layout_gravity="center"
+                android:layout_marginTop="16dp">
+
+                <Button
+                    android:id="@+id/pre1"
+                    android:layout_width="match_parent"
+                    android:layout_height="50dp"
+                    android:text="Botón 1"
+                    android:layout_marginTop="16dp"
+                    android:layout_gravity="center"
+                    android:layout_marginRight="30dp"
+                    android:layout_marginLeft="30dp"
+                    android:background="#FFFFFF"
+                    android:textColor="#757575"
+                    android:elevation="4dp"/>
+
+                <Button
+                    android:id="@+id/pre2"
+                    android:layout_width="match_parent"
+                    android:layout_height="50dp"
+                    android:text="Botón 2"
+                    android:layout_marginTop="8dp"
+                    android:layout_gravity="center"
+                    android:layout_marginRight="30dp"
+                    android:layout_marginLeft="30dp"
+                    android:background="#FFFFFF"
+                    android:textColor="#757575"
+                    android:elevation="4dp"/>
+
+                <Button
+                    android:id="@+id/pre3"
+                    android:layout_width="match_parent"
+                    android:layout_height="50dp"
+                    android:text="Botón 3"
+                    android:layout_marginTop="8dp"
+                    android:layout_gravity="center"
+                    android:layout_marginRight="30dp"
+                    android:layout_marginLeft="30dp"
+                    android:background="#FFFFFF"
+                    android:textColor="#757575"
+                    android:elevation="4dp"/>
+
+                <Button
+                    android:id="@+id/pre4"
+                    android:layout_width="match_parent"
+                    android:layout_height="50dp"
+                    android:text="Botón 4"
+                    android:layout_marginTop="8dp"
+                    android:layout_gravity="center"
+                    android:layout_marginRight="30dp"
+                    android:layout_marginLeft="30dp"
+                    android:background="#FFFFFF"
+                    android:textColor="#757575"
+                    android:elevation="4dp"/>
+
+                <Button
+                    android:id="@+id/pre5"
+                    android:layout_width="match_parent"
+                    android:layout_height="50dp"
+                    android:text="Botón 5"
+                    android:layout_marginTop="8dp"
+                    android:layout_gravity="center"
+                    android:layout_marginRight="30dp"
+                    android:layout_marginLeft="30dp"
+                    android:background="#FFFFFF"
+                    android:textColor="#757575"
+                    android:elevation="4dp"/>
+
+                <Button
+                    android:id="@+id/pre6"
+                    android:layout_width="match_parent"
+                    android:layout_height="50dp"
+                    android:text="Botón 6"
+                    android:layout_marginTop="8dp"
+                    android:layout_gravity="center"
+                    android:layout_marginRight="30dp"
+                    android:layout_marginLeft="30dp"
+                    android:background="#FFFFFF"
+                    android:textColor="#757575"
+                    android:elevation="4dp"/>
+
+                <Button
+                    android:id="@+id/pre7"
+                    android:layout_width="match_parent"
+                    android:layout_height="50dp"
+                    android:text="Botón 7"
+                    android:layout_marginTop="8dp"
+                    android:layout_gravity="center"
+                    android:layout_marginRight="30dp"
+                    android:layout_marginLeft="30dp"
+                    android:background="#FFFFFF"
+                    android:textColor="#757575"
+                    android:elevation="4dp"/>
+
+                <Button
+                    android:id="@+id/pre8"
+                    android:layout_width="match_parent"
+                    android:layout_height="50dp"
+                    android:text="Botón 8"
+                    android:layout_marginTop="8dp"
+                    android:layout_gravity="center"
+                    android:layout_marginRight="30dp"
+                    android:layout_marginLeft="30dp"
+                    android:background="#FFFFFF"
+                    android:textColor="#757575"
+                    android:elevation="4dp"/>
+
+                <Button
+                    android:id="@+id/pre9"
+                    android:layout_width="match_parent"
+                    android:layout_height="50dp"
+                    android:text="Botón 9"
+                    android:layout_marginTop="8dp"
+                    android:layout_gravity="center"
+                    android:layout_marginRight="30dp"
+                    android:layout_marginLeft="30dp"
+                    android:background="#FFFFFF"
+                    android:textColor="#757575"
+                    android:elevation="4dp"/>
+
+                <Button
+                    android:id="@+id/pre10"
+                    android:layout_width="match_parent"
+                    android:layout_height="50dp"
+                    android:text="Botón 10"
+                    android:layout_marginTop="8dp"
+                    android:layout_gravity="center"
+                    android:layout_marginRight="30dp"
+                    android:layout_marginLeft="30dp"
+                    android:background="#FFFFFF"
+                    android:textColor="#757575"
+                    android:elevation="4dp"/>
+
+            </LinearLayout>
+    </ScrollView>
+</LinearLayout>
